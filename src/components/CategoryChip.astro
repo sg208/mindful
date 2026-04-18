@@ -1,0 +1,29 @@
+---
+import type { Category } from '~/lib/categories';
+
+interface Props {
+  category: Pick<Category['data'], 'id' | 'label' | 'accent'>;
+  asLink?: boolean;
+  size?: 'sm' | 'md';
+}
+
+const { category, asLink = true, size = 'sm' } = Astro.props;
+const href = `/categories/${category.id}`;
+// Bump sm to guarantee a 24×24 CSS px hit area (WCAG 2.5.8 target size, 2.2 AA).
+const padding = size === 'sm' ? 'px-3 py-1.5 text-xs' : 'px-3 py-1.5 text-sm';
+// Mix text toward the theme ink (--ink flips per color scheme) so contrast holds in both light and dark.
+const style = `background: color-mix(in oklch, ${category.accent} 18%, transparent); color: color-mix(in oklch, ${category.accent} 35%, var(--ink));`;
+
+const Tag = asLink ? 'a' : 'span';
+---
+
+<Tag
+  class:list={[
+    'inline-flex items-center gap-1 rounded-full font-medium tracking-wide uppercase no-underline',
+    padding,
+  ]}
+  style={style}
+  href={asLink ? href : undefined}
+>
+  {category.label}
+</Tag>

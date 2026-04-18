@@ -1,0 +1,95 @@
+---
+import '~/styles/global.css';
+import Header from '~/components/Header.astro';
+import Footer from '~/components/Footer.astro';
+import Seo from '~/components/Seo.astro';
+import { siteConfig } from '~/config/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedAt?: Date;
+  updatedAt?: Date;
+  canonical?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  fullBleed?: boolean;
+}
+
+const {
+  title,
+  description,
+  image,
+  type,
+  publishedAt,
+  updatedAt,
+  canonical,
+  noindex,
+  jsonLd,
+  fullBleed = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang={siteConfig.locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content={siteConfig.themeColor} />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="alternate" type="application/rss+xml" title={siteConfig.name} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <link rel="preconnect" href="https://picsum.photos" crossorigin />
+
+    <Seo
+      title={title}
+      description={description}
+      image={image}
+      type={type}
+      publishedAt={publishedAt}
+      updatedAt={updatedAt}
+      canonical={canonical}
+      noindex={noindex}
+      jsonLd={jsonLd}
+    />
+
+    <script is:inline>
+      if ('serviceWorker' in navigator) {
+        const isSecure =
+          location.protocol === 'https:' ||
+          location.hostname === 'localhost' ||
+          location.hostname === '127.0.0.1';
+        if (isSecure) {
+          window.addEventListener('load', function () {
+            navigator.serviceWorker.register('/sw.js').catch(function (error) {
+              console.warn('Service worker registration failed:', error);
+            });
+          });
+        }
+      }
+    </script>
+  </head>
+  <body class="antialiased">
+    <a href="#main" class="skip-link">Skip to content</a>
+    <Header />
+    <main
+      id="main"
+      tabindex="-1"
+      class:list={[
+        fullBleed ? '' : 'mx-auto max-w-6xl px-5 sm:px-8',
+        'relative z-10 py-10 focus:outline-none sm:py-16',
+      ]}
+    >
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,152 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import CategoryChip from '~/components/CategoryChip.astro';
+import Disclaimer from '~/components/Disclaimer.astro';
+import { formatDate, readingMinutes, type Post } from '~/lib/posts';
+import { getCategory } from '~/lib/categories';
+import { siteConfig } from '~/config/site';
+
+interface Props {
+  post: Post;
+  previous?: Post;
+  next?: Post;
+  body: string;
+}
+
+const { post, previous, next, body } = Astro.props;
+const category = await getCategory(post.data.category);
+const minutes = readingMinutes(body);
+const publishedIso = post.data.publishedAt.toISOString();
+const updatedIso = (post.data.updatedAt ?? post.data.publishedAt).toISOString();
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.data.title,
+  description: post.data.excerpt,
+  image: post.data.image ? [post.data.image] : undefined,
+  datePublished: publishedIso,
+  dateModified: updatedIso,
+  author: { '@type': 'Organization', name: siteConfig.author },
+  publisher: {
+    '@type': 'Organization',
+    name: siteConfig.name,
+    logo: { '@type': 'ImageObject', url: new URL('/icons/icon-512.png', Astro.site).toString() },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': new URL(`/posts/${post.id}`, Astro.site).toString(),
+  },
+  articleSection: category?.data.label,
+};
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.excerpt}
+  image={post.data.image}
+  type="article"
+  publishedAt={post.data.publishedAt}
+  updatedAt={post.data.updatedAt}
+  jsonLd={jsonLd}
+>
+  <article class="mx-auto flex flex-col gap-10">
+    <header class="mx-auto max-w-3xl text-center">
+      <nav
+        aria-label="Breadcrumb"
+        class="mb-6 text-xs tracking-widest text-[var(--muted)] uppercase"
+      >
+        <ol class="flex flex-wrap items-center justify-center gap-2">
+          <li><a href="/">Mindful</a></li>
+          <li aria-hidden="true">&middot;</li>
+          {
+            category && (
+              <li>
+                <a href={`/categories/${category.data.id}`}>{category.data.label}</a>
+              </li>
+            )
+          }
+        </ol>
+      </nav>
+      <h1
+        class="rise text-4xl leading-[1.08] tracking-tight text-balance sm:text-5xl md:text-6xl"
+        style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 96, 'SOFT' 30;"
+      >
+        {post.data.title}
+      </h1>
+      <p class="rise rise-1 mx-auto mt-6 max-w-2xl text-lg text-[var(--muted)]">
+        {post.data.excerpt}
+      </p>
+      <div
+        class="rise rise-2 mt-6 flex flex-wrap items-center justify-center gap-3 text-sm text-[var(--muted)]"
+      >
+        {category && <CategoryChip category={category.data} />}
+        <time datetime={publishedIso}>{formatDate(post.data.publishedAt)}</time>
+        <span aria-hidden="true">&middot;</span>
+        <span>{minutes} min read</span>
+      </div>
+    </header>
+
+    {
+      post.data.image && (
+        <figure class="rise rise-3 mx-auto w-full max-w-4xl">
+          <img
+            src={post.data.image}
+            alt={post.data.imageAlt ?? post.data.title}
+            width="1200"
+            height="600"
+            loading="eager"
+            decoding="async"
+            class="aspect-[2/1] w-full rounded-[var(--radius-card)] object-cover"
+          />
+        </figure>
+      )
+    }
+
+    <div class="prose mx-auto">
+      <slot />
+    </div>
+
+    <Disclaimer variant="card" />
+
+    {
+      (previous || next) && (
+        <nav
+          aria-label="More reading"
+          class="mx-auto grid w-full max-w-4xl gap-6 border-t border-[var(--rule)] pt-10 sm:grid-cols-2"
+        >
+          {previous ? (
+            <a
+              href={`/posts/${previous.id}`}
+              class="group block rounded-[var(--radius-card)] border border-[var(--rule)] bg-[var(--surface)] p-5 no-underline transition-colors hover:border-[var(--accent)]"
+            >
+              <p class="text-xs tracking-widest text-[var(--muted)] uppercase">Previous</p>
+              <p
+                class="mt-2 text-lg leading-snug"
+                style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 30;"
+              >
+                {previous.data.title}
+              </p>
+            </a>
+          ) : (
+            <span />
+          )}
+          {next && (
+            <a
+              href={`/posts/${next.id}`}
+              class="group block rounded-[var(--radius-card)] border border-[var(--rule)] bg-[var(--surface)] p-5 text-right no-underline transition-colors hover:border-[var(--accent)]"
+            >
+              <p class="text-xs tracking-widest text-[var(--muted)] uppercase">Next</p>
+              <p
+                class="mt-2 text-lg leading-snug"
+                style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 30;"
+              >
+                {next.data.title}
+              </p>
+            </a>
+          )}
+        </nav>
+      )
+    }
+  </article>
+</BaseLayout>

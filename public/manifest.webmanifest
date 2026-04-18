@@ -1,0 +1,23 @@
+{
+  "name": "Mindful",
+  "short_name": "Mindful",
+  "description": "Short, gentle reads for everyday mental wellbeing. Not a substitute for professional care.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F7F3EC",
+  "theme_color": "#6B8E7F",
+  "lang": "en",
+  "categories": ["health", "lifestyle", "education"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

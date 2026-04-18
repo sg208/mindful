@@ -1,0 +1,24 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" noindex>
+  <section class="mx-auto max-w-xl py-16 text-center">
+    <p class="text-xs tracking-[0.3em] text-[var(--muted)] uppercase">404</p>
+    <h1
+      class="mt-6 text-5xl leading-tight tracking-tight text-balance sm:text-6xl"
+      style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 96, 'SOFT' 30;"
+    >
+      This page wandered off.
+    </h1>
+    <p class="mt-6 text-[var(--muted)]">
+      The page you were looking for isn&rsquo;t here. Maybe a breath, and then a quiet return home.
+    </p>
+    <a
+      href="/"
+      class="mt-10 inline-block rounded-full border border-[var(--rule)] bg-[var(--surface)] px-5 py-2 text-sm no-underline transition-colors hover:border-[var(--accent)]"
+    >
+      Back to Mindful
+    </a>
+  </section>
+</BaseLayout>

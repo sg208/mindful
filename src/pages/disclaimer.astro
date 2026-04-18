@@ -1,0 +1,44 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Disclaimer"
+  description="Mindful is not a substitute for professional mental-health care."
+>
+  <article class="mx-auto max-w-3xl">
+    <header class="mb-10">
+      <p class="text-xs tracking-[0.3em] text-[var(--muted)] uppercase">Disclaimer</p>
+      <h1
+        class="mt-4 text-5xl leading-tight tracking-tight text-balance sm:text-6xl"
+        style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 96;"
+      >
+        Not a substitute for care.
+      </h1>
+    </header>
+
+    <div class="prose">
+      <p>
+        The essays on Mindful are shared for general reading and reflection. They are not medical,
+        psychological, or therapeutic advice, and they should not be used to diagnose or treat any
+        condition.
+      </p>
+
+      <p>
+        If you are struggling, a qualified professional can offer support that is specific to your
+        situation &mdash; something a short essay simply cannot do.
+      </p>
+
+      <h2>In crisis</h2>
+      <p>
+        If you are in immediate danger, please contact your local emergency services. Many countries
+        also have dedicated mental-health helplines available by phone, text, or chat.
+      </p>
+
+      <h2>A note on links</h2>
+      <p>
+        Mindful does not currently include affiliate links, advertisements, or sponsored content.
+      </p>
+    </div>
+  </article>
+</BaseLayout>

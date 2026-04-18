@@ -1,0 +1,54 @@
+{
+  "name": "mindful",
+  "version": "0.1.0",
+  "description": "Mindful - a short-read mental health blog. Static-first, accessible, SEO-tuned.",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "serve -s dist -l ${PORT:-3000}",
+    "seed": "node scripts/csv-to-content.mjs",
+    "icons": "node scripts/generate-icons.mjs",
+    "init:env": "node scripts/init-env.mjs",
+    "check": "astro check && tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{astro,ts,tsx,js,jsx,mjs,cjs,md,mdx,css,json}\"",
+    "format:check": "prettier --check \"**/*.{astro,ts,tsx,js,jsx,mjs,cjs,md,mdx,css,json}\"",
+    "fix": "npm run lint:fix && npm run format",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.8",
+    "@astrojs/mdx": "^5.0.3",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.2",
+    "@fontsource-variable/fraunces": "^5.2.9",
+    "@fontsource-variable/newsreader": "^5.2.10",
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^6.1.8",
+    "serve": "^14.2.6",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@playwright/test": "^1.59.1",
+    "astro-eslint-parser": "^1.4.0",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-astro": "^1.7.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "globals": "^17.5.0",
+    "prettier": "^3.8.3",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "typescript-eslint": "^8.58.2"
+  }
+}

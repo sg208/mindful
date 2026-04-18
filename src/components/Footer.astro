@@ -1,0 +1,30 @@
+---
+import { siteConfig } from '~/config/site';
+import NavLinks from './NavLinks.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="relative z-10 mt-24 border-t border-[var(--rule)]">
+  <div class="mx-auto max-w-6xl px-5 py-12 sm:px-8">
+    <div class="grid gap-10 sm:grid-cols-[minmax(0,1fr)_2fr]">
+      <section>
+        <p
+          class="text-lg"
+          style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 24;"
+        >
+          {siteConfig.name}
+        </p>
+        <p class="mt-2 max-w-xs text-sm text-[var(--muted)]">{siteConfig.tagline}</p>
+      </section>
+
+      <NavLinks label="Footer" variant="footer" />
+    </div>
+
+    <p class="mt-10 border-t border-[var(--rule)] pt-6 text-xs leading-relaxed text-[var(--muted)]">
+      &copy; {year}
+      {siteConfig.name}. Written with care; not a substitute for professional mental-health support.
+      If you are in crisis, please contact local emergency services or a trusted helpline.
+    </p>
+  </div>
+</footer>

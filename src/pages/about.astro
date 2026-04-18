@@ -1,0 +1,50 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Disclaimer from '~/components/Disclaimer.astro';
+import { siteConfig } from '~/config/site';
+---
+
+<BaseLayout title="About" description={`About ${siteConfig.name} — ${siteConfig.tagline}`}>
+  <article class="mx-auto max-w-3xl">
+    <header class="mb-10">
+      <p class="text-xs tracking-[0.3em] text-[var(--muted)] uppercase">About</p>
+      <h1
+        class="mt-4 text-5xl leading-tight tracking-tight text-balance sm:text-6xl"
+        style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 96, 'SOFT' 30;"
+      >
+        A quiet place for everyday reflection.
+      </h1>
+    </header>
+
+    <div class="prose">
+      <p>
+        Mindful is a small collection of short reads on mental wellbeing. Each essay is meant to be
+        finished in the span of a slow cup of tea &mdash; a few minutes of breathing room in the
+        middle of an ordinary day.
+      </p>
+
+      <p>
+        We write about the things that quietly shape us: the way we sleep, the way we worry, the
+        ways we show up for the people we love. We aim for warmth over cleverness, and calm over
+        urgency.
+      </p>
+
+      <h2>What Mindful is not</h2>
+      <p>
+        Mindful is not therapy. It is not medical advice. It is not a replacement for support from a
+        qualified professional. If something you read here moves you toward seeking help, we are
+        glad. That is the best thing an essay can do.
+      </p>
+
+      <h2>If you need support</h2>
+      <p>
+        If you are in crisis or thinking about harming yourself, please contact your local emergency
+        services or a trusted helpline. You deserve support that meets you where you are.
+      </p>
+    </div>
+
+    <div class="mt-12">
+      <Disclaimer variant="card" />
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,66 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import PostCard from '~/components/PostCard.astro';
+import { getCategories } from '~/lib/categories';
+import { getPostsByCategory } from '~/lib/posts';
+import { siteConfig } from '~/config/site';
+
+export async function getStaticPaths() {
+  const categories = await getCategories();
+  return categories.map((category) => ({
+    params: { slug: category.data.id },
+    props: { category },
+  }));
+}
+
+const { category } = Astro.props;
+const posts = await getPostsByCategory(category.data.id);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${category.data.label} — ${siteConfig.name}`,
+  description: category.data.description,
+  url: new URL(`/categories/${category.data.id}`, Astro.site).toString(),
+};
+---
+
+<BaseLayout title={category.data.label} description={category.data.description} jsonLd={jsonLd}>
+  <header class="mb-14 border-b border-[var(--rule)] pb-10">
+    <nav aria-label="Breadcrumb" class="mb-6 text-xs tracking-widest text-[var(--muted)] uppercase">
+      <ol class="flex flex-wrap gap-2">
+        <li><a href="/">Mindful</a></li>
+        <li aria-hidden="true">&middot;</li>
+        <li aria-current="page">{category.data.label}</li>
+      </ol>
+    </nav>
+    <p class="text-xs tracking-[0.3em] text-[var(--muted)] uppercase">Theme</p>
+    <h1
+      class="mt-3 text-5xl leading-[1.05] tracking-tight text-balance sm:text-6xl"
+      style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 96, 'SOFT' 30;"
+    >
+      {category.data.label}
+    </h1>
+    <p class="mt-5 max-w-2xl text-lg leading-relaxed text-[var(--muted)]">
+      {category.data.description}
+    </p>
+    <p class="mt-6 text-sm text-[var(--muted)]">
+      {posts.length}
+      {posts.length === 1 ? 'essay' : 'essays'}
+    </p>
+  </header>
+
+  {
+    posts.length === 0 ? (
+      <p class="text-[var(--muted)]">No essays in this theme yet. Check back soon.</p>
+    ) : (
+      <ul class="grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+        {posts.map((post) => (
+          <li>
+            <PostCard post={post} headingLevel={2} />
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>

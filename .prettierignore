@@ -1,0 +1,6 @@
+node_modules
+dist
+.astro
+dev-dist
+public/manifest.webmanifest
+package-lock.json

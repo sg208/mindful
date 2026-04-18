@@ -1,0 +1,122 @@
+---
+import NavLinks from './NavLinks.astro';
+import { siteConfig } from '~/config/site';
+---
+
+<header
+  class="sticky top-0 z-40 border-b border-[var(--rule)] bg-[var(--bg)] backdrop-blur-md supports-[backdrop-filter]:bg-[color-mix(in_oklch,var(--bg)_78%,transparent)]"
+>
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-4 sm:px-8 sm:py-5">
+    <a href="/" class="group inline-flex items-baseline gap-2 no-underline">
+      <span
+        class="text-xl tracking-tight"
+        style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 36, 'SOFT' 50;"
+      >
+        Mindful
+      </span>
+      <span class="hidden text-xs tracking-widest text-[var(--muted)] uppercase sm:inline">
+        &mdash; a quiet place to read
+      </span>
+    </a>
+
+    <button
+      type="button"
+      data-menu-open
+      aria-label="Open menu"
+      aria-controls="site-menu"
+      aria-expanded="false"
+      class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--rule)] text-[var(--muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent-ink)]"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        class="h-[18px] w-[18px]"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d="M4 7h16"></path>
+        <path d="M4 12h16"></path>
+        <path d="M4 17h16"></path>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<dialog
+  id="site-menu"
+  aria-labelledby="site-menu-title"
+  class="m-0 h-[100dvh] max-h-none w-screen max-w-none bg-[var(--bg)] text-[var(--ink)] backdrop:bg-[color-mix(in_oklch,var(--ink)_60%,transparent)] backdrop:backdrop-blur-sm open:flex open:flex-col"
+>
+  <div
+    class="flex items-center justify-between gap-6 border-b border-[var(--rule)] px-5 py-4 sm:px-8 sm:py-5"
+  >
+    <p
+      id="site-menu-title"
+      class="text-xl tracking-tight"
+      style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 36, 'SOFT' 50;"
+    >
+      {siteConfig.name}
+    </p>
+    <button
+      type="button"
+      data-menu-close
+      aria-label="Close menu"
+      class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--rule)] text-[var(--muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent-ink)]"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        class="h-[18px] w-[18px]"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d="M6 6l12 12"></path>
+        <path d="M18 6l-12 12"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="flex-1 overflow-y-auto">
+    <div class="mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-16">
+      <p class="max-w-md text-base text-[var(--muted)] sm:text-lg">{siteConfig.tagline}</p>
+      <div class="mt-10 sm:mt-14">
+        <NavLinks label="Site menu" variant="menu" />
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.getElementById('site-menu') as HTMLDialogElement | null;
+  const openButton = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+  const closeButton = document.querySelector<HTMLButtonElement>('[data-menu-close]');
+
+  if (dialog && openButton) {
+    const open = () => {
+      dialog.showModal();
+      openButton.setAttribute('aria-expanded', 'true');
+    };
+    const close = () => {
+      if (dialog.open) dialog.close();
+      openButton.setAttribute('aria-expanded', 'false');
+    };
+
+    openButton.addEventListener('click', open);
+    closeButton?.addEventListener('click', close);
+    dialog.addEventListener('close', () => openButton.setAttribute('aria-expanded', 'false'));
+
+    // Native <dialog> closes on Escape; we also close on link navigation so
+    // the dialog doesn't linger open across bfcache restores.
+    dialog.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', close);
+    });
+  }
+</script>

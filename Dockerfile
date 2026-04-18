@@ -1,0 +1,28 @@
+# syntax=docker/dockerfile:1.7
+
+FROM node:22-alpine AS deps
+WORKDIR /app
+COPY package.json package-lock.json ./
+# --ignore-scripts blocks transitive postinstall from running during image build.
+RUN npm ci --no-audit --no-fund --ignore-scripts
+
+FROM node:22-alpine AS build
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+ENV NODE_ENV=production
+RUN npm run build
+
+FROM node:22-alpine AS runtime
+WORKDIR /app
+ENV NODE_ENV=production
+# Reuse the version of `serve` pinned in package-lock.json (no global install).
+COPY --from=deps /app/node_modules ./node_modules
+COPY package.json ./
+COPY --from=build /app/dist ./dist
+# node:22-alpine ships a non-root `node` user (uid 1000). Drop root for runtime.
+USER node
+EXPOSE 3000
+ENV PORT=3000
+# `serve` reads dist/serve.json (copied from public/serve.json by Astro) for security headers.
+CMD ["sh", "-c", "node node_modules/serve/build/main.js -s dist -l ${PORT:-3000}"]

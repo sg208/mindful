@@ -1,0 +1,64 @@
+---
+import { siteConfig } from '~/config/site';
+
+interface Props {
+  /** Id of a visible heading that names this nav (e.g. dialog title). */
+  labelledby?: string;
+  /** Short label fallback when there is no visible heading in the DOM. */
+  label?: string;
+  variant?: 'footer' | 'menu';
+}
+
+const { labelledby, label, variant = 'footer' } = Astro.props;
+
+const themeLinks = [
+  { href: '/categories/mindfulness', label: 'Mindfulness' },
+  { href: '/categories/anxiety-stress', label: 'Anxiety & Stress' },
+  { href: '/categories/self-care', label: 'Self-Care' },
+  { href: '/categories/sleep-rest', label: 'Sleep & Rest' },
+  { href: '/categories/relationships', label: 'Relationships' },
+];
+
+const utilityLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/disclaimer', label: 'Disclaimer' },
+  { href: '/rss.xml', label: 'RSS feed' },
+];
+
+const textSize = variant === 'menu' ? 'text-lg' : 'text-sm';
+const spacing = variant === 'menu' ? 'space-y-3' : 'space-y-2';
+const themesId = `${variant}-themes-heading`;
+const utilityId = `${variant}-utility-heading`;
+const headingClass = 'text-xs font-normal tracking-widest text-[var(--muted)] uppercase';
+---
+
+<nav aria-labelledby={labelledby} aria-label={labelledby ? undefined : label}>
+  <div class="grid gap-10 sm:grid-cols-2">
+    <section aria-labelledby={themesId}>
+      <h2 id={themesId} class={headingClass}>{siteConfig.name} by theme</h2>
+      <ul class:list={['mt-3', spacing, textSize]}>
+        {
+          themeLinks.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section aria-labelledby={utilityId}>
+      <h2 id={utilityId} class={headingClass}>Good to know</h2>
+      <ul class:list={['mt-3', spacing, textSize]}>
+        {
+          utilityLinks.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</nav>

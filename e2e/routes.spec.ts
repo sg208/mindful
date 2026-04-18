@@ -1,0 +1,56 @@
+import { test, expect } from '@playwright/test';
+
+/** Stable slug present in repo content */
+const SAMPLE_POST_SLUG = 'what-is-mindfulness';
+
+test.describe('Core routes', () => {
+  test('article page renders title from frontmatter', async ({ page }) => {
+    await page.goto(`/posts/${SAMPLE_POST_SLUG}`);
+
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(/mindfulness/i);
+    await expect(page.locator('article')).toBeVisible();
+  });
+
+  test('category page lists theme', async ({ page }) => {
+    await page.goto('/categories/mindfulness');
+
+    // H1 is the category label; the description sits beneath as supporting copy.
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(/mindfulness/i);
+    await expect(page.locator('header').getByText(/paying attention/i)).toBeVisible();
+  });
+
+  test('About and Disclaimer load', async ({ page }) => {
+    await page.goto('/about');
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+
+    await page.goto('/disclaimer');
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  });
+
+  test('offline fallback page', async ({ page }) => {
+    await page.goto('/offline');
+
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(/offline/i);
+  });
+
+  test('RSS returns XML', async ({ request }) => {
+    const response = await request.get('/rss.xml');
+    expect(response.ok()).toBeTruthy();
+    const text = await response.text();
+    expect(text).toContain('<rss');
+    expect(text).toContain('<item>');
+  });
+
+  test('sitemap index is reachable', async ({ page }) => {
+    const response = await page.goto('/sitemap-index.xml');
+    expect(response?.status()).toBe(200);
+    const html = await page.content();
+    expect(html).toMatch(/sitemap/i);
+  });
+
+  test('unknown path returns 404 page', async ({ page }) => {
+    const response = await page.goto('/this-page-does-not-exist-xyz');
+    expect(response?.status()).toBe(404);
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(/wandered off/i);
+  });
+});
