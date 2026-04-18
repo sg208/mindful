@@ -313,7 +313,9 @@ The multi-stage image uses `node:22-alpine`, installs deps with
 `--ignore-scripts`, drops to the non-root `node` user for runtime, and starts
 the bundled `serve` pointed at `dist/`. Security headers come from
 `public/serve.json`. **Set `SITE_URL`** in the Railway project variables — the
-build throws when it is missing.
+build throws when it is missing. The Dockerfile declares `ARG SITE_URL` so
+Railway forwards the service variable to the build step (without the `ARG`,
+Docker service variables only reach the runtime container).
 
 ### Docker (anywhere else)
 

@@ -10,6 +10,11 @@ FROM node:22-alpine AS build
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# Railway (and plain Docker) only forward service variables to the build step
+# when the Dockerfile declares them as ARG. SITE_URL is required by
+# `astro build` to emit canonical URLs, OG tags, sitemap, and RSS.
+ARG SITE_URL
+ENV SITE_URL=${SITE_URL}
 ENV NODE_ENV=production
 RUN npm run build
 
