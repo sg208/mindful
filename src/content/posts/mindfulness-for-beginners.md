@@ -3,7 +3,7 @@ title: Mindfulness for Beginners
 excerpt: 'Mindfulness for beginners is simple, not easy. Small, honest practices that help you return to the moment without judgment.'
 category: mindfulness
 publishedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://fastly.picsum.photos/seed/mind3/800/400'
+image: 'https://picsum.photos/seed/mind3/800/400'
 imageAlt: 'A pair of hands resting open on a lap, with soft morning light falling across them'
 featured: false
 reviewRequired: false

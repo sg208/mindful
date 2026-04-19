@@ -4,7 +4,7 @@ excerpt: "You don't have to fix it. Often the best support is simply being prese
 category: relationships
 publishedAt: '2025-03-15T12:00:00.000+00:00'
 updatedAt: '2026-03-11T16:09:08.487+00:00'
-image: 'https://fastly.picsum.photos/seed/rel2/800/400'
+image: 'https://picsum.photos/seed/rel2/800/400'
 featured: false
 reviewRequired: false
 draft: false

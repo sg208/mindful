@@ -4,7 +4,7 @@ excerpt: Isolation can make mental health harder. Reaching out—even in small w
 category: relationships
 publishedAt: '2025-03-25T12:00:00.000+00:00'
 updatedAt: '2026-03-11T16:09:20.546+00:00'
-image: 'https://fastly.picsum.photos/seed/rel4/800/400'
+image: 'https://picsum.photos/seed/rel4/800/400'
 featured: false
 reviewRequired: false
 draft: false

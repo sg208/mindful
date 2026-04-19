@@ -4,7 +4,7 @@ excerpt: "When anxiety keeps you awake, the softest path back to sleep is usuall
 category: sleep-rest
 publishedAt: '2025-03-18T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://fastly.picsum.photos/seed/sleep3/800/400'
+image: 'https://picsum.photos/seed/sleep3/800/400'
 featured: false
 reviewRequired: false
 draft: false
