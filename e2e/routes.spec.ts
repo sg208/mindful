@@ -29,6 +29,15 @@ test.describe('Core routes', () => {
     await expect(page.locator('header').getByText(/paying attention/i)).toBeVisible();
   });
 
+  test('all-essays index groups posts by category', async ({ page }) => {
+    await page.goto('/posts');
+
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(/all essays/i);
+    // At least one category group heading (h2) and one post link must render.
+    await expect(page.getByRole('heading', { level: 2 }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: /mindfulness/i }).first()).toBeVisible();
+  });
+
   test('About and Disclaimer load', async ({ page }) => {
     await page.goto('/about');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
