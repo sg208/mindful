@@ -3,7 +3,7 @@ title: Journaling for Mental Health
 excerpt: 'Journaling for mental health is a small, quiet practice that helps you feel what you feel and meet yourself with a little more kindness.'
 category: self-care
 publishedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://picsum.photos/seed/journal1/800/400'
+image: 'https://fastly.picsum.photos/seed/journal1/800/400'
 imageAlt: 'An open notebook and a pen resting on a soft blanket beside a cup of tea'
 featured: false
 reviewRequired: false

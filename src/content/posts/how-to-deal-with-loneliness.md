@@ -3,7 +3,7 @@ title: How to Deal with Loneliness
 excerpt: 'Loneliness is not a flaw in you. These gentle ways of dealing with loneliness can help you feel a little more met, a little more held.'
 category: relationships
 publishedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://picsum.photos/seed/relate3/800/400'
+image: 'https://fastly.picsum.photos/seed/relate3/800/400'
 imageAlt: 'A person sitting by a window at dusk, warm light on their face, a mug cradled in both hands'
 featured: false
 reviewRequired: false

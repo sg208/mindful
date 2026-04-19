@@ -182,7 +182,7 @@ excerpt: One or two sentences for the card, meta description, and RSS.
 category: mindfulness # must match a category id (see list below)
 publishedAt: 2026-04-18 # ISO date; Date object is parsed by Zod
 updatedAt: 2026-04-19 # optional
-image: https://picsum.photos/seed/your-seed/1200/600 # optional, URL only
+image: https://fastly.picsum.photos/seed/your-seed/1200/600 # optional, URL only
 imageAlt: Describe the image for screen readers # optional
 featured: false # at most one post is shown as the hero
 reviewRequired: false # editorial flag (for your own tracking)
@@ -346,7 +346,7 @@ S3+CloudFront, nginx, Caddy — all work with no code changes. Just set
   `astro:schema`. Import from `astro/zod` instead.
 - **Service worker doesn't register**: SWs require HTTPS. On plain `http://`
   (non-localhost), the registration is a guarded no-op by design.
-- **`picsum.photos` is slow or rate-limited**: replace with optimised local
+- **`fastly.picsum.photos` is slow or rate-limited**: replace with optimised local
   images; update the `remotePatterns` allowlist in `astro.config.mjs` if you
   add a new remote host.
 - **Playwright: browser not installed**: run `npx playwright install chromium`

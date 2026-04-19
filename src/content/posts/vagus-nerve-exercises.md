@@ -3,7 +3,7 @@ title: Vagus Nerve Exercises for Everyday Calm
 excerpt: 'Gentle vagus nerve exercises are simple ways to signal safety to your body and coax your nervous system back toward calm.'
 category: anxiety-stress
 publishedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://picsum.photos/seed/vagus1/800/400'
+image: 'https://fastly.picsum.photos/seed/vagus1/800/400'
 imageAlt: 'A person standing quietly at an open window, breathing deeply in soft afternoon light'
 featured: false
 reviewRequired: false

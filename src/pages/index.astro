@@ -4,7 +4,7 @@ import PostCard from '~/components/PostCard.astro';
 import CategoryCard from '~/components/CategoryCard.astro';
 import Disclaimer from '~/components/Disclaimer.astro';
 import type { Post } from '~/lib/posts';
-import { getPublishedPosts, getFeaturedPost, getPostsByCategory } from '~/lib/posts';
+import { getPublishedPosts, getFeaturedPost } from '~/lib/posts';
 import { getCategories } from '~/lib/categories';
 import { siteConfig } from '~/config/site';
 import { homeConfig } from '~/config/home';
@@ -17,12 +17,10 @@ const picks = homeConfig.editorPickSlugs
   .map((slug) => posts.find((post) => post.id === slug))
   .filter((post): post is Post => post !== undefined && post.id !== featured?.id);
 
-const categoryCounts = await Promise.all(
-  categories.map(async (category) => ({
-    category,
-    count: (await getPostsByCategory(category.data.id)).length,
-  })),
-);
+const categoryCounts = categories.map((category) => ({
+  category,
+  count: posts.filter((post) => post.data.category === category.data.id).length,
+}));
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -80,7 +78,7 @@ const jsonLd = {
           >
             Start here
           </h2>
-          <p class="text-xs tracking-widest text-[var(--muted)] uppercase">Most-read essays</p>
+          <p class="text-xs tracking-widest text-[var(--muted)] uppercase">Editor picks</p>
         </div>
         <ul class="grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
           {picks.map((post) => (

@@ -4,7 +4,7 @@ excerpt: "Presence is not a special state reserved for quiet rooms. It is a smal
 category: mindfulness
 publishedAt: '2025-03-26T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://picsum.photos/seed/mind4/800/400'
+image: 'https://fastly.picsum.photos/seed/mind4/800/400'
 featured: false
 reviewRequired: false
 draft: false

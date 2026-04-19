@@ -4,7 +4,7 @@ excerpt: "Anxiety can make the world feel loud and small at once. These gentle, 
 category: anxiety-stress
 publishedAt: '2025-03-12T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://picsum.photos/seed/anx1/800/400'
+image: 'https://fastly.picsum.photos/seed/anx1/800/400'
 featured: false
 reviewRequired: false
 draft: false

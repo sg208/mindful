@@ -4,7 +4,7 @@ excerpt: "Your body already knows how to find calm. Regulation is simply the qui
 category: anxiety-stress
 publishedAt: '2025-03-27T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://picsum.photos/seed/anx4/800/400'
+image: 'https://fastly.picsum.photos/seed/anx4/800/400'
 featured: false
 reviewRequired: false
 draft: false

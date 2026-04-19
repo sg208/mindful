@@ -31,6 +31,10 @@ const accentInk = `color-mix(in oklch, ${category.accent} 40%, var(--ink))`;
     class="mt-auto flex items-center justify-between gap-3 pt-2 text-xs tracking-widest text-[var(--muted)] uppercase"
   >
     <span>{count} {count === 1 ? 'essay' : 'essays'}</span>
-    <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">&rarr;</span>
+    <span
+      aria-hidden="true"
+      class="transition-transform group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:translate-x-0"
+      >&rarr;</span
+    >
   </p>
 </a>

@@ -11,8 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Refreshed blog posts with clearer SEO slugs and titles across anxiety, sleep, stress, boundaries, and mindfulness themes; retired older overlapping slugs in favor of consolidated pieces.
 - Added Playwright coverage for a representative rewritten post URL so builds catch missing or broken article routes.
+- Pinned all hero images to `fastly.picsum.photos` and updated the CSP to only allow that host.
+- Renamed the home "Most-read essays" label to "Editor picks" to match the curated `editorPickSlugs` source.
 
 ### Fixed
 
 - Playwright `webServer` runs `astro build`, which requires `SITE_URL`; default it to the preview base URL when unset so E2E works without a local `.env`.
 - README and Copilot workspace notes describe that E2E default and correct the category route coverage blurb (H1 uses the category label).
+- Added missing `imageAlt` frontmatter for the sleep hygiene post.

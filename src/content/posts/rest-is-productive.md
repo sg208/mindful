@@ -4,7 +4,7 @@ excerpt: "Taking real breaks isn't lazy—it's what allows you to sustain effort
 category: self-care
 publishedAt: '2025-03-19T12:00:00.000+00:00'
 updatedAt: '2026-03-11T16:09:14.452+00:00'
-image: 'https://picsum.photos/seed/selfcare3/800/400'
+image: 'https://fastly.picsum.photos/seed/selfcare3/800/400'
 featured: false
 reviewRequired: false
 draft: false

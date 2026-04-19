@@ -3,7 +3,7 @@ title: Somatic Exercises for Anxiety
 excerpt: 'Gentle somatic exercises for anxiety help you work with your body, not against it, so calm has a real place to land.'
 category: anxiety-stress
 publishedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://picsum.photos/seed/soma1/800/400'
+image: 'https://fastly.picsum.photos/seed/soma1/800/400'
 imageAlt: 'A person standing barefoot on a rug, gently rolling their shoulders back in soft indoor light'
 featured: false
 reviewRequired: false

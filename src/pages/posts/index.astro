@@ -2,16 +2,15 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import CategoryChip from '~/components/CategoryChip.astro';
 import { getCategories } from '~/lib/categories';
-import { getPostsByCategory, formatDate, readingMinutes } from '~/lib/posts';
+import { getPublishedPosts, formatDate, readingMinutes } from '~/lib/posts';
 import { siteConfig } from '~/config/site';
 
 const categories = await getCategories();
-const groups = await Promise.all(
-  categories.map(async (category) => ({
-    category,
-    posts: await getPostsByCategory(category.data.id),
-  })),
-);
+const publishedPosts = await getPublishedPosts();
+const groups = categories.map((category) => ({
+  category,
+  posts: publishedPosts.filter((post) => post.data.category === category.data.id),
+}));
 const totalCount = groups.reduce((sum, group) => sum + group.posts.length, 0);
 
 const title = 'All essays';
