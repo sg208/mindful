@@ -49,6 +49,7 @@ import { siteConfig } from '~/config/site';
 <dialog
   id="site-menu"
   aria-labelledby="site-menu-title"
+  aria-modal="true"
   class="m-0 h-[100dvh] max-h-none w-screen max-w-none bg-[var(--bg)] text-[var(--ink)] backdrop:bg-[color-mix(in_oklch,var(--ink)_60%,transparent)] backdrop:backdrop-blur-sm open:flex open:flex-col"
 >
   <div
@@ -103,15 +104,20 @@ import { siteConfig } from '~/config/site';
     const open = () => {
       dialog.showModal();
       openButton.setAttribute('aria-expanded', 'true');
+      closeButton?.focus();
     };
     const close = () => {
       if (dialog.open) dialog.close();
-      openButton.setAttribute('aria-expanded', 'false');
     };
 
     openButton.addEventListener('click', open);
     closeButton?.addEventListener('click', close);
-    dialog.addEventListener('close', () => openButton.setAttribute('aria-expanded', 'false'));
+    // Restore focus to the open button whenever the dialog closes (Escape, close
+    // button, or link click), so keyboard users don't lose their place.
+    dialog.addEventListener('close', () => {
+      openButton.setAttribute('aria-expanded', 'false');
+      openButton.focus();
+    });
 
     // Native <dialog> closes on Escape; we also close on link navigation so
     // the dialog doesn't linger open across bfcache restores.

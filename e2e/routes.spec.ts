@@ -3,11 +3,21 @@ import { test, expect } from '@playwright/test';
 /** Stable slug present in repo content */
 const SAMPLE_POST_SLUG = 'what-is-mindfulness';
 
+/** Representative slug from SEO-focused post rewrites */
+const SEO_REWRITE_POST_SLUG = 'how-to-calm-anxiety';
+
 test.describe('Core routes', () => {
   test('article page renders title from frontmatter', async ({ page }) => {
     await page.goto(`/posts/${SAMPLE_POST_SLUG}`);
 
     await expect(page.getByRole('heading', { level: 1 })).toContainText(/mindfulness/i);
+    await expect(page.locator('article')).toBeVisible();
+  });
+
+  test('SEO-rewrite post slug renders from frontmatter', async ({ page }) => {
+    await page.goto(`/posts/${SEO_REWRITE_POST_SLUG}`);
+
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(/calm anxiety/i);
     await expect(page.locator('article')).toBeVisible();
   });
 
@@ -17,6 +27,17 @@ test.describe('Core routes', () => {
     // H1 is the category label; the description sits beneath as supporting copy.
     await expect(page.getByRole('heading', { level: 1 })).toContainText(/mindfulness/i);
     await expect(page.locator('header').getByText(/paying attention/i)).toBeVisible();
+  });
+
+  test('all-essays index groups posts by category', async ({ page }) => {
+    await page.goto('/posts');
+
+    const main = page.locator('main');
+
+    await expect(main.getByRole('heading', { level: 1 })).toContainText(/all essays/i);
+    // At least one category group heading (h2) and one post link must render.
+    await expect(main.getByRole('heading', { level: 2 }).first()).toBeVisible();
+    await expect(main.getByRole('link', { name: /mindfulness/i }).first()).toBeVisible();
   });
 
   test('About and Disclaimer load', async ({ page }) => {

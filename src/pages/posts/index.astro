@@ -1,0 +1,95 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import CategoryChip from '~/components/CategoryChip.astro';
+import { getCategories } from '~/lib/categories';
+import { getPublishedPosts, formatDate, readingMinutes } from '~/lib/posts';
+import { siteConfig } from '~/config/site';
+
+const categories = await getCategories();
+const publishedPosts = await getPublishedPosts();
+const groups = categories.map((category) => ({
+  category,
+  posts: publishedPosts.filter((post) => post.data.category === category.data.id),
+}));
+const totalCount = groups.reduce((sum, group) => sum + group.posts.length, 0);
+
+const title = 'All essays';
+const description = `Every essay on ${siteConfig.name}, grouped by theme. ${totalCount} short reads on anxiety, mindfulness, relationships, self-care, and rest.`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${title} — ${siteConfig.name}`,
+  description,
+  url: new URL('/posts', Astro.site).toString(),
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <header class="mb-14 border-b border-[var(--rule)] pb-10">
+    <nav aria-label="Breadcrumb" class="mb-6 text-xs tracking-widest text-[var(--muted)] uppercase">
+      <ol class="flex flex-wrap gap-2">
+        <li><a href="/">Mindful</a></li>
+        <li aria-hidden="true">&middot;</li>
+        <li aria-current="page">All essays</li>
+      </ol>
+    </nav>
+    <p class="text-xs tracking-[0.3em] text-[var(--muted)] uppercase">The full index</p>
+    <h1
+      class="mt-3 text-5xl leading-[1.05] tracking-tight text-balance sm:text-6xl"
+      style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 96, 'SOFT' 30;"
+    >
+      All essays
+    </h1>
+    <p class="mt-5 max-w-2xl text-lg leading-relaxed text-[var(--muted)]">{description}</p>
+  </header>
+
+  <div class="flex flex-col gap-14">
+    {
+      groups.map(({ category, posts }) => (
+        <section aria-labelledby={`group-${category.data.id}`}>
+          <div class="mb-5 flex items-baseline justify-between gap-4 border-b border-[var(--rule)] pb-3">
+            <h2
+              id={`group-${category.data.id}`}
+              class="text-2xl tracking-tight sm:text-3xl"
+              style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 36;"
+            >
+              <a href={`/categories/${category.data.id}`} class="no-underline">
+                {category.data.label}
+              </a>
+            </h2>
+            <CategoryChip category={category.data} size="sm" />
+          </div>
+          <p class="mb-6 max-w-2xl text-sm leading-relaxed text-[var(--muted)]">
+            {category.data.description}
+          </p>
+          {posts.length === 0 ? (
+            <p class="text-[var(--muted)]">No essays in this theme yet.</p>
+          ) : (
+            <ul class="flex flex-col divide-y divide-[var(--rule)]">
+              {posts.map((post) => (
+                <li>
+                  <a
+                    href={`/posts/${post.id}`}
+                    class="flex flex-col gap-1 py-4 no-underline sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
+                  >
+                    <span class="text-lg leading-snug tracking-tight text-[var(--ink)] sm:text-xl">
+                      {post.data.title}
+                    </span>
+                    <span class="flex shrink-0 items-center gap-3 text-xs tracking-widest text-[var(--muted)] uppercase">
+                      <time datetime={post.data.publishedAt.toISOString()}>
+                        {formatDate(post.data.publishedAt)}
+                      </time>
+                      <span aria-hidden="true">&middot;</span>
+                      <span>{readingMinutes(post.body)} min</span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>

@@ -75,7 +75,7 @@ The CSV is the original import only. After the first `npm run seed`, markdown in
     │   ├── Footer.astro         Bottom nav via NavLinks
     │   ├── Header.astro         Sticky header + native <dialog> menu
     │   ├── NavLinks.astro       Shared nav (footer + menu stay in sync)
-    │   ├── PostCard.astro       Card used on home + category index
+    │   ├── PostCard.astro       Card used on home + category index; hero image links to the post
     │   └── Seo.astro            <title>, OG, Twitter, JSON-LD
     ├── config/
     │   └── site.ts              Site-level constants (name, tagline, nav)
@@ -149,18 +149,22 @@ npx playwright install chromium
 ```
 
 `playwright.config.ts` runs `npm run build && npm run preview -- --host 127.0.0.1 --port 4173`
-and points tests at `http://127.0.0.1:4173`. Port **4173** is intentional so a local
-`astro dev` on **4321** does not steal the preview port (if preview falls back to
-another port, `baseURL` would no longer match and tests can 404).
+and points tests at `http://127.0.0.1:4173`. The web server sets `SITE_URL` to that
+same base URL when the variable is unset so `astro build` succeeds without a local
+`.env` (override via `.env` or the environment if you need a different canonical URL
+in generated metadata). Port **4173** is intentional so a local `astro dev` on
+**4321** does not steal the preview port (if preview falls back to another port,
+`baseURL` would no longer match and tests can 404).
 
 Coverage (see `e2e/*.spec.ts`):
 
 - Home: single `h1`, `#main` landmark, skip link → `#main`, header/footer
 - Hamburger `<dialog#site-menu>`: open/close `aria-expanded`, navigate to About,
   Escape closes
-- Routes: sample post (`/posts/what-is-mindfulness`), category (H1 = category
-  **description** in `categories/[slug].astro`), About, Disclaimer, `/offline`,
-  RSS XML, `/sitemap-index.xml`, 404 page
+- Routes: sample post (`/posts/what-is-mindfulness`), a second post slug used for
+  SEO rewrites (`/posts/how-to-calm-anxiety`), category (H1 = category **label** in
+  `categories/[slug].astro`), About, Disclaimer, `/offline`, RSS XML,
+  `/sitemap-index.xml`, 404 page
 - Footer: category link, RSS navigation
 
 Projects: **chromium** (desktop) and **mobile** (Pixel 5 Chromium profile).
@@ -178,7 +182,7 @@ excerpt: One or two sentences for the card, meta description, and RSS.
 category: mindfulness # must match a category id (see list below)
 publishedAt: 2026-04-18 # ISO date; Date object is parsed by Zod
 updatedAt: 2026-04-19 # optional
-image: https://picsum.photos/seed/your-seed/1200/600 # optional, URL only
+image: https://fastly.picsum.photos/seed/your-seed/1200/600 # optional, URL only
 imageAlt: Describe the image for screen readers # optional
 featured: false # at most one post is shown as the hero
 reviewRequired: false # editorial flag (for your own tracking)
@@ -342,7 +346,7 @@ S3+CloudFront, nginx, Caddy — all work with no code changes. Just set
   `astro:schema`. Import from `astro/zod` instead.
 - **Service worker doesn't register**: SWs require HTTPS. On plain `http://`
   (non-localhost), the registration is a guarded no-op by design.
-- **`picsum.photos` is slow or rate-limited**: replace with optimised local
+- **`fastly.picsum.photos` is slow or rate-limited**: replace with optimised local
   images; update the `remotePatterns` allowlist in `astro.config.mjs` if you
   add a new remote host.
 - **Playwright: browser not installed**: run `npx playwright install chromium`

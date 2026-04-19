@@ -4,7 +4,7 @@ excerpt: "Mindfulness isn't about feeling a certain way. It's about noticing wha
 category: mindfulness
 publishedAt: '2025-03-21T12:00:00.000+00:00'
 updatedAt: '2026-03-11T16:09:16.265+00:00'
-image: 'https://picsum.photos/seed/mind3/800/400'
+image: 'https://fastly.picsum.photos/seed/mind3/800/400'
 featured: false
 reviewRequired: false
 draft: false
