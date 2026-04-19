@@ -1,16 +1,28 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PostCard from '~/components/PostCard.astro';
+import CategoryCard from '~/components/CategoryCard.astro';
 import Disclaimer from '~/components/Disclaimer.astro';
-import CategoryChip from '~/components/CategoryChip.astro';
-import { getPublishedPosts, getFeaturedPost } from '~/lib/posts';
+import type { Post } from '~/lib/posts';
+import { getPublishedPosts, getFeaturedPost, getPostsByCategory } from '~/lib/posts';
 import { getCategories } from '~/lib/categories';
 import { siteConfig } from '~/config/site';
+import { homeConfig } from '~/config/home';
 
 const posts = await getPublishedPosts();
 const featured = await getFeaturedPost();
 const categories = await getCategories();
-const rest = posts.filter((post) => post.id !== featured?.id);
+
+const picks = homeConfig.editorPickSlugs
+  .map((slug) => posts.find((post) => post.id === slug))
+  .filter((post): post is Post => post !== undefined && post.id !== featured?.id);
+
+const categoryCounts = await Promise.all(
+  categories.map(async (category) => ({
+    category,
+    count: (await getPostsByCategory(category.data.id)).length,
+  })),
+);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -42,37 +54,12 @@ const jsonLd = {
     <div
       class="rise rise-1 max-w-sm border-l border-[var(--rule)] pl-5 text-[var(--muted)] sm:pl-8 md:border-r md:border-r-0 md:border-l-0 md:pr-8 md:pl-0 md:text-right"
     >
-      <p class="text-base leading-relaxed">
-        {siteConfig.description}
-      </p>
+      <p class="text-base leading-relaxed">{siteConfig.description}</p>
       <p class="mt-4 text-xs tracking-widest uppercase">
         {posts.length} essays &middot; 2&ndash;5 min each
       </p>
     </div>
   </section>
-
-  {
-    categories.length > 0 && (
-      <nav
-        aria-labelledby="themes-heading"
-        class="rise rise-2 mb-16 flex flex-wrap items-center gap-2 border-y border-[var(--rule)] py-6"
-      >
-        <h2
-          id="themes-heading"
-          class="mr-2 self-center text-xs font-normal tracking-widest text-[var(--muted)] uppercase"
-        >
-          Themes
-        </h2>
-        <ul class="flex flex-wrap gap-2">
-          {categories.map((category) => (
-            <li>
-              <CategoryChip category={category.data} size="md" />
-            </li>
-          ))}
-        </ul>
-      </nav>
-    )
-  }
 
   {
     featured && (
@@ -83,27 +70,51 @@ const jsonLd = {
   }
 
   {
-    rest.length > 0 && (
-      <section aria-labelledby="latest-heading" class="rise rise-3">
+    picks.length > 0 && (
+      <section aria-labelledby="start-heading" class="rise rise-3 mb-20">
         <div class="mb-8 flex items-baseline justify-between gap-4 border-b border-[var(--rule)] pb-4">
           <h2
-            id="latest-heading"
+            id="start-heading"
             class="text-2xl tracking-tight sm:text-3xl"
             style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 36;"
           >
-            More to read
+            Start here
           </h2>
-          <a
-            href="/rss.xml"
-            class="inline-flex h-8 items-center rounded-full border border-[var(--rule)] px-3 text-xs tracking-widest text-[var(--muted)] uppercase no-underline hover:border-[var(--accent)]"
-          >
-            RSS
-          </a>
+          <p class="text-xs tracking-widest text-[var(--muted)] uppercase">Most-read essays</p>
         </div>
         <ul class="grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-          {rest.map((post) => (
+          {picks.map((post) => (
             <li>
               <PostCard post={post} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    categoryCounts.length > 0 && (
+      <section aria-labelledby="themes-heading" class="rise rise-4">
+        <div class="mb-8 flex items-baseline justify-between gap-4 border-b border-[var(--rule)] pb-4">
+          <h2
+            id="themes-heading"
+            class="text-2xl tracking-tight sm:text-3xl"
+            style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 36;"
+          >
+            Browse by theme
+          </h2>
+          <a
+            href="/posts"
+            class="text-xs tracking-widest text-[var(--muted)] uppercase hover:text-[var(--accent-ink)]"
+          >
+            All essays &rarr;
+          </a>
+        </div>
+        <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {categoryCounts.map(({ category, count }) => (
+            <li class="h-full">
+              <CategoryCard category={category.data} count={count} />
             </li>
           ))}
         </ul>
