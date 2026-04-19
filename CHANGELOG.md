@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Accessibility statement at `/accessibility`, privacy notice at `/privacy`, and terms of use at `/terms`, linked from the shared footer and menu nav.
+- Playwright route smoke coverage for the new pages alongside About and Disclaimer.
+
+### Removed
+
+- RSS feed (`/rss.xml`), `@astrojs/rss`, head alternate link, footer “RSS feed” link, and related docs, privacy copy, and E2E assertions.
+
 ### Changed
 
 - Refreshed blog posts with clearer SEO slugs and titles across anxiety, sleep, stress, boundaries, and mindfulness themes; retired older overlapping slugs in favor of consolidated pieces.
