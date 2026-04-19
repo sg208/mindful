@@ -3,7 +3,7 @@ title: Burnout Symptoms to Notice Early
 excerpt: 'Burnout symptoms often show up long before the breaking point. Noticing them early is a kindness, not a weakness.'
 category: anxiety-stress
 publishedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://fastly.picsum.photos/seed/burn1/800/400'
+image: 'https://picsum.photos/seed/burn1/800/400'
 imageAlt: 'A tired-looking candle that has mostly burned down, resting beside an unopened book'
 featured: false
 reviewRequired: false

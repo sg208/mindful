@@ -3,7 +3,7 @@ title: Emotional Regulation Techniques
 excerpt: 'Simple emotional regulation techniques can help you feel more steady without numbing what matters. Small practices, real relief.'
 category: mindfulness
 publishedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://fastly.picsum.photos/seed/mind2/800/400'
+image: 'https://picsum.photos/seed/mind2/800/400'
 imageAlt: 'A person with eyes closed, hand resting gently on their chest, softly lit by morning light'
 featured: false
 reviewRequired: false

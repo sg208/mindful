@@ -4,7 +4,7 @@ excerpt: "Sleep and mood are two sides of the same quiet conversation. Tending t
 category: sleep-rest
 publishedAt: '2025-03-23T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://fastly.picsum.photos/seed/sleep4/800/400'
+image: 'https://picsum.photos/seed/sleep4/800/400'
 featured: false
 reviewRequired: false
 draft: false

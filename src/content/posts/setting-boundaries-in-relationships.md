@@ -4,7 +4,7 @@ excerpt: "Boundaries are not walls. They are the gentle lines that let you stay 
 category: relationships
 publishedAt: '2025-03-10T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://fastly.picsum.photos/seed/rel1/800/400'
+image: 'https://picsum.photos/seed/rel1/800/400'
 featured: false
 reviewRequired: false
 draft: false

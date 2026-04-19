@@ -4,7 +4,7 @@ excerpt: "Sleep is not a reward for a busy day. It is the quiet work your mind d
 category: sleep-rest
 publishedAt: '2025-03-08T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://fastly.picsum.photos/seed/sleep1/800/400'
+image: 'https://picsum.photos/seed/sleep1/800/400'
 featured: false
 reviewRequired: false
 draft: false

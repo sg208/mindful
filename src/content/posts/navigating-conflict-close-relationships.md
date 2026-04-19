@@ -4,7 +4,7 @@ excerpt: Conflict is normal. How you handle it can either damage or strengthen y
 category: relationships
 publishedAt: '2025-03-20T12:00:00.000+00:00'
 updatedAt: '2026-03-11T16:09:15.316+00:00'
-image: 'https://fastly.picsum.photos/seed/rel3/800/400'
+image: 'https://picsum.photos/seed/rel3/800/400'
 featured: false
 reviewRequired: false
 draft: false

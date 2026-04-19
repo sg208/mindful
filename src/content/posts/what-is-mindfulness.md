@@ -4,7 +4,7 @@ excerpt: "Mindfulness is simply paying attention to the present moment without j
 category: mindfulness
 publishedAt: '2025-03-11T12:00:00.000+00:00'
 updatedAt: '2026-03-11T16:09:05.352+00:00'
-image: 'https://fastly.picsum.photos/seed/mind1/800/400'
+image: 'https://picsum.photos/seed/mind1/800/400'
 featured: false
 reviewRequired: false
 draft: false

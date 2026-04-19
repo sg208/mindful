@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Refreshed blog posts with clearer SEO slugs and titles across anxiety, sleep, stress, boundaries, and mindfulness themes; retired older overlapping slugs in favor of consolidated pieces.
 - Added Playwright coverage for a representative rewritten post URL so builds catch missing or broken article routes.
-- Pinned all hero images to `fastly.picsum.photos` and updated the CSP to only allow that host.
+- Kept Picsum hero image placeholders on `picsum.photos` (seed endpoints) while allowing both `picsum.photos` and `fastly.picsum.photos` in CSP.
 - Renamed the home "Most-read essays" label to "Editor picks" to match the curated `editorPickSlugs` source.
 
 ### Fixed

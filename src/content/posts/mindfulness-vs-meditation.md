@@ -3,7 +3,7 @@ title: Mindfulness vs Meditation
 excerpt: 'Mindfulness vs meditation is less a debate and more a gentle distinction. One is a way of being, the other a way of practicing.'
 category: mindfulness
 publishedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://fastly.picsum.photos/seed/mind4/800/400'
+image: 'https://picsum.photos/seed/mind4/800/400'
 imageAlt: 'A simple meditation cushion beside a window with soft daylight spilling onto the floor'
 featured: false
 reviewRequired: false

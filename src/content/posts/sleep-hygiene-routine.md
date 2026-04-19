@@ -4,7 +4,7 @@ excerpt: "Sleep hygiene is not a strict checklist. It is a handful of small, war
 category: sleep-rest
 publishedAt: '2025-03-13T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'
-image: 'https://fastly.picsum.photos/seed/sleep2/800/400'
+image: 'https://picsum.photos/seed/sleep2/800/400'
 imageAlt: 'A bedside table with a warm reading lamp, a closed book, and a glass of water in soft evening light'
 featured: false
 reviewRequired: false
