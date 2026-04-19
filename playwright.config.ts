@@ -26,6 +26,9 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
     // astro.config.mjs requires SITE_URL for `astro build`; preview base is a safe default for E2E.
-    env: { ...process.env, SITE_URL: process.env.SITE_URL ?? baseURL },
+    env: {
+      ...process.env,
+      SITE_URL: process.env.SITE_URL?.trim() || baseURL,
+    },
   },
 });
