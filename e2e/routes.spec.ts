@@ -3,11 +3,21 @@ import { test, expect } from '@playwright/test';
 /** Stable slug present in repo content */
 const SAMPLE_POST_SLUG = 'what-is-mindfulness';
 
+/** Representative slug from SEO-focused post rewrites */
+const SEO_REWRITE_POST_SLUG = 'how-to-calm-anxiety';
+
 test.describe('Core routes', () => {
   test('article page renders title from frontmatter', async ({ page }) => {
     await page.goto(`/posts/${SAMPLE_POST_SLUG}`);
 
     await expect(page.getByRole('heading', { level: 1 })).toContainText(/mindfulness/i);
+    await expect(page.locator('article')).toBeVisible();
+  });
+
+  test('SEO-rewrite post slug renders from frontmatter', async ({ page }) => {
+    await page.goto(`/posts/${SEO_REWRITE_POST_SLUG}`);
+
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(/calm anxiety/i);
     await expect(page.locator('article')).toBeVisible();
   });
 
