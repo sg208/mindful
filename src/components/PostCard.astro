@@ -14,6 +14,7 @@ interface Props {
 const { post, variant = 'default', headingLevel = 3 } = Astro.props;
 const category = await getCategory(post.data.category);
 const href = `/posts/${post.id}`;
+const imageAlt = post.data.imageAlt ?? post.data.title;
 const headingSize =
   variant === 'feature' ? 'text-3xl sm:text-4xl md:text-5xl' : 'text-xl sm:text-2xl';
 const Heading = `h${headingLevel}` as 'h2' | 'h3';
@@ -24,17 +25,21 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 >
   {
     post.data.image && (
-      <div class="overflow-hidden rounded-[var(--radius-card)]">
+      <a
+        href={href}
+        class="block overflow-hidden rounded-[var(--radius-card)] no-underline outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--accent)]"
+      >
         <img
           src={post.data.image}
-          alt=""
+          alt={imageAlt}
           loading={variant === 'feature' ? 'eager' : 'lazy'}
+          fetchpriority={variant === 'feature' ? 'high' : undefined}
           decoding="async"
           width={variant === 'feature' ? 1200 : 800}
           height={variant === 'feature' ? 600 : 400}
           class="aspect-[16/9] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
         />
-      </div>
+      </a>
     )
   }
 
