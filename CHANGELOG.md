@@ -20,3 +20,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - README and Copilot workspace notes describe that E2E default and correct the category route coverage blurb (H1 uses the category label).
 - Added missing `imageAlt` frontmatter for the sleep hygiene post.
 - Set home editor pick cards to `headingLevel={3}` to preserve the H2 → H3 outline.
+- Relaxed `script-src` to allow `'unsafe-inline'` for JSON-LD + Astro-generated snippets, and removed an invalid `document-domain` Permissions-Policy token that logged warnings.
