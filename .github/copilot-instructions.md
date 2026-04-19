@@ -44,9 +44,10 @@ to any static host.
 - `Footer.astro` — uses `NavLinks` + disclaimer copy
 - `Seo.astro` — title, description, canonical, OG, Twitter, JSON-LD (pass
   objects or arrays via the `jsonLd` prop)
-- `PostCard.astro` — card for home + category listings; accepts
-  `headingLevel: 2 | 3` (default 3) so parent pages keep a valid h1 → h2 → h3
-  outline
+- `PostCard.astro` — card for home + category listings; hero `<img>` links to
+  the post (`href` matches title link), `alt` from `imageAlt` frontmatter or
+  title, inset focus ring on the image link; accepts `headingLevel: 2 | 3`
+  (default 3) so parent pages keep a valid h1 → h2 → h3 outline
 - `CategoryChip.astro` — pill tinted by the category's `accent`; text color
   mixed against `var(--ink)` so contrast holds in light and dark themes
 - `Disclaimer.astro` — reusable "not medical advice" note

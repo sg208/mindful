@@ -75,7 +75,7 @@ The CSV is the original import only. After the first `npm run seed`, markdown in
     │   ├── Footer.astro         Bottom nav via NavLinks
     │   ├── Header.astro         Sticky header + native <dialog> menu
     │   ├── NavLinks.astro       Shared nav (footer + menu stay in sync)
-    │   ├── PostCard.astro       Card used on home + category index
+    │   ├── PostCard.astro       Card used on home + category index; hero image links to the post
     │   └── Seo.astro            <title>, OG, Twitter, JSON-LD
     ├── config/
     │   └── site.ts              Site-level constants (name, tagline, nav)
