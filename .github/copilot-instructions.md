@@ -9,7 +9,8 @@ without requiring a wide search.
 Astro 6 static (`output: 'static'`) + TypeScript strict + Tailwind v4 (via
 `@tailwindcss/vite`) + Content Collections (markdown + JSON). Zero framework
 runtime. **E2E:** `@playwright/test` hits `astro preview` at `http://127.0.0.1:4173`
-(never 4321 — avoids clashing with `astro dev`). Deployed on Railway via the
+(never 4321 — avoids clashing with `astro dev`); `playwright.config.ts` sets
+`SITE_URL` for the webServer build when unset. Deployed on Railway via the
 repo `Dockerfile` (multi-stage, non-root `node` user, bundled `serve`). Ships
 to any static host.
 

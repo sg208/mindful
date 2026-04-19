@@ -149,18 +149,22 @@ npx playwright install chromium
 ```
 
 `playwright.config.ts` runs `npm run build && npm run preview -- --host 127.0.0.1 --port 4173`
-and points tests at `http://127.0.0.1:4173`. Port **4173** is intentional so a local
-`astro dev` on **4321** does not steal the preview port (if preview falls back to
-another port, `baseURL` would no longer match and tests can 404).
+and points tests at `http://127.0.0.1:4173`. The web server sets `SITE_URL` to that
+same base URL when the variable is unset so `astro build` succeeds without a local
+`.env` (override via `.env` or the environment if you need a different canonical URL
+in generated metadata). Port **4173** is intentional so a local `astro dev` on
+**4321** does not steal the preview port (if preview falls back to another port,
+`baseURL` would no longer match and tests can 404).
 
 Coverage (see `e2e/*.spec.ts`):
 
 - Home: single `h1`, `#main` landmark, skip link → `#main`, header/footer
 - Hamburger `<dialog#site-menu>`: open/close `aria-expanded`, navigate to About,
   Escape closes
-- Routes: sample post (`/posts/what-is-mindfulness`), category (H1 = category
-  **description** in `categories/[slug].astro`), About, Disclaimer, `/offline`,
-  RSS XML, `/sitemap-index.xml`, 404 page
+- Routes: sample post (`/posts/what-is-mindfulness`), a second post slug used for
+  SEO rewrites (`/posts/how-to-calm-anxiety`), category (H1 = category **label** in
+  `categories/[slug].astro`), About, Disclaimer, `/offline`, RSS XML,
+  `/sitemap-index.xml`, 404 page
 - Footer: category link, RSS navigation
 
 Projects: **chromium** (desktop) and **mobile** (Pixel 5 Chromium profile).
