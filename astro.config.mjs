@@ -16,7 +16,6 @@ export default defineConfig({
   site: SITE_URL,
   output: 'static',
   trailingSlash: 'never',
-  prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
   image: {
     remotePatterns: [{ protocol: 'https', hostname: 'picsum.photos' }],
   },
