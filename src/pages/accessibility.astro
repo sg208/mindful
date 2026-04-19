@@ -1,0 +1,59 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Accessibility"
+  description="How we think about accessibility on Mindful, what we try to do today, and where we still have room to grow."
+>
+  <article class="mx-auto max-w-3xl">
+    <header class="mb-10">
+      <p class="text-xs tracking-[0.3em] text-[var(--muted)] uppercase">Accessibility</p>
+      <h1
+        class="mt-4 text-5xl leading-tight tracking-tight text-balance sm:text-6xl"
+        style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 96;"
+      >
+        A site more people can use, comfortably.
+      </h1>
+    </header>
+
+    <div class="prose">
+      <p>
+        When we say &ldquo;accessibility,&rdquo; we mean the basics: more readers can find their way
+        around, read the text, use a keyboard where it matters, and not get lost in layout or
+        wording. We care about that, and we treat it as part of doing this project well &mdash; not
+        as an extra polish layer at the end.
+      </p>
+
+      <h2>What we aim for today</h2>
+      <ul>
+        <li>Clear page structure (landmarks like header, main navigation, main content, and footer).</li>
+        <li>Interactive pieces (such as the menu) built so keyboard and screen-reader users can open, move through, and close them.</li>
+        <li>Readable type and color choices we control, with calm contrast so long reads stay gentle on the eyes.</li>
+        <li>Meaningful headings on essays and index pages so you can skim and jump.</li>
+      </ul>
+
+      <h2>We are not perfect</h2>
+      <p>
+        Mindful is small and changes over time. We test in browsers and with automated checks, but
+        we do not catch everything. A combination of device, assistive technology, and personal
+        preference can still surface barriers we have not seen yet. If you hit one, it is real,
+        even if this page says we try hard.
+      </p>
+
+      <h2>Still improving</h2>
+      <p>
+        We revisit layouts, copy, and behavior as the site grows. When we learn about a problem, we
+        want to fix it or explain honestly if a fix will take longer. Accessibility is ongoing work,
+        not a one-time checkbox.
+      </p>
+
+      <h2>If something is hard to use</h2>
+      <p>
+        We want to hear about it. When you have a moment, tell us what you were trying to do, what
+        got in the way, and what device or tools you were using if you know them. That detail helps
+        more than you might think.
+      </p>
+    </div>
+  </article>
+</BaseLayout>

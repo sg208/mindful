@@ -1,0 +1,91 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Privacy"
+  description="How Mindful handles information when you visit the site: no analytics, third-party hosting and images, and plain-language detail."
+>
+  <article class="mx-auto max-w-3xl">
+    <header class="mb-10">
+      <p class="text-xs tracking-[0.3em] text-[var(--muted)] uppercase">Privacy</p>
+      <h1
+        class="mt-4 text-5xl leading-tight tracking-tight text-balance sm:text-6xl"
+        style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 96;"
+      >
+        How we treat your visit.
+      </h1>
+    </header>
+
+    <div class="prose">
+      <p>
+        Mindful is a small, read-only website of essays. We do <strong>not</strong> run Google
+        Analytics, advertising trackers, or similar analytics products. We are not in the business
+        of profiling readers.
+      </p>
+
+      <h2>What you share by simply browsing</h2>
+      <p>
+        When you open a page, technical information travels the way it always does on the web: your
+        browser asks servers for files, and those servers see data such as your IP address, the
+        page or file requested, and rough timing. That is normal internet plumbing, not something
+        unique to Mindful.
+      </p>
+
+      <h2>Who helps us deliver the site</h2>
+      <p>We rely on a few services so the site loads quickly and stays online:</p>
+      <ul>
+        <li>
+          <strong>Cloudflare</strong> sits in front of our domain for DNS and network services (for
+          example routing, security, and performance). Cloudflare processes visitor traffic as part
+          of that role. Their own policies describe what they collect and why.
+        </li>
+        <li>
+          <strong>Railway</strong> hosts the built site. When you request a page or file, Railway
+          (and any caching or edge network they use to deliver static files) may process the same
+          kind of technical data as any host.
+        </li>
+        <li>
+          <strong>Placeholder images</strong> on some essays come from <strong>Picsum</strong> (and
+          its CDN). Your browser loads those images directly from their infrastructure, which means
+          Picsum or its providers may see technical data tied to that request, the same way any
+          external image host would.
+        </li>
+      </ul>
+
+      <h2>Fonts</h2>
+      <p>
+        We bundle our web fonts with the site (via Fontsource packages built into our CSS). We do
+        <strong>not</strong> load fonts from Google Fonts or another remote font service in the page
+        head, so visiting Mindful does not send a separate font request to Google for typography.
+      </p>
+
+      <h2>Offline support (service worker)</h2>
+      <p>
+        Mindful registers a small <strong>service worker</strong> so pages and same-origin assets
+        can be cached on <em>your device</em> for speed and a simple offline fallback. That cache
+        stays on your device; it is not a copy we read on our servers.
+      </p>
+
+      <h2>Cookies and similar storage</h2>
+      <p>
+        We do not use cookies for marketing or analytics. Any storage tied to the service worker is
+        for technical caching as described above, not for cross-site tracking.
+      </p>
+
+      <h2>Children</h2>
+      <p>
+        Mindful is written for adults reflecting on wellbeing. It is not aimed at collecting data
+        from children. If you are a parent or guardian with a concern, please use contact options we
+        publish elsewhere when available.
+      </p>
+
+      <h2>Updates</h2>
+      <p>
+        If our stack or practices change in a way that matters for privacy, we will update this
+        page and note the spirit of the change here. This is a transparency page, not a contract;
+        for rules about using the site, see <a href="/terms">Terms of use</a>.
+      </p>
+    </div>
+  </article>
+</BaseLayout>

@@ -57,8 +57,8 @@ to any static host.
 
 - `index.astro` (home: hero + featured + grid), `posts/[slug].astro`,
   `categories/[slug].astro`, `about.astro`, `disclaimer.astro`,
-  `offline.astro` (SW fallback, noindex), `404.astro` (noindex),
-  `rss.xml.ts` (20 latest non-draft posts)
+  `accessibility.astro`, `privacy.astro`, `terms.astro`,
+  `offline.astro` (SW fallback, noindex), `404.astro` (noindex)
 
 **Styling**
 
@@ -89,7 +89,7 @@ to any static host.
 
 - Specs: `e2e/home.spec.ts`, `e2e/menu.spec.ts`, `e2e/routes.spec.ts`,
   `e2e/footer-nav.spec.ts` — home landmarks, dialog menu + Escape, post/category/
-  about/disclaimer/offline/rss/sitemap/404, footer links
+  about/disclaimer/offline/sitemap/404, footer links
 - Config: `playwright.config.ts` — `webServer` = build + preview on port **4173**;
   projects **chromium** + **mobile** (Pixel 5 profile, Chromium)
 - Sample post slug hard-coded in `routes.spec.ts`: `what-is-mindfulness` — update
@@ -98,7 +98,7 @@ to any static host.
 **Config**
 
 - `astro.config.mjs` (integrations, image remote allowlist, Tailwind plugin).
-  Fails `astro build` when `SITE_URL` is missing (canonical/OG/sitemap/RSS).
+  Fails `astro build` when `SITE_URL` is missing (canonical/OG/sitemap).
 - `eslint.config.mjs` (flat config: astro + jsx-a11y + typescript-eslint + prettier)
 - `.prettierrc`, `tsconfig.json` (path alias `~/*` → `src/*`; includes `e2e/**/*.ts`)
 - `railway.json` (builder: `DOCKERFILE`, `dockerfilePath: Dockerfile`), multi-stage

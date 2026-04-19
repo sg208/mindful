@@ -40,11 +40,20 @@ test.describe('Core routes', () => {
     await expect(main.getByRole('link', { name: /mindfulness/i }).first()).toBeVisible();
   });
 
-  test('About and Disclaimer load', async ({ page }) => {
+  test('About, legal, and info pages load', async ({ page }) => {
     await page.goto('/about');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 
     await page.goto('/disclaimer');
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+
+    await page.goto('/accessibility');
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+
+    await page.goto('/privacy');
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+
+    await page.goto('/terms');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   });
 
@@ -52,14 +61,6 @@ test.describe('Core routes', () => {
     await page.goto('/offline');
 
     await expect(page.getByRole('heading', { level: 1 })).toContainText(/offline/i);
-  });
-
-  test('RSS returns XML', async ({ request }) => {
-    const response = await request.get('/rss.xml');
-    expect(response.ok()).toBeTruthy();
-    const text = await response.text();
-    expect(text).toContain('<rss');
-    expect(text).toContain('<item>');
   });
 
   test('sitemap index is reachable', async ({ page }) => {

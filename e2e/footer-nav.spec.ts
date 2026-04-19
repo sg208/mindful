@@ -12,15 +12,4 @@ test.describe('Footer navigation', () => {
     await expect(page).toHaveURL(/\/categories\/self-care$/);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   });
-
-  test('footer RSS link requests feed', async ({ page }) => {
-    await page.goto('/');
-
-    const rssPromise = page.waitForResponse((res) => res.url().endsWith('/rss.xml') && res.ok());
-    await page
-      .locator('footer')
-      .getByRole('link', { name: /rss feed/i })
-      .click();
-    await rssPromise;
-  });
 });
