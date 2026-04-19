@@ -1,5 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/vercel/serve/main/schema/config.schema.json",
   "headers": [
     {
       "source": "**/*",
