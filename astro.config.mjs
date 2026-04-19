@@ -17,7 +17,11 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'never',
   image: {
-    remotePatterns: [{ protocol: 'https', hostname: 'picsum.photos' }],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'picsum.photos' },
+      // Seed URLs redirect here at runtime; allow if we ever use Astro image APIs.
+      { protocol: 'https', hostname: 'fastly.picsum.photos' },
+    ],
   },
   integrations: [
     mdx(),
