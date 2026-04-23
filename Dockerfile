@@ -31,6 +31,6 @@ COPY scripts/upload-to-cdn.mjs ./scripts/upload-to-cdn.mjs
 USER node
 EXPOSE 3000
 ENV PORT=3000
-# Run CDN upload first, then start the static file server.
+# scripts/upload-to-cdn.mjs runs in the background while serve starts immediately.
 # `serve` reads dist/serve.json (copied from public/serve.json by Astro) for security headers.
 CMD ["sh", "-c", "node scripts/upload-to-cdn.mjs & exec node node_modules/serve/build/main.js -s dist -l ${PORT:-3000}"]
