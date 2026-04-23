@@ -50,6 +50,23 @@ async function collectFiles(dir) {
   return paths;
 }
 
+/** Create a directory in Bunny storage (PUT with trailing slash). */
+async function createDirectory(dirPath) {
+  const url = `${STORAGE_BASE_URL}/${encodePath(dirPath)}/`;
+  try {
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: { AccessKey: STORAGE_ACCESS_KEY, 'Content-Type': 'application/json' },
+      body: '{}',
+    });
+    if (!res.ok) {
+      console.warn(`[cdn] mkdir ${dirPath}  HTTP ${res.status} (may already exist)`);
+    }
+  } catch (err) {
+    console.warn(`[cdn] mkdir network error  ${dirPath}: ${err.message}`);
+  }
+}
+
 /** Upload a single file to Bunny storage. Returns true on success. */
 async function uploadFile(filePath) {
   const relativePath = relative(DIST_DIR, filePath).replace(/\\/g, '/');
@@ -151,13 +168,26 @@ async function main() {
 
   console.log(`[cdn] ${files.length} file(s) to upload`);
 
+  // Bunny storage is a hierarchical filesystem — directories must exist
+  // before files can be PUT inside them. Collect unique parent paths,
+  // sort so parents are created before children, then create each one.
+  // Failures are logged as warnings only; uploads proceed regardless.
+  const dirs = new Set();
+  for (const file of files) {
+    const parts = relative(DIST_DIR, file).replace(/\\/g, '/').split('/');
+    for (let i = 1; i < parts.length; i++) {
+      dirs.add(parts.slice(0, i).join('/'));
+    }
+  }
+  for (const dir of [...dirs].sort()) {
+    await createDirectory(dir);
+  }
+
   const CONCURRENCY = 8;
   let ok = 0;
   let fail = 0;
 
-  // Upload files in bounded-concurrency batches. Bunny object storage
-  // creates virtual directory paths automatically on PUT — no explicit
-  // mkdir step is needed.
+  // Upload all files in bounded-concurrency batches.
   for (let i = 0; i < files.length; i += CONCURRENCY) {
     const batch = files.slice(i, i + CONCURRENCY);
     const results = await Promise.all(batch.map((file) => uploadFile(file)));
