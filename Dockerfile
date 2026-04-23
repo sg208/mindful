@@ -31,6 +31,8 @@ COPY scripts/upload-to-cdn.mjs ./scripts/upload-to-cdn.mjs
 USER node
 EXPOSE 3000
 ENV PORT=3000
-# scripts/upload-to-cdn.mjs runs in the background while serve starts immediately.
+# Run the CDN upload to completion (logs stream to Railway deploy logs),
+# then exec into `serve`. The script catches all errors and exits 0, so
+# serve always starts regardless of upload outcome.
 # `serve` reads dist/serve.json (copied from public/serve.json by Astro) for security headers.
-CMD ["sh", "-c", "node scripts/upload-to-cdn.mjs & exec node node_modules/serve/build/main.js -s dist -l ${PORT:-3000}"]
+CMD ["sh", "-c", "node scripts/upload-to-cdn.mjs; exec node node_modules/serve/build/main.js -s dist -l ${PORT:-3000}"]
