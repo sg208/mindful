@@ -26,9 +26,11 @@ RUN apk add --no-cache curl
 COPY --from=deps /app/node_modules ./node_modules
 COPY package.json ./
 COPY --from=build /app/dist ./dist
+COPY scripts/upload-to-cdn.mjs ./scripts/upload-to-cdn.mjs
 # node:22-alpine ships a non-root `node` user (uid 1000). Drop root for runtime.
 USER node
 EXPOSE 3000
 ENV PORT=3000
+# Run CDN upload first, then start the static file server.
 # `serve` reads dist/serve.json (copied from public/serve.json by Astro) for security headers.
-CMD ["sh", "-c", "node node_modules/serve/build/main.js -s dist -l ${PORT:-3000}"]
+CMD ["sh", "-c", "node scripts/upload-to-cdn.mjs && node node_modules/serve/build/main.js -s dist -l ${PORT:-3000}"]
