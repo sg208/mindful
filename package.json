@@ -11,7 +11,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "start": "serve -s dist -l ${PORT:-3000}",
+    "start": "node scripts/upload-to-cdn.mjs && serve -s dist -l ${PORT:-3000}",
     "seed": "node scripts/csv-to-content.mjs",
     "icons": "node scripts/generate-icons.mjs",
     "init:env": "node scripts/init-env.mjs",
