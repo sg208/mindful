@@ -30,9 +30,11 @@ const ZONE_ID = process.env.BUNNY_ZONE_ID;
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
-/** Encode each path segment individually, preserving the slashes between them. */
+/** Encode each path segment individually, preserving the slashes between them.
+ *  Normalises backslashes to forward slashes first so the function is safe on
+ *  any platform and regardless of how the caller constructed the path. */
 function encodePath(rawPath) {
-  return rawPath.split('/').map(encodeURIComponent).join('/');
+  return rawPath.replace(/\\/g, '/').split('/').map(encodeURIComponent).join('/');
 }
 
 /** Recursively collect every file path under a directory. */
