@@ -50,25 +50,6 @@ async function collectFiles(dir) {
   return paths;
 }
 
-/** Create a directory in Bunny storage (PUT with trailing slash). Returns true on success. */
-async function createDirectory(dirPath) {
-  const url = `${STORAGE_BASE_URL}/${encodePath(dirPath)}/`;
-  try {
-    const res = await fetch(url, {
-      method: 'PUT',
-      headers: { AccessKey: STORAGE_ACCESS_KEY },
-    });
-    if (!res.ok) {
-      console.error(`[cdn] ✗ mkdir failed  ${dirPath}  HTTP ${res.status}`);
-      return false;
-    }
-    return true;
-  } catch (err) {
-    console.error(`[cdn] ✗ mkdir network error  ${dirPath}: ${err.message}`);
-    return false;
-  }
-}
-
 /** Upload a single file to Bunny storage. Returns true on success. */
 async function uploadFile(filePath) {
   const relativePath = relative(DIST_DIR, filePath).replace(/\\/g, '/');
@@ -170,42 +151,16 @@ async function main() {
 
   console.log(`[cdn] ${files.length} file(s) to upload`);
 
-  // Bunny storage requires directories to exist before files can be uploaded
-  // into them. Collect unique parent paths, sort so parents come before children,
-  // then create each one with a PUT /<dir>/ request.
-  const dirs = new Set();
-  for (const file of files) {
-    const parts = relative(DIST_DIR, file).replace(/\\/g, '/').split('/');
-    for (let i = 1; i < parts.length; i++) {
-      dirs.add(parts.slice(0, i).join('/'));
-    }
-  }
-  const failedDirs = new Set();
-  for (const dir of [...dirs].sort()) {
-    const ok = await createDirectory(dir);
-    if (!ok) failedDirs.add(dir);
-  }
-
   const CONCURRENCY = 8;
   let ok = 0;
   let fail = 0;
 
-  // Upload files in bounded-concurrency batches of CONCURRENCY.
+  // Upload files in bounded-concurrency batches. Bunny object storage
+  // creates virtual directory paths automatically on PUT — no explicit
+  // mkdir step is needed.
   for (let i = 0; i < files.length; i += CONCURRENCY) {
     const batch = files.slice(i, i + CONCURRENCY);
-    const results = await Promise.all(
-      batch.map((file) => {
-        const relativePath = relative(DIST_DIR, file).replace(/\\/g, '/');
-        const parentDir = relativePath.includes('/')
-          ? relativePath.slice(0, relativePath.lastIndexOf('/'))
-          : null;
-        if (parentDir !== null && failedDirs.has(parentDir)) {
-          console.error(`[cdn] ✗ skipped  ${relativePath}  (parent dir creation failed)`);
-          return Promise.resolve(false);
-        }
-        return uploadFile(file);
-      }),
-    );
+    const results = await Promise.all(batch.map((file) => uploadFile(file)));
     for (const success of results) {
       if (success) {
         ok++;
