@@ -1,6 +1,6 @@
 ---
 title: Setting Boundaries in Relationships
-excerpt: "Boundaries are not walls. They are the gentle lines that let you stay close to others without losing yourself."
+excerpt: 'Boundaries are not walls. They are the gentle lines that let you stay close to others without losing yourself.'
 category: relationships
 publishedAt: '2025-03-10T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'

@@ -1,6 +1,6 @@
 ---
 title: A Breathing Exercise for Anxiety
-excerpt: "Your breath is always with you. When anxiety rises, it can be the quietest way home."
+excerpt: 'Your breath is always with you. When anxiety rises, it can be the quietest way home.'
 category: mindfulness
 publishedAt: '2025-03-16T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'

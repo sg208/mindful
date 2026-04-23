@@ -1,6 +1,6 @@
 ---
 title: Sleep and Mood
-excerpt: "Sleep and mood are two sides of the same quiet conversation. Tending to one is often how we reach the other."
+excerpt: 'Sleep and mood are two sides of the same quiet conversation. Tending to one is often how we reach the other.'
 category: sleep-rest
 publishedAt: '2025-03-23T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'

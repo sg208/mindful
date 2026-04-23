@@ -1,6 +1,6 @@
 ---
 title: How to Stop Worrying
-excerpt: "Worry often feels like care in disguise. With a little space and kindness, it can soften into something lighter."
+excerpt: 'Worry often feels like care in disguise. With a little space and kindness, it can soften into something lighter.'
 category: anxiety-stress
 publishedAt: '2025-03-22T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'
