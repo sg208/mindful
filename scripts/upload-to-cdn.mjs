@@ -169,6 +169,9 @@ async function main() {
   }
 
   console.log(`[cdn] ${files.length} file(s) to upload`);
+  for (const file of files) {
+    console.log(`[cdn] queued  ${relative(DIST_DIR, file).replace(/\\/g, '/')}`);
+  }
 
   // Bunny storage is a hierarchical filesystem — directories must exist
   // before files can be PUT inside them. Collect unique parent paths,
