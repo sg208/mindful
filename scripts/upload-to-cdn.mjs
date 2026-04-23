@@ -16,9 +16,8 @@
  */
 
 import { readdir, readFile, stat } from 'node:fs/promises';
-import { join, relative } from 'node:path';
+import { join, relative, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = resolve(here, '..', 'dist');
@@ -30,6 +29,11 @@ const API_KEY = process.env.BUNNY_API_KEY;
 const ZONE_ID = process.env.BUNNY_ZONE_ID;
 
 // ─── helpers ────────────────────────────────────────────────────────────────
+
+/** Encode each path segment individually, preserving the slashes between them. */
+function encodePath(rawPath) {
+  return rawPath.split('/').map(encodeURIComponent).join('/');
+}
 
 /** Recursively collect every file path under a directory. */
 async function collectFiles(dir) {
@@ -46,10 +50,29 @@ async function collectFiles(dir) {
   return paths;
 }
 
+/** Create a directory in Bunny storage (PUT with trailing slash). Returns true on success. */
+async function createDirectory(dirPath) {
+  const url = `${STORAGE_BASE_URL}/${encodePath(dirPath)}/`;
+  try {
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: { AccessKey: STORAGE_ACCESS_KEY },
+    });
+    if (!res.ok) {
+      console.error(`[cdn] ✗ mkdir failed  ${dirPath}  HTTP ${res.status}`);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error(`[cdn] ✗ mkdir network error  ${dirPath}: ${err.message}`);
+    return false;
+  }
+}
+
 /** Upload a single file to Bunny storage. Returns true on success. */
 async function uploadFile(filePath) {
   const relativePath = relative(DIST_DIR, filePath).replace(/\\/g, '/');
-  const url = `${STORAGE_BASE_URL}/${relativePath}`;
+  const url = `${STORAGE_BASE_URL}/${encodePath(relativePath)}`;
 
   let body;
   try {
@@ -70,8 +93,7 @@ async function uploadFile(filePath) {
     });
 
     if (!res.ok) {
-      const text = await res.text().catch(() => '');
-      console.error(`[cdn] ✗ upload failed  ${relativePath}  HTTP ${res.status} ${text}`.trimEnd());
+      console.error(`[cdn] ✗ upload failed  ${relativePath}  HTTP ${res.status}`);
       return false;
     }
 
@@ -96,8 +118,7 @@ async function purgeCache() {
     });
 
     if (!res.ok) {
-      const text = await res.text().catch(() => '');
-      console.error(`[cdn] ✗ cache purge failed  HTTP ${res.status} ${text}`.trimEnd());
+      console.error(`[cdn] ✗ cache purge failed  HTTP ${res.status}`);
       return false;
     }
 
@@ -130,6 +151,13 @@ async function main() {
     return;
   }
 
+  // ZONE_ID is interpolated into a URL path segment — reject anything that
+  // isn't a plain positive integer to prevent path injection.
+  if (!/^\d+$/.test(ZONE_ID)) {
+    console.warn('[cdn] BUNNY_ZONE_ID must be a numeric ID — skipping CDN upload');
+    return;
+  }
+
   console.log('[cdn] Starting CDN upload…');
 
   let files;
@@ -142,11 +170,49 @@ async function main() {
 
   console.log(`[cdn] ${files.length} file(s) to upload`);
 
+  // Bunny storage requires directories to exist before files can be uploaded
+  // into them. Collect unique parent paths, sort so parents come before children,
+  // then create each one with a PUT /<dir>/ request.
+  const dirs = new Set();
+  for (const file of files) {
+    const parts = relative(DIST_DIR, file).replace(/\\/g, '/').split('/');
+    for (let i = 1; i < parts.length; i++) {
+      dirs.add(parts.slice(0, i).join('/'));
+    }
+  }
+  const failedDirs = new Set();
+  for (const dir of [...dirs].sort()) {
+    const ok = await createDirectory(dir);
+    if (!ok) failedDirs.add(dir);
+  }
+
+  const CONCURRENCY = 8;
   let ok = 0;
   let fail = 0;
-  for (const file of files) {
-    const success = await uploadFile(file);
-    success ? ok++ : fail++;
+
+  // Upload files in bounded-concurrency batches of CONCURRENCY.
+  for (let i = 0; i < files.length; i += CONCURRENCY) {
+    const batch = files.slice(i, i + CONCURRENCY);
+    const results = await Promise.all(
+      batch.map((file) => {
+        const relativePath = relative(DIST_DIR, file).replace(/\\/g, '/');
+        const parentDir = relativePath.includes('/')
+          ? relativePath.slice(0, relativePath.lastIndexOf('/'))
+          : null;
+        if (parentDir !== null && failedDirs.has(parentDir)) {
+          console.error(`[cdn] ✗ skipped  ${relativePath}  (parent dir creation failed)`);
+          return Promise.resolve(false);
+        }
+        return uploadFile(file);
+      }),
+    );
+    for (const success of results) {
+      if (success) {
+        ok++;
+      } else {
+        fail++;
+      }
+    }
   }
 
   console.log(`[cdn] Upload complete — ${ok} succeeded, ${fail} failed`);
@@ -160,5 +226,5 @@ async function main() {
 
 main().catch((err) => {
   // Catch any unexpected top-level error so the process always exits 0.
-  console.error(`[cdn] Unexpected error: ${err.message}`);
+  console.error(`[cdn] Unexpected error: ${err instanceof Error ? err.message : String(err)}`);
 });
