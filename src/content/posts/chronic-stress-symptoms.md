@@ -1,6 +1,6 @@
 ---
 title: Chronic Stress Symptoms
-excerpt: "Chronic stress often arrives quietly. Learning to notice it early is the first step back toward ease."
+excerpt: 'Chronic stress often arrives quietly. Learning to notice it early is the first step back toward ease.'
 category: anxiety-stress
 publishedAt: '2025-03-17T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'

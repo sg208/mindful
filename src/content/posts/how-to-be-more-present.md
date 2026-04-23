@@ -1,6 +1,6 @@
 ---
 title: How to Be More Present
-excerpt: "Presence is not a special state reserved for quiet rooms. It is a small, warm return to where you already are."
+excerpt: 'Presence is not a special state reserved for quiet rooms. It is a small, warm return to where you already are.'
 category: mindfulness
 publishedAt: '2025-03-26T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'

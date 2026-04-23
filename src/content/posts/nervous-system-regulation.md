@@ -1,6 +1,6 @@
 ---
 title: Nervous System Regulation
-excerpt: "Your body already knows how to find calm. Regulation is simply the quiet practice of inviting that calm back in."
+excerpt: 'Your body already knows how to find calm. Regulation is simply the quiet practice of inviting that calm back in.'
 category: anxiety-stress
 publishedAt: '2025-03-27T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'

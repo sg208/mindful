@@ -1,6 +1,6 @@
 ---
 title: How to Say No Without Guilt
-excerpt: "Saying no is not the opposite of kindness. It is how you stay kind without slowly disappearing."
+excerpt: 'Saying no is not the opposite of kindness. It is how you stay kind without slowly disappearing.'
 category: self-care
 publishedAt: '2025-03-14T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'

@@ -16,11 +16,11 @@ accessible, SEO-tuned, mobile/PWA-ready — with a minimalist editorial feel.
 - **Hand-rolled PWA**: `public/manifest.webmanifest` + `public/sw.js` (no framework runtime)
 - Fonts: self-hosted **Fraunces** (display) + **Newsreader** (body) via Fontsource
 - Tooling: **ESLint 9 flat config** (Astro + jsx-a11y + typescript-eslint), **Prettier**
-with astro + tailwind plugins
+  with astro + tailwind plugins
 - **E2E: Playwright** (`@playwright/test`) against `astro preview` on a dedicated port
-(`4173`) so tests never fight `astro dev` on `4321`
+  (`4173`) so tests never fight `astro dev` on `4321`
 - Deploy: Railway via the repo `Dockerfile` (non-root, bundled `serve`,
-security headers from `public/serve.json`); portable to any static host
+  security headers from `public/serve.json`); portable to any static host
 
 Zero framework runtime ships to the browser. First-paint JS is ~2.2 KB (Astro's
 prefetch helper) plus the service worker.
@@ -42,8 +42,6 @@ flowchart LR
   dist --> host[Railway / any static host]
   dist --> e2e["Playwright E2E<br/>astro preview :4173"]
 ```
-
-
 
 The CSV is the original import only. After the first `npm run seed`, markdown in
 `src/content/posts/` is the source of truth. Rerunning the seed overwrites files.
@@ -119,16 +117,13 @@ Open [http://localhost:4321](http://localhost:4321).
 
 Environment variables:
 
-
 | Variable   | Default                       | Purpose                                         |
 | ---------- | ----------------------------- | ----------------------------------------------- |
-| `SITE_URL` | `https://mindful.example.com` | Canonical, OG, and sitemap base URL              |
+| `SITE_URL` | `https://mindful.example.com` | Canonical, OG, and sitemap base URL             |
 | `PORT`     | `3000`                        | `npm start` static server port (set by Railway) |
 | `CSV_PATH` | `~/Downloads/mindful-...csv`  | Override for `npm run seed`                     |
 
-
 ## Scripts
-
 
 | Script                | What it does                                                       |
 | --------------------- | ------------------------------------------------------------------ |
@@ -146,7 +141,6 @@ Environment variables:
 | `npm run init:env`    | Copy `.env.example` to `.env` if missing                           |
 | `npm run test:e2e`    | Playwright: build, serve preview on **4173**, run all E2E projects |
 | `npm run test:e2e:ui` | Playwright UI mode                                                 |
-
 
 ## End-to-end tests (Playwright)
 
@@ -168,11 +162,11 @@ Coverage (see `e2e/*.spec.ts`):
 
 - Home: single `h1`, `#main` landmark, skip link → `#main`, header/footer
 - Hamburger `<dialog#site-menu>`: open/close `aria-expanded`, navigate to About,
-Escape closes
+  Escape closes
 - Routes: sample post (`/posts/what-is-mindfulness`), a second post slug used for
-SEO rewrites (`/posts/how-to-calm-anxiety`), category (H1 = category **label** in
-`categories/[slug].astro`), About, Disclaimer, `/offline`,
-`/sitemap-index.xml`, 404 page
+  SEO rewrites (`/posts/how-to-calm-anxiety`), category (H1 = category **label** in
+  `categories/[slug].astro`), About, Disclaimer, `/offline`,
+  `/sitemap-index.xml`, 404 page
 - Footer: category link, utility links (about, legal pages, etc.)
 
 Projects: **chromium** (desktop) and **mobile** (Pixel 5 Chromium profile).
@@ -236,7 +230,6 @@ Tokens live in [src/styles/global.css](src/styles/global.css) inside
 `@theme { ... }`. Use them as CSS variables (`var(--accent)`) so dark mode and
 future palette changes "just work":
 
-
 | Token       | Light     | Dark      | Used for                 |
 | ----------- | --------- | --------- | ------------------------ |
 | `--bg`      | `#F7F3EC` | `#14171A` | Page background          |
@@ -247,11 +240,10 @@ future palette changes "just work":
 | `--accent`  | `#6B8E7F` | `#9FC2B3` | Sage accent, focus ring  |
 | `--warm`    | `#C9875B` | `#E0A37B` | Terracotta hover accent  |
 
-
 Font stack:
 
 - `--font-display`: **Fraunces Variable** (opsz + SOFT axes). Used for headings
-and brand. Set `font-variation-settings` when you care about optical size.
+  and brand. Set `font-variation-settings` when you care about optical size.
 - `--font-serif`: **Newsreader Variable**. Default body and UI.
 - `--font-sans`: system fallback for small meta text if you ever need it.
 
@@ -259,7 +251,7 @@ Other conventions:
 
 - Measure `max-width: 66ch` on article bodies via the `.prose` class.
 - Staggered entrance: add `rise rise-1 / rise-2 / rise-3` classes to hero
-elements for a 0–300 ms fade-rise.
+  elements for a 0–300 ms fade-rise.
 - A SVG grain overlay is attached via `body::before`; do not override it.
 
 ## Accessibility contract
@@ -271,7 +263,7 @@ All pages must:
 - Include a skip link (already in `BaseLayout.astro`).
 - Have visible `:focus-visible` rings (2 px accent, 2 px offset — global rule).
 - Respect `prefers-reduced-motion` (all animations gated by a media query in
-`global.css`) and `prefers-color-scheme`.
+  `global.css`) and `prefers-color-scheme`.
 - Give every meaningful image an `alt`; decorative images use `alt=""`.
 - Mark active nav items with `aria-current="page"`.
 
@@ -298,16 +290,16 @@ emits `/sitemap-index.xml` + `/sitemap-0.xml` automatically.
 ## PWA
 
 - Manifest: [public/manifest.webmanifest](public/manifest.webmanifest)
-(`name`, `theme_color: #6B8E7F`, `background_color: #F7F3EC`, icons).
+  (`name`, `theme_color: #6B8E7F`, `background_color: #F7F3EC`, icons).
 - Service worker: [public/sw.js](public/sw.js).
   - HTML requests: **network-first**, fall back to `/offline` on failure.
   - Static assets (CSS, JS, fonts, images): **stale-while-revalidate**.
   - Same-origin only; only `ok`, `basic`, non-redirected responses enter the
-  cache so error/opaque responses can't poison it.
+    cache so error/opaque responses can't poison it.
   - Registered from `BaseLayout.astro` on HTTPS, `localhost`, or `127.0.0.1`.
 - Runtime security headers: [public/serve.json](public/serve.json) (HSTS, CSP,
-`X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, frame
-lockdown) — read automatically by `serve`.
+  `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, frame
+  lockdown) — read automatically by `serve`.
 - Icons are regenerated from `public/favicon.svg` with `npm run icons`.
 
 ## Deploying
@@ -348,26 +340,26 @@ S3+CloudFront, nginx, Caddy — all work with no code changes. Just set
 ## Troubleshooting
 
 - **Build fails on a post with "expected date, received string"**: the
-`publishedAt` field is missing or malformed. Use ISO 8601.
-- `**npm run seed` writes nothing**: set `CSV_PATH` if your CSV is not at
-`~/Downloads/mindful-from-appwrite-april-2026.csv`.
-- `**z` is deprecated warnings**: you're importing from `astro:content` or
-`astro:schema`. Import from `astro/zod` instead.
+  `publishedAt` field is missing or malformed. Use ISO 8601.
+- `**npm run seed` writes nothing\*\*: set `CSV_PATH` if your CSV is not at
+  `~/Downloads/mindful-from-appwrite-april-2026.csv`.
+- `**z` is deprecated warnings\*\*: you're importing from `astro:content` or
+  `astro:schema`. Import from `astro/zod` instead.
 - **Service worker doesn't register**: SWs require HTTPS. On plain `http://`
-(non-localhost), the registration is a guarded no-op by design.
-- `**picsum.photos` is slow or rate-limited**: replace with optimised local
-images; update the `remotePatterns` allowlist in `astro.config.mjs` if you
-add a new remote host.
+  (non-localhost), the registration is a guarded no-op by design.
+- `**picsum.photos` is slow or rate-limited\*\*: replace with optimised local
+  images; update the `remotePatterns` allowlist in `astro.config.mjs` if you
+  add a new remote host.
 - **Playwright: browser not installed**: run `npx playwright install chromium`
-(or `npx playwright install` for all browsers).
+  (or `npx playwright install` for all browsers).
 - **E2E 404 on sitemap**: another process may be bound to the E2E preview
-port; stop stray `astro preview`/`dev` processes or ensure `4173` is free.
+  port; stop stray `astro preview`/`dev` processes or ensure `4173` is free.
 
 ## Roadmap
 
 - Postgres-backed content (swap the `glob` loader for a DB loader).
 - Local/optimised images (replace `picsum.photos` placeholders with
-`astro:assets`).
+  `astro:assets`).
 - Static search (MiniSearch indexed at build time).
 - Expand Playwright coverage (e.g. article prev/next, theme color meta) as needed.
 

@@ -1,6 +1,6 @@
 ---
 title: A Sleep Hygiene Routine That Feels Kind
-excerpt: "Sleep hygiene is not a strict checklist. It is a handful of small, warm signals that tell your body it is safe to rest."
+excerpt: 'Sleep hygiene is not a strict checklist. It is a handful of small, warm signals that tell your body it is safe to rest.'
 category: sleep-rest
 publishedAt: '2025-03-13T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'

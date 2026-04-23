@@ -1,6 +1,6 @@
 ---
 title: How to Calm Anxiety
-excerpt: "Anxiety can make the world feel loud and small at once. These gentle, grounded practices can help you find your feet again."
+excerpt: 'Anxiety can make the world feel loud and small at once. These gentle, grounded practices can help you find your feet again.'
 category: anxiety-stress
 publishedAt: '2025-03-12T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'

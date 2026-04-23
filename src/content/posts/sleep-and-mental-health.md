@@ -1,6 +1,6 @@
 ---
 title: Sleep and Mental Health
-excerpt: "Sleep is not a reward for a busy day. It is the quiet work your mind does to stay steady, soft, and well."
+excerpt: 'Sleep is not a reward for a busy day. It is the quiet work your mind does to stay steady, soft, and well.'
 category: sleep-rest
 publishedAt: '2025-03-08T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'

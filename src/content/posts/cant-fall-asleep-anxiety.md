@@ -1,6 +1,6 @@
 ---
 title: When You Can't Fall Asleep Because of Anxiety
-excerpt: "When anxiety keeps you awake, the softest path back to sleep is usually the kindest one."
+excerpt: 'When anxiety keeps you awake, the softest path back to sleep is usually the kindest one.'
 category: sleep-rest
 publishedAt: '2025-03-18T12:00:00.000+00:00'
 updatedAt: '2026-04-19T12:00:00.000+00:00'
