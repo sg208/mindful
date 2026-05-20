@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Self-care post “Self-Compassion When You're Hard on Yourself” at `/posts/self-compassion-when-youre-hard-on-yourself`.
+- Cursor agent `susan-new-article` (`.cursor/agents/`) to audit existing posts, invoke the ask-susan skill, and draft unique Mindful articles with valid frontmatter.
 - Accessibility statement at `/accessibility`, privacy notice at `/privacy`, and terms of use at `/terms`, linked from the shared footer and menu nav.
 - Playwright route smoke coverage for the new pages alongside About and Disclaimer.
 
