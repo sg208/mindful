@@ -1,21 +1,36 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHeader from '~/components/PageHeader.astro';
 ---
 
 <BaseLayout
   title="Disclaimer"
   description="Mindful is not a substitute for professional mental-health care."
 >
-  <article class="mx-auto max-w-3xl">
-    <header class="mb-10">
-      <p class="text-xs tracking-[0.3em] text-[var(--muted)] uppercase">Disclaimer</p>
-      <h1
-        class="mt-4 text-5xl leading-tight tracking-tight text-balance sm:text-6xl"
-        style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 96;"
+  <article class="mx-auto max-w-[52rem]">
+    <PageHeader title="Not a substitute for care." crumbs={[{ label: 'Disclaimer' }]} />
+
+    <section
+      id="in-crisis"
+      aria-labelledby="in-crisis-heading"
+      class="mb-14 bg-[var(--field)] px-6 py-8 text-[var(--field-ink)] sm:px-10 sm:py-10"
+    >
+      <h2
+        id="in-crisis-heading"
+        class="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.5rem)] leading-tight"
       >
-        Not a substitute for care.
-      </h1>
-    </header>
+        In crisis
+      </h2>
+      <p class="mt-4 max-w-[52ch] text-[1.25rem] leading-relaxed">
+        If you are in immediate danger, please contact your local emergency services. Many countries
+        also have dedicated mental-health helplines available by phone, text, or chat.
+      </p>
+      <p class="mt-4 text-[1.25rem]">
+        <a href="https://findahelpline.com" class="link-accent" rel="noopener">
+          Find a free, confidential helpline in your country
+        </a>
+      </p>
+    </section>
 
     <div class="prose">
       <p>
@@ -27,12 +42,6 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
       <p>
         If you are struggling, a qualified professional can offer support that is specific to your
         situation &mdash; something a short essay simply cannot do.
-      </p>
-
-      <h2>In crisis</h2>
-      <p>
-        If you are in immediate danger, please contact your local emergency services. Many countries
-        also have dedicated mental-health helplines available by phone, text, or chat.
       </p>
 
       <h2>A note on links</h2>

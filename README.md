@@ -43,8 +43,6 @@ Markdown files in `src/content/posts/` are the source of truth. The posts were f
 | `scripts/`              | Seed import, icon generation, `.env` setup, CDN upload; testable helpers in `scripts/lib/` |
 | `tests/unit/`, `e2e/`   | Vitest unit tests and Playwright specs                                                     |
 
-`CLAUDE.md` and `AGENTS.md` carry a more detailed map for anyone (or any agent) making changes.
-
 ## Getting started
 
 You need Node 24 (see `.nvmrc`) and pnpm 10. The exact pnpm version is pinned in `package.json`, so `corepack enable` will pick it up.
@@ -156,17 +154,19 @@ Then add the id to the `CATEGORY_IDS` tuple in `src/content.config.ts`.
 
 ## Design, accessibility and SEO
 
-Colours and fonts are CSS variables declared in the `@theme` block of `src/styles/global.css`, with dark-mode values alongside. Use `var(--accent)` and friends instead of hard-coded colours. Article text is capped at 66 characters per line by the `.prose` class, and the `rise rise-1/2/3` classes give hero elements a short staggered fade.
+Colours are CSS variables on `:root` in `src/styles/global.css`, with dark-mode values in a `prefers-color-scheme` block; fonts live in its `@theme` block. Use `var(--accent)` and friends instead of hard-coded colours. Surfaces are separated by tone steps rather than borders or shadows. Essay text is capped at 64 characters per line by the `.prose` class (`src/styles/prose.css`), and the `rise rise-1/2/3` and `reveal` classes in `src/styles/motion.css` give headers a short staggered rise and list items a scroll-linked one where the browser supports it.
 
-| Token       | Light     | Dark      | Used for                 |
-| ----------- | --------- | --------- | ------------------------ |
-| `--bg`      | `#F7F3EC` | `#14171A` | Page background          |
-| `--surface` | `#FFFFFF` | `#1A1E22` | Card and dialog surfaces |
-| `--ink`     | `#1F2A24` | `#ECE7DD` | Primary text             |
-| `--muted`   | `#5A6560` | `#9AA39D` | Secondary text           |
-| `--rule`    | `#E6DFD2` | `#2A2F33` | Hairlines, borders       |
-| `--accent`  | `#6B8E7F` | `#9FC2B3` | Sage accent, focus ring  |
-| `--warm`    | `#C9875B` | `#E0A37B` | Terracotta hover accent  |
+| Token       | Light     | Dark      | Used for                                      |
+| ----------- | --------- | --------- | --------------------------------------------- |
+| `--bg`      | `#F3F2EE` | `#121513` | Page background                               |
+| `--surface` | `#E8E7E1` | `#1B201D` | Featured essay, prev/next links, menu buttons |
+| `--ink`     | `#151A17` | `#ECEAE4` | Body and headings                             |
+| `--muted`   | `#4A524E` | `#AAB1AC` | Dates, reading time, breadcrumbs              |
+| `--accent`  | `#2C5A4B` | `#A3CDB9` | Links to help, the primary button, focus ring |
+| `--field`   | `#DCE4DE` | `#1F2C26` | The care note and the crisis section          |
+| `--close`   | `#18201C` | `#0B0D0C` | Footer                                        |
+
+The "Need help now?" link in the header and the care note on the home page and every essay point to the crisis section of `/disclaimer` (`siteConfig.supportHref`).
 
 Every page has one `<h1>`, proper landmarks, a skip link, visible focus rings, alt text on meaningful images and `aria-current="page"` on the active nav link. Animations respect `prefers-reduced-motion`. ESLint runs the jsx-a11y rules over `.astro` files.
 

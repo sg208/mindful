@@ -17,10 +17,10 @@ const svg = await readFile(svgPath);
 const maskableSvg = Buffer.from(
   `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" fill="#F7F3EC" />
-  <circle cx="50" cy="50" r="18" fill="none" stroke="#6B8E7F" stroke-width="2.6" />
-  <circle cx="50" cy="50" r="9" fill="none" stroke="#C9875B" stroke-width="2" />
-  <circle cx="50" cy="50" r="2.25" fill="#1F2A24" />
+  <rect width="100" height="100" fill="#F3F2EE" />
+  <circle cx="50" cy="50" r="18" fill="none" stroke="#2C5A4B" stroke-width="3.6" />
+  <circle cx="50" cy="50" r="9" fill="none" stroke="#2C5A4B" stroke-width="2.7" opacity="0.55" />
+  <circle cx="50" cy="50" r="2.7" fill="#151A17" />
 </svg>`,
 );
 
@@ -35,7 +35,7 @@ for (const task of tasks) {
   const png = await sharp(task.input, { density: 512 })
     .resize(task.size, task.size, {
       fit: 'contain',
-      background: { r: 247, g: 243, b: 236, alpha: 1 },
+      background: { r: 243, g: 242, b: 238, alpha: 1 },
     })
     .png({ compressionLevel: 9 })
     .toBuffer();

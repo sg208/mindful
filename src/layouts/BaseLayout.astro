@@ -37,7 +37,16 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content={siteConfig.themeColor} />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content={siteConfig.themeColor}
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content={siteConfig.themeColorDark}
+    />
     <meta name="color-scheme" content="light dark" />
     <meta name="generator" content={Astro.generator} />
 
@@ -63,7 +72,7 @@ const {
 
     <script is:inline src="/sw-register.js"></script>
   </head>
-  <body class="antialiased">
+  <body>
     <a href="#main" class="skip-link">
       Skip to content
     </a>
@@ -71,10 +80,7 @@ const {
     <main
       id="main"
       tabindex="-1"
-      class:list={[
-        fullBleed ? '' : 'mx-auto max-w-6xl px-5 sm:px-8',
-        'relative z-10 py-10 sm:py-16',
-      ]}
+      class:list={[fullBleed ? '' : 'frame', 'pt-10 pb-24 focus:outline-none sm:pt-16 sm:pb-32']}
     >
       <slot />
     </main>

@@ -1,0 +1,32 @@
+<script>
+  const dialog = document.getElementById('site-menu') as HTMLDialogElement | null;
+  const openButton = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+  const closeButton = document.querySelector<HTMLButtonElement>('[data-menu-close]');
+
+  if (dialog && openButton) {
+    const handleOpen = () => {
+      dialog.showModal();
+      openButton.setAttribute('aria-expanded', 'true');
+      closeButton?.focus();
+    };
+    const handleClose = () => {
+      if (dialog.open) dialog.close();
+    };
+    // Restore focus to the open button whenever the dialog closes (Escape, close
+    // button, or link click), so keyboard users don't lose their place.
+    const handleClosed = () => {
+      openButton.setAttribute('aria-expanded', 'false');
+      openButton.focus();
+    };
+
+    openButton.addEventListener('click', handleOpen);
+    closeButton?.addEventListener('click', handleClose);
+    dialog.addEventListener('close', handleClosed);
+
+    // Native <dialog> closes on Escape; also close on link navigation so the
+    // dialog doesn't linger open across bfcache restores.
+    dialog.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', handleClose);
+    });
+  }
+</script>
