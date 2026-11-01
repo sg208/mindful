@@ -11,23 +11,29 @@ const href = `/categories/${category.id}`;
 const countLabel = `${count} ${count === 1 ? 'essay' : 'essays'}`;
 ---
 
-<a
-  href={href}
-  class="theme-row group grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1 py-5 no-underline sm:grid-cols-[auto_minmax(0,5fr)_minmax(0,6fr)_auto] sm:items-baseline sm:gap-x-8"
->
+<div class="theme-row group relative grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1 py-5 no-underline sm:grid-cols-[auto_minmax(0,5fr)_minmax(0,6fr)_auto] sm:items-baseline sm:gap-x-8">
   <span
     aria-hidden="true"
     class="mt-[0.55em] inline-block h-3 w-3 sm:mt-0 sm:self-center"
     style={`background: ${category.accent};`}
   ></span>
   <h3 class="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.75rem)] leading-tight">
-    <span class="theme-row__label">{category.label}</span>
+    <a href={href} class="theme-row__link no-underline">
+      <span class="theme-row__label">{category.label}</span>
+    </a>
   </h3>
   <p class="col-start-2 text-[var(--ink-soft)] sm:col-start-auto">{category.description}</p>
   <p class="meta col-start-2 sm:col-start-auto">{countLabel}</p>
-</a>
+</div>
 
 <style>
+  /* Stretch the heading link over the whole row so the row stays one click target. */
+  .theme-row__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
   .theme-row__label {
     text-decoration-line: underline;
     text-decoration-color: transparent;
@@ -37,7 +43,7 @@ const countLabel = `${count} ${count === 1 ? 'essay' : 'essays'}`;
   }
 
   .theme-row:hover .theme-row__label,
-  .theme-row:focus-visible .theme-row__label {
+  .theme-row:focus-within .theme-row__label {
     text-decoration-color: currentColor;
   }
 </style>

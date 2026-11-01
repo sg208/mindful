@@ -5,11 +5,12 @@ interface Props {
   variant?: 'inline' | 'card';
   /** Heading level for the card heading; keep the page outline valid. */
   headingLevel?: 2 | 3;
+  /** Heading id for `aria-labelledby`; pass a unique one if a page renders two cards. */
+  id?: string;
 }
 
-const { variant = 'card', headingLevel = 2 } = Astro.props;
+const { variant = 'card', headingLevel = 2, id: headingId = 'care-note-heading' } = Astro.props;
 const Heading = `h${headingLevel}` as 'h2' | 'h3';
-const headingId = 'care-note-heading';
 ---
 
 {variant === 'card' ? (

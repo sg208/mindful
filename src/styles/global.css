@@ -100,15 +100,14 @@ body {
     text-decoration-color: transparent;
   }
 
-  .link-quiet: hover, .link-quiet;
-}
+  .link-quiet:hover,
+  .link-quiet:focus-visible {
+    text-decoration-color: currentColor;
+  }
 
-:focus-visible {
-  text-decoration-color: currentColor;
-}
-
-.link-accent {
-  color: var(--accent);
+  .link-accent {
+    color: var(--accent);
+  }
 }
 
 :focus-visible {

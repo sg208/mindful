@@ -2,7 +2,7 @@
 
 ## Code
 
-- `.astro` components only; no React/Vue/Svelte without a runtime-state need (`CLAUDE.md` Conventions)
+- `.astro` components only; no React/Vue/Svelte without a runtime-state need
 - Interactivity order: CSS → inline `<script>` → `client:*` island
 - Path alias `~/*` → `src/*` (`tsconfig.json`)
 - Zod from `astro/zod` (`src/content.config.ts:2`)

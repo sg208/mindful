@@ -8,6 +8,7 @@ import {
   getPostsByCategory,
   getPublishedPosts,
   readingMinutes,
+  readingSpanLabel,
   type Post,
 } from './posts';
 
@@ -111,5 +112,19 @@ describe('collection helpers', () => {
     expect(await getAdjacentPosts('newest')).toMatchObject({ next: undefined });
     expect((await getAdjacentPosts('oldest')).previous).toBeUndefined();
     expect(await getAdjacentPosts('missing')).toEqual({});
+  });
+});
+
+describe('readingSpanLabel', () => {
+  it('returns undefined when there are no posts', () => {
+    expect(readingSpanLabel([])).toBeUndefined();
+  });
+
+  it('uses the single-read phrasing when every post is the same length', () => {
+    expect(readingSpanLabel([4, 4])).toBe('a 4-minute read');
+  });
+
+  it('spans shortest to longest', () => {
+    expect(readingSpanLabel([5, 2, 9])).toBe('2 to 9 minutes to read');
   });
 });
