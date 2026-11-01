@@ -43,8 +43,6 @@ Markdown files in `src/content/posts/` are the source of truth. The posts were f
 | `scripts/`              | Seed import, icon generation, `.env` setup, CDN upload; testable helpers in `scripts/lib/` |
 | `tests/unit/`, `e2e/`   | Vitest unit tests and Playwright specs                                                     |
 
-`CLAUDE.md` and `AGENTS.md` carry a more detailed map for anyone (or any agent) making changes.
-
 ## Getting started
 
 You need Node 24 (see `.nvmrc`) and pnpm 10. The exact pnpm version is pinned in `package.json`, so `corepack enable` will pick it up.
