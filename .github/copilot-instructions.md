@@ -116,7 +116,7 @@ static assets (`wrangler.jsonc`, deploy with `pnpm run deploy`).
 
 - `dev` / `build` / `preview` — Astro dev, static build, preview built site
 - `deploy` — build with `SITE_URL=https://mindful.engg.app` + `wrangler deploy`
-  (global wrangler v4, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`)
+  (wrangler v4 devDependency, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`)
 - `cdn:upload` — optional: push `dist/` to Bunny storage + purge (not the live host)
 - `seed` — re-import posts + categories from CSV (rare, destructive)
 - `icons` — regenerate PWA icons from `favicon.svg`

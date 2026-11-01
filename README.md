@@ -189,7 +189,7 @@ The site runs as a Cloudflare Worker with static assets, configured in `wrangler
 pnpm run deploy
 ```
 
-That sets `SITE_URL=https://mindful.engg.app`, builds, and runs `wrangler deploy`. You need `wrangler` v4 installed globally and `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in your environment. Unknown paths get the built `404` page.
+That sets `SITE_URL=https://mindful.engg.app`, builds, and runs `wrangler deploy`. Wrangler 4 is a dev dependency, so you only need `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in your environment. Unknown paths get the built `404` page.
 
 ## Troubleshooting
 
