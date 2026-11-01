@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-11-01
+
+### Changed
+
+- **Privacy page fonts section**: the Fonts section no longer mentions Google Fonts. It still says Fraunces and Newsreader are bundled from Fontsource packages and served by Cloudflare.
+
+### Fixed
+
+- **Pages load at their canonical URL**: `/privacy`, `/terms` and every other page now return 200 at the no-slash address used in canonical tags and the sitemap. The slash form, such as `/privacy/`, redirects to it. This is set by `"html_handling": "drop-trailing-slash"` in `wrangler.jsonc`, matching `trailingSlash: 'never'` in `astro.config.mjs`.
+
 ## [0.3.0] - 2026-11-01
 
 ### Breaking changes
