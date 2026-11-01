@@ -29,7 +29,7 @@ prefetch helper) plus the service worker.
 
 ```mermaid
 flowchart LR
-  csv["Appwrite CSV (one-shot)"] -->|"npm run seed"| seed[scripts/csv-to-content.mjs]
+  csv["Appwrite CSV (one-shot)"] -->|"pnpm run seed"| seed[scripts/csv-to-content.mjs]
   seed --> posts["src/content/posts/*.md"]
   seed --> cats["src/content/categories/*.json"]
   posts --> schema[src/content.config.ts]
@@ -43,7 +43,7 @@ flowchart LR
   dist --> e2e["Playwright E2E<br/>astro preview :4173"]
 ```
 
-The CSV is the original import only. After the first `npm run seed`, markdown in
+The CSV is the original import only. After the first `pnpm run seed`, markdown in
 `src/content/posts/` is the source of truth. Rerunning the seed overwrites files.
 
 ## Repository layout
@@ -108,9 +108,9 @@ The CSV is the original import only. After the first `npm run seed`, markdown in
 
 ```bash
 nvm use                 # Node 22 (see .nvmrc)
-npm install
-npm run init:env        # copies .env.example -> .env if missing
-npm run dev
+pnpm install
+pnpm run init:env        # copies .env.example -> .env if missing
+pnpm run dev
 ```
 
 Open [http://localhost:4321](http://localhost:4321).
@@ -120,37 +120,37 @@ Environment variables:
 | Variable   | Default                       | Purpose                                         |
 | ---------- | ----------------------------- | ----------------------------------------------- |
 | `SITE_URL` | `https://mindful.example.com` | Canonical, OG, and sitemap base URL             |
-| `PORT`     | `3000`                        | `npm start` static server port (set by Railway) |
-| `CSV_PATH` | `~/Downloads/mindful-...csv`  | Override for `npm run seed`                     |
+| `PORT`     | `3000`                        | `pnpm start` static server port (set by Railway) |
+| `CSV_PATH` | `~/Downloads/mindful-...csv`  | Override for `pnpm run seed`                     |
 
 ## Scripts
 
 | Script                | What it does                                                       |
 | --------------------- | ------------------------------------------------------------------ |
-| `npm run dev`         | Astro dev server with HMR                                          |
-| `npm run build`       | Build static site into `dist/`                                     |
-| `npm run preview`     | Preview the built site locally                                     |
-| `npm start`           | Serve `dist/` on `$PORT` (Railway-ready)                           |
-| `npm run seed`        | Re-import posts + categories from the Appwrite CSV                 |
-| `npm run icons`       | Rasterise `public/favicon.svg` into PWA icon PNGs                  |
-| `npm run check`       | `astro check` + `tsc --noEmit`                                     |
-| `npm run lint`        | ESLint over the repo                                               |
-| `npm run lint:fix`    | ESLint with `--fix`                                                |
-| `npm run format`      | Prettier write                                                     |
-| `npm run fix`         | `lint:fix` then `format`                                           |
-| `npm run init:env`    | Copy `.env.example` to `.env` if missing                           |
-| `npm run test:e2e`    | Playwright: build, serve preview on **4173**, run all E2E projects |
-| `npm run test:e2e:ui` | Playwright UI mode                                                 |
+| `pnpm run dev`         | Astro dev server with HMR                                          |
+| `pnpm run build`       | Build static site into `dist/`                                     |
+| `pnpm run preview`     | Preview the built site locally                                     |
+| `pnpm start`           | Serve `dist/` on `$PORT` (Railway-ready)                           |
+| `pnpm run seed`        | Re-import posts + categories from the Appwrite CSV                 |
+| `pnpm run icons`       | Rasterise `public/favicon.svg` into PWA icon PNGs                  |
+| `pnpm run check`       | `astro check` + `tsc --noEmit`                                     |
+| `pnpm run lint`        | ESLint over the repo                                               |
+| `pnpm run lint:fix`    | ESLint with `--fix`                                                |
+| `pnpm run format`      | Prettier write                                                     |
+| `pnpm run fix`         | `lint:fix` then `format`                                           |
+| `pnpm run init:env`    | Copy `.env.example` to `.env` if missing                           |
+| `pnpm run test:e2e`    | Playwright: build, serve preview on **4173**, run all E2E projects |
+| `pnpm run test:e2e:ui` | Playwright UI mode                                                 |
 
 ## End-to-end tests (Playwright)
 
 First-time setup installs browser binaries:
 
 ```bash
-npx playwright install chromium
+pnpm exec playwright install chromium
 ```
 
-`playwright.config.ts` runs `npm run build && npm run preview -- --host 127.0.0.1 --port 4173`
+`playwright.config.ts` runs `pnpm run build && pnpm run preview -- --host 127.0.0.1 --port 4173`
 and points tests at `http://127.0.0.1:4173`. The web server sets `SITE_URL` to that
 same base URL when the variable is unset so `astro build` succeeds without a local
 `.env` (override via `.env` or the environment if you need a different canonical URL
@@ -300,7 +300,7 @@ emits `/sitemap-index.xml` + `/sitemap-0.xml` automatically.
 - Runtime security headers: [public/serve.json](public/serve.json) (HSTS, CSP,
   `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, frame
   lockdown) — read automatically by `serve`.
-- Icons are regenerated from `public/favicon.svg` with `npm run icons`.
+- Icons are regenerated from `public/favicon.svg` with `pnpm run icons`.
 
 ## Deploying
 
@@ -341,7 +341,7 @@ S3+CloudFront, nginx, Caddy — all work with no code changes. Just set
 
 - **Build fails on a post with "expected date, received string"**: the
   `publishedAt` field is missing or malformed. Use ISO 8601.
-- `**npm run seed` writes nothing\*\*: set `CSV_PATH` if your CSV is not at
+- `**pnpm run seed` writes nothing\*\*: set `CSV_PATH` if your CSV is not at
   `~/Downloads/mindful-from-appwrite-april-2026.csv`.
 - `**z` is deprecated warnings\*\*: you're importing from `astro:content` or
   `astro:schema`. Import from `astro/zod` instead.
@@ -350,8 +350,8 @@ S3+CloudFront, nginx, Caddy — all work with no code changes. Just set
 - `**picsum.photos` is slow or rate-limited\*\*: replace with optimised local
   images; update the `remotePatterns` allowlist in `astro.config.mjs` if you
   add a new remote host.
-- **Playwright: browser not installed**: run `npx playwright install chromium`
-  (or `npx playwright install` for all browsers).
+- **Playwright: browser not installed**: run `pnpm exec playwright install chromium`
+  (or `pnpm exec playwright install` for all browsers).
 - **E2E 404 on sitemap**: another process may be bound to the E2E preview
   port; stop stray `astro preview`/`dev` processes or ensure `4173` is free.
 

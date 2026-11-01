@@ -3,4 +3,4 @@ dist
 .astro
 dev-dist
 public/manifest.webmanifest
-package-lock.json
+pnpm-lock.yaml
