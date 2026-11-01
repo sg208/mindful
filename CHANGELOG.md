@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-01
+
+### Breaking changes
+
+- **Docker and Railway setup removed**: the `Dockerfile`, `.dockerignore`, `railway.json`, `public/serve.json` and the `pnpm start` script are gone, along with the `serve` dependency. If you ran the Docker image, it no longer builds. Deploy with `pnpm run deploy`, or publish the built `dist/` to any static host.
+
+### Added
+
+- **Legal pages rewritten**: `/accessibility`, `/privacy` and `/terms` now describe how the site actually works. It is hosted on a Cloudflare Worker, loads images from Picsum, sets no cookies and uses no browser storage. Contact goes through GitHub issues, and the accessibility target is WCAG 2.2 AA.
+- **Source code link**: the footer links to the GitHub repository.
+- **MIT licence**: the code is MIT licensed (`LICENSE`, `"license": "MIT"` in `package.json`). The essays are not covered by it.
+
+### Changed
+
+- **Security headers on Cloudflare**: HSTS, the Content Security Policy and the other security headers moved from `public/serve.json` to `public/_headers`. The service worker files are no longer cached.
+- **Wrangler is a dev dependency**: `pnpm run deploy` uses the project's `wrangler` 4, so a global install is no longer needed. You still need `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
+- **Bunny upload is optional**: the CDN upload is now its own `pnpm cdn:upload` script and exits cleanly when the Bunny variables are missing.
+
 ## [0.2.1] - 2026-11-01
 
 ### Changed
