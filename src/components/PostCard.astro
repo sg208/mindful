@@ -1,61 +1,62 @@
 ---
 import type { Post } from '~/lib/posts';
-import { formatDate } from '~/lib/posts';
+import { formatDate, readingMinutes } from '~/lib/posts';
 import { getCategory } from '~/lib/categories';
 import CategoryChip from './CategoryChip.astro';
 
 interface Props {
   post: Post;
-  variant?: 'default' | 'feature';
+  variant?: 'default' | 'row' | 'feature';
   /** Heading level for the card title; keep the page outline valid. */
   headingLevel?: 2 | 3;
+  /** Hide the theme link on pages that already belong to one theme. */
+  hasTheme?: boolean;
 }
 
-const { post, variant = 'default', headingLevel = 3 } = Astro.props;
-const category = await getCategory(post.data.category);
+const { post, variant = 'default', headingLevel = 3, hasTheme = true } = Astro.props;
+const category = hasTheme ? await getCategory(post.data.category) : undefined;
 const href = `/posts/${post.id}`;
-const imageAlt = post.data.imageAlt ?? post.data.title;
-const headingSize =
-  variant === 'feature' ? 'text-3xl sm:text-4xl md:text-5xl' : 'text-xl sm:text-2xl';
+const isFeature = variant === 'feature';
+const minutes = readingMinutes(post.body);
 const Heading = `h${headingLevel}` as 'h2' | 'h3';
 ---
 
 <article
-  class:list={['group relative flex flex-col gap-4', variant === 'feature' ? 'sm:gap-6' : '']}
+  class:list={[
+    'grid gap-x-10 gap-y-4',
+    isFeature &&
+      'md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:items-end lg:grid-cols-[minmax(0,8fr)_minmax(0,4fr)]',
+    variant === 'row' && 'md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]',
+  ]}
 >
-  {
-    post.data.image && (
-      <a
-        href={href}
-        class="block overflow-hidden rounded-[var(--radius-card)] no-underline outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-inset"
-      >
-        <img
-          src={post.data.image}
-          alt={imageAlt}
-          loading={variant === 'feature' ? 'eager' : 'lazy'}
-          fetchpriority={variant === 'feature' ? 'high' : undefined}
-          decoding="async"
-          width={variant === 'feature' ? 1200 : 800}
-          height={variant === 'feature' ? 600 : 400}
-          class="aspect-[16/9] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-        />
-      </a>
-    )
-  }
-
-  <div class="flex flex-wrap items-center gap-3 text-sm text-[var(--muted)]">
-    {category && <CategoryChip category={category.data} />}
-    <time datetime={post.data.publishedAt.toISOString()}>
-      {formatDate(post.data.publishedAt)}
-    </time>
-  </div>
-
   <Heading
-    class:list={[headingSize, 'leading-tight tracking-tight']}
-    style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 48, 'SOFT' 30;"
+    class:list={[
+      'font-display text-balance',
+      isFeature
+        ? 'text-[clamp(2rem,1.2rem+3vw,3.75rem)] leading-[1.02]'
+        : 'text-[clamp(1.5rem,1.2rem+1vw,2rem)] leading-[1.12]',
+    ]}
   >
-    <a href={href} class="no-underline hover:text-[var(--accent-ink)]">{post.data.title}</a>
+    <a href={href} class="link-quiet">
+      {post.data.title}
+    </a>
   </Heading>
 
-  <p class="max-w-prose text-[var(--muted)]">{post.data.excerpt}</p>
+  <div class:list={['flex flex-col gap-3', isFeature && 'md:pb-2']}>
+    <p class="max-w-prose text-[var(--ink-soft)]">{post.data.excerpt}</p>
+    <p class="meta flex flex-wrap items-center gap-x-3 gap-y-1">
+      {category && <CategoryChip category={category.data} />}
+      <time datetime={post.data.publishedAt.toISOString()}>
+        {formatDate(post.data.publishedAt)}
+      </time>
+      <span>{minutes} min read</span>
+    </p>
+    {isFeature && (
+      <p class="mt-3">
+        <a href={href} class="button" aria-label={`Read the essay: ${post.data.title}`}>
+          Read the essay
+        </a>
+      </p>
+    )}
+  </div>
 </article>

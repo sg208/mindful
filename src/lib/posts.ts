@@ -47,3 +47,13 @@ export function formatDate(date: Date): string {
     day: 'numeric',
   }).format(date);
 }
+
+/** "a 4-minute read" | "3 to 7 minutes to read"; undefined when there are no posts. */
+export const readingSpanLabel = (minutes: readonly number[]): string | undefined => {
+  if (minutes.length === 0) return undefined;
+  const shortest = Math.min(...minutes);
+  const longest = Math.max(...minutes);
+  return shortest === longest
+    ? `a ${String(shortest)}-minute read`
+    : `${String(shortest)} to ${String(longest)} minutes to read`;
+};

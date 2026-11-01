@@ -1,11 +1,11 @@
 {
   "name": "mindful",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Mindful - a short-read mental health blog. Static-first, accessible, SEO-tuned.",
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "dev": "astro dev",
@@ -20,34 +20,50 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"**/*.{astro,ts,tsx,js,jsx,mjs,cjs,md,mdx,css,json}\"",
     "format:check": "prettier --check \"**/*.{astro,ts,tsx,js,jsx,mjs,cjs,md,mdx,css,json}\"",
-    "fix": "npm run lint:fix && npm run format",
+    "fix": "pnpm run lint:fix && pnpm run format",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.8",
-    "@astrojs/mdx": "^5.0.3",
-    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/check": "^0.9.12",
+    "@astrojs/mdx": "^8.1.2",
+    "@astrojs/sitemap": "^3.7.4",
     "@fontsource-variable/fraunces": "^5.2.9",
     "@fontsource-variable/newsreader": "^5.2.10",
-    "@tailwindcss/vite": "^4.2.2",
-    "astro": "^6.1.8",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.4.4",
     "serve": "^14.2.6",
-    "tailwindcss": "^4.2.2",
+    "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.4",
-    "@playwright/test": "^1.59.1",
-    "astro-eslint-parser": "^1.4.0",
-    "eslint": "^9.39.4",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.64.1",
+    "astro-eslint-parser": "^3.2.0",
+    "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-astro": "^1.7.0",
+    "eslint-plugin-astro": "^3.2.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "globals": "^17.5.0",
+    "globals": "^17.13.0",
     "prettier": "^3.8.3",
-    "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.7.2",
-    "typescript-eslint": "^8.58.2"
+    "prettier-plugin-astro": "^1.1.2",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "sharp": "^0.35.5",
+    "typescript-eslint": "^8.72.1",
+    "vitest": "^5.0.5"
+  },
+  "packageManager": "pnpm@10.34.8+sha512.f627a8e971343afe49dfd0f63d028234201dfa831d5cb588733e1e5f8db26bf16989a32161ab5c1b4db3b1fdbc373160606b5b89e002df6dd19a85adf91fc5a8",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ],
+    "overrides": {
+      "compression": "^1.8.2",
+      "esbuild": "^0.28.1",
+      "minimatch@10": "^11.0.1"
+    }
   }
 }

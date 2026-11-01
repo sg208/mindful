@@ -1,21 +1,14 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHeader from '~/components/PageHeader.astro';
 ---
 
 <BaseLayout
   title="Terms of use"
   description="Rules and expectations for using Mindful: reading, intellectual property, limitations, and links to our disclaimer and privacy pages."
 >
-  <article class="mx-auto max-w-3xl">
-    <header class="mb-10">
-      <p class="text-xs tracking-[0.3em] text-[var(--muted)] uppercase">Terms of use</p>
-      <h1
-        class="mt-4 text-5xl leading-tight tracking-tight text-balance sm:text-6xl"
-        style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 96;"
-      >
-        Using Mindful on fair terms.
-      </h1>
-    </header>
+  <article class="mx-auto max-w-[52rem]">
+    <PageHeader title="Using Mindful on fair terms." crumbs={[{ label: 'Terms' }]} />
 
     <div class="prose">
       <p>
@@ -27,8 +20,8 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
       <p>
         Mindful publishes short essays on everyday mental wellbeing. The site is informational
         reading, not a service agreement for therapy, coaching, or crisis support. Our
-        <a href="/disclaimer">Disclaimer</a> says more about limits of the content; it is part of how
-        we expect the site to be used.
+        <a href="/disclaimer">Disclaimer</a> says more about limits of the content; it is part of
+        how we expect the site to be used.
       </p>
 
       <h2>Not professional care</h2>

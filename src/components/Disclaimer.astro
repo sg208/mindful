@@ -1,27 +1,44 @@
 ---
+import { siteConfig } from '~/config/site';
+
 interface Props {
   variant?: 'inline' | 'card';
+  /** Heading level for the card heading; keep the page outline valid. */
+  headingLevel?: 2 | 3;
+  /** Heading id for `aria-labelledby`; pass a unique one if a page renders two cards. */
+  id?: string;
 }
-const { variant = 'card' } = Astro.props;
+
+const { variant = 'card', headingLevel = 2, id: headingId = 'care-note-heading' } = Astro.props;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
 ---
 
-{
-  variant === 'card' ? (
-    <aside
-      class="mx-auto max-w-3xl rounded-[var(--radius-card)] border border-[var(--rule)] bg-[var(--surface)] p-6 shadow-[var(--shadow-soft)]"
-      aria-label="Important note"
-    >
-      <p class="text-xs tracking-widest text-[var(--muted)] uppercase">A gentle note</p>
-      <p class="mt-2 text-base leading-relaxed text-[var(--ink-soft)]">
-        Mindful shares short reflections, not medical advice. If you are struggling, please reach
-        out to a qualified professional or a local crisis line. You deserve care that&nbsp;meets you
-        where you are.
-      </p>
-    </aside>
-  ) : (
-    <p class="text-xs leading-relaxed text-[var(--muted)]">
-      These reflections are not a substitute for professional mental-health care. If you need
-      support, please reach out to a qualified clinician or local helpline.
-    </p>
-  )
-}
+{variant === 'card' ? (
+  <aside
+    class="bg-[var(--field)] px-6 py-8 text-[var(--field-ink)] sm:px-10 sm:py-10"
+    aria-labelledby={headingId}
+  >
+    <div class="grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-10">
+      <Heading id={headingId} class="font-display text-2xl leading-tight sm:text-3xl">
+        If today feels heavy
+      </Heading>
+      <div>
+        <p class="text-lg">
+          Mindful shares short reflections, not medical advice. If you are struggling, please reach
+          out to a qualified professional or a local crisis line. You deserve care that&nbsp;meets
+          you where you are.
+        </p>
+        <p class="mt-4">
+          <a href={siteConfig.supportHref} class="link-accent text-lg">
+            Where to find help now
+          </a>
+        </p>
+      </div>
+    </div>
+  </aside>
+) : (
+  <p class="meta">
+    These reflections are not a substitute for professional mental-health care. If you need support,
+    please reach out to a qualified clinician or local helpline.
+  </p>
+)}

@@ -6,7 +6,7 @@ without requiring a wide search.
 
 ## Stack
 
-Astro 6 static (`output: 'static'`) + TypeScript strict + Tailwind v4 (via
+Astro 7 static (`output: 'static'`) + TypeScript strict + Tailwind v4 (via
 `@tailwindcss/vite`) + Content Collections (markdown + JSON). Zero framework
 runtime. **E2E:** `@playwright/test` hits `astro preview` at `http://127.0.0.1:4173`
 (never 4321 — avoids clashing with `astro dev`); `playwright.config.ts` sets
@@ -39,19 +39,24 @@ to any static host.
 
 **Components** (`src/components/`)
 
-- `Header.astro` — sticky, hamburger button opens native `<dialog#site-menu>`
-  full-screen; inline script handles open/close; mirrors footer links
+- `Header.astro` — sticky bar: wordmark, `siteConfig.headerNav` links (md+),
+  "Need help now?" link, and a menu button that opens native
+  `<dialog#site-menu>` full-screen; `MenuScript.astro` handles open/close
 - `NavLinks.astro` — shared nav (footer + menu use this so they stay in sync)
 - `Footer.astro` — uses `NavLinks` + disclaimer copy
 - `Seo.astro` — title, description, canonical, OG, Twitter, JSON-LD (pass
   objects or arrays via the `jsonLd` prop)
-- `PostCard.astro` — card for home + category listings; hero `<img>` links to
-  the post (`href` matches title link), `alt` from `imageAlt` frontmatter or
-  title, inset focus ring on the image link; accepts `headingLevel: 2 | 3`
-  (default 3) so parent pages keep a valid h1 → h2 → h3 outline
-- `CategoryChip.astro` — pill tinted by the category's `accent`; text color
-  mixed against `var(--ink)` so contrast holds in light and dark themes
-- `Disclaimer.astro` — reusable "not medical advice" note
+- `PostCard.astro` — text-only entry for home + category listings
+  (`variant`: `default` | `row` | `feature`); accepts `headingLevel: 2 | 3`
+  (default 3) so parent pages keep a valid h1 → h2 → h3 outline. Post images
+  render only on the article page
+- `CategoryChip.astro` — theme link in ink with a small square of the
+  category's `accent`
+- `CategoryCard.astro` — theme row for the home page
+- `PageHeader.astro` — breadcrumb, `<h1>` and lede for index and info pages
+- `ArticleNav.astro` — previous/next essay links
+- `Disclaimer.astro` — reusable "not medical advice" care note linking to the
+  crisis section
 
 **Pages** (`src/pages/`)
 
@@ -62,13 +67,16 @@ to any static host.
 
 **Styling**
 
-- `src/styles/global.css` — Tailwind import, `@theme` design tokens, `.prose`
-  rules (drop cap, measure 66ch), SVG grain overlay via `body::before`, rise
-  animations gated by `prefers-reduced-motion`
+- `src/styles/global.css` — Tailwind import, fonts in `@theme`, colour
+  tokens on `:root` (light/dark), base links, `.frame`, `.button`, `.meta`
+- `src/styles/prose.css` — `.prose` rules (measure 64ch, drop cap via
+  `.prose-essay`)
+- `src/styles/motion.css` — rise / scroll-linked reveal, dropped under
+  `prefers-reduced-motion`
 
 **PWA**
 
-- `public/manifest.webmanifest` (name, theme `#6B8E7F`, bg `#F7F3EC`, icons)
+- `public/manifest.webmanifest` (name, theme + bg `#F3F2EE`, icons)
 - `public/sw.js` — same-origin only; network-first HTML (fallback `/offline`),
   SWR for assets; only caches `response.ok && type === 'basic' && !redirected`
   so error/opaque responses can't poison the cache. Registered inline from
@@ -76,7 +84,7 @@ to any static host.
 - `public/serve.json` — runtime security headers for `serve` (HSTS, CSP,
   `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, frame
   lockdown); also forces no-cache on `sw.js`.
-- Icons regenerated from `public/favicon.svg` via `npm run icons`
+- Icons regenerated from `public/favicon.svg` via `pnpm run icons`
 
 **Scripts** (`scripts/`)
 
@@ -84,6 +92,7 @@ to any static host.
   markdown is now source of truth)
 - `generate-icons.mjs` — sharp-based favicon → PWA PNG icons
 - `init-env.mjs` — copy `.env.example` → `.env` if missing
+- `lib/` — pure helpers (CSV parser, frontmatter builder, CDN paths) unit-tested in `tests/unit/`
 
 **E2E** (`e2e/`, `playwright.config.ts`)
 
@@ -115,9 +124,10 @@ to any static host.
 - `format` / `format:check` — Prettier
 - `fix` — `lint:fix` then `format`
 - `init:env` — copy `.env.example` → `.env`
-- `test:e2e` — Playwright (starts preview on **4173**)
+- `test` / `test:watch` — Vitest unit tests (`src/**/*.test.ts`, `tests/unit/`)
+- `test:e2e` — Playwright (starts preview on **4173**, `--ignore-lock` keeps Astro 7 preview in foreground)
 - `test:e2e:ui` — Playwright UI mode
-- (first run) `npx playwright install chromium` — browser binaries
+- (first run) `pnpm exec playwright install chromium` — browser binaries
 
 ## Conventions
 
@@ -161,7 +171,7 @@ to any static host.
   measured reason; the default viewport prefetch is already on.
 - Don't introduce CSS-in-JS or a component library; Tailwind + `global.css`
   tokens are the system.
-- Don't rerun `npm run seed` to edit posts — it is a one-shot migration;
+- Don't rerun `pnpm run seed` to edit posts — it is a one-shot migration;
   markdown files are now the source of truth.
 - Don't edit the header without also checking `Footer.astro` (they share
   `NavLinks.astro`).

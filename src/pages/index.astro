@@ -4,7 +4,7 @@ import PostCard from '~/components/PostCard.astro';
 import CategoryCard from '~/components/CategoryCard.astro';
 import Disclaimer from '~/components/Disclaimer.astro';
 import type { Post } from '~/lib/posts';
-import { getPublishedPosts, getFeaturedPost } from '~/lib/posts';
+import { getPublishedPosts, getFeaturedPost, readingMinutes, readingSpanLabel } from '~/lib/posts';
 import { getCategories } from '~/lib/categories';
 import { siteConfig } from '~/config/site';
 import { homeConfig } from '~/config/home';
@@ -22,6 +22,8 @@ const categoryCounts = categories.map((category) => ({
   count: posts.filter((post) => post.data.category === category.data.id).length,
 }));
 
+const readingSpan = readingSpanLabel(posts.map((post) => readingMinutes(post.body)));
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -33,92 +35,87 @@ const jsonLd = {
 ---
 
 <BaseLayout jsonLd={jsonLd}>
-  <section
-    class="grid gap-10 pb-16 sm:gap-12 sm:pb-20 md:grid-cols-[1fr_minmax(0,320px)] md:items-end md:gap-16"
-  >
-    <div class="rise">
-      <p class="text-xs tracking-[0.25em] text-[var(--muted)] uppercase">A quiet place to read</p>
-      <h1
-        class="mt-4 text-5xl leading-[1.02] tracking-tight text-balance sm:text-6xl md:text-7xl"
-        style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 144, 'SOFT' 20;"
-      >
-        Small <em
-          style="font-variation-settings: 'opsz' 144, 'SOFT' 100; font-style: italic; color: var(--accent-ink);"
-          >reflections</em
-        >
-        on the everyday practice of being well.
-      </h1>
-    </div>
-    <div
-      class="rise rise-1 max-w-sm border-l border-[var(--rule)] pl-5 text-[var(--muted)] sm:pl-8 md:border-r md:border-r-0 md:border-l-0 md:pr-8 md:pl-0 md:text-right"
+  <section aria-labelledby="home-title" class="pb-20 sm:pb-28">
+    <h1
+      id="home-title"
+      class="rise font-display max-w-[14ch] text-[clamp(2.375rem,1rem+6.4vw,7rem)] leading-[0.98] tracking-[-0.035em]"
     >
-      <p class="text-base leading-relaxed">{siteConfig.description}</p>
-      <p class="mt-4 text-xs tracking-widest uppercase">Settle in &middot; 2&ndash;5 min each</p>
+      Small reflections on being well.
+    </h1>
+    <div class="mt-8 grid gap-6 sm:mt-10 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:gap-10">
+      <p class="rise rise-1 max-w-[38ch] text-[clamp(1.25rem,1.1rem+0.5vw,1.5rem)] leading-snug">
+        {siteConfig.description}
+      </p>
+      {readingSpan && (
+        <p class="rise rise-2 meta md:self-end">
+          {posts.length} short essays, each {readingSpan}.{' '}
+          <a href="/posts" class="text-[var(--ink)]">
+            See them all
+          </a>
+        </p>
+      )}
     </div>
   </section>
 
-  {
-    featured && (
-      <section aria-label="Featured essay" class="rise rise-2 mb-20">
-        <PostCard post={featured} variant="feature" headingLevel={2} />
-      </section>
-    )
-  }
+  {featured && (
+    <section
+      aria-label="Featured essay"
+      class="rise rise-3 bg-[var(--surface)] px-6 py-10 sm:px-10 sm:py-14"
+    >
+      <PostCard post={featured} variant="feature" headingLevel={2} />
+    </section>
+  )}
 
-  {
-    picks.length > 0 && (
-      <section aria-labelledby="start-heading" class="rise rise-3 mb-20">
-        <div class="mb-8 flex items-baseline justify-between gap-4 border-b border-[var(--rule)] pb-4">
-          <h2
-            id="start-heading"
-            class="text-2xl tracking-tight sm:text-3xl"
-            style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 36;"
-          >
-            Start here
-          </h2>
-          <p class="text-xs tracking-widest text-[var(--muted)] uppercase">Editor picks</p>
-        </div>
-        <ul class="grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-          {picks.map((post) => (
-            <li>
-              <PostCard post={post} headingLevel={3} />
-            </li>
-          ))}
-        </ul>
-      </section>
-    )
-  }
+  {picks.length > 0 && (
+    <section
+      aria-labelledby="start-heading"
+      class="grid gap-8 pt-24 sm:pt-32 md:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] md:gap-10"
+    >
+      <div class="reveal">
+        <h2
+          id="start-heading"
+          class="font-display text-[clamp(2.25rem,1.6rem+2.4vw,3.5rem)] leading-none"
+        >
+          Start here
+        </h2>
+        <p class="mt-4 max-w-[28ch] text-[var(--ink-soft)]">
+          A few essays the editors would hand to a friend on a hard week.
+        </p>
+      </div>
+      <ul class="flex flex-col gap-12">
+        {picks.map((post) => (
+          <li class="reveal">
+            <PostCard post={post} headingLevel={3} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 
-  {
-    categoryCounts.length > 0 && (
-      <section aria-labelledby="themes-heading" class="rise rise-4">
-        <div class="mb-8 flex items-baseline justify-between gap-4 border-b border-[var(--rule)] pb-4">
-          <h2
-            id="themes-heading"
-            class="text-2xl tracking-tight sm:text-3xl"
-            style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 36;"
-          >
-            Browse by theme
-          </h2>
-          <a
-            href="/posts"
-            class="text-xs tracking-widest text-[var(--muted)] uppercase hover:text-[var(--accent-ink)]"
-          >
-            All essays &rarr;
-          </a>
-        </div>
-        <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {categoryCounts.map(({ category, count }) => (
-            <li class="h-full">
-              <CategoryCard category={category.data} count={count} />
-            </li>
-          ))}
-        </ul>
-      </section>
-    )
-  }
+  {categoryCounts.length > 0 && (
+    <section id="themes" aria-labelledby="themes-heading" class="pt-24 sm:pt-32">
+      <div class="reveal flex flex-wrap items-baseline justify-between gap-4">
+        <h2
+          id="themes-heading"
+          class="font-display text-[clamp(2.25rem,1.6rem+2.4vw,3.5rem)] leading-none"
+        >
+          Browse by theme
+        </h2>
+        <a href="/posts" class="text-lg">
+          All essays
+        </a>
+      </div>
+      <ul class="mt-8">
+        {categoryCounts.map(({ category, count }) => (
+          <li class="reveal">
+            <CategoryCard category={category.data} count={count} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 
-  <section class="mt-24">
+  <div class="reveal pt-24 sm:pt-32">
     <Disclaimer variant="card" />
-  </section>
+  </div>
 </BaseLayout>

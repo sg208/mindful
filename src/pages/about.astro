@@ -1,20 +1,13 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHeader from '~/components/PageHeader.astro';
 import Disclaimer from '~/components/Disclaimer.astro';
 import { siteConfig } from '~/config/site';
 ---
 
 <BaseLayout title="About" description={`About ${siteConfig.name} — ${siteConfig.tagline}`}>
-  <article class="mx-auto max-w-3xl">
-    <header class="mb-10">
-      <p class="text-xs tracking-[0.3em] text-[var(--muted)] uppercase">About</p>
-      <h1
-        class="mt-4 text-5xl leading-tight tracking-tight text-balance sm:text-6xl"
-        style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 96, 'SOFT' 30;"
-      >
-        A quiet place for everyday reflection.
-      </h1>
-    </header>
+  <article class="mx-auto max-w-[52rem]">
+    <PageHeader title="A quiet place for everyday reflection." crumbs={[{ label: 'About' }]} />
 
     <div class="prose">
       <p>

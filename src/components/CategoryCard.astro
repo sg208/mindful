@@ -8,33 +8,42 @@ interface Props {
 
 const { category, count } = Astro.props;
 const href = `/categories/${category.id}`;
-const label = `${category.label} — ${count} ${count === 1 ? 'essay' : 'essays'}`;
-const accentTint = `color-mix(in oklch, ${category.accent} 45%, transparent)`;
-const accentInk = `color-mix(in oklch, ${category.accent} 40%, var(--ink))`;
+const countLabel = `${count} ${count === 1 ? 'essay' : 'essays'}`;
 ---
 
-<a
-  href={href}
-  aria-label={label}
-  class="group relative flex h-full flex-col gap-3 rounded-[var(--radius-card)] border border-[var(--rule)] p-6 no-underline transition-colors hover:border-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] focus-visible:outline-none"
->
-  <span aria-hidden="true" class="h-1 w-10 rounded-full" style={`background: ${accentTint};`}
+<div class="theme-row group relative grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1 py-5 no-underline sm:grid-cols-[auto_minmax(0,5fr)_minmax(0,6fr)_auto] sm:items-baseline sm:gap-x-8">
+  <span
+    aria-hidden="true"
+    class="mt-[0.55em] inline-block h-3 w-3 sm:mt-0 sm:self-center"
+    style={`background: ${category.accent};`}
   ></span>
-  <h3
-    class="text-2xl leading-tight tracking-tight"
-    style={`font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 36; color: ${accentInk};`}
-  >
-    {category.label}
+  <h3 class="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.75rem)] leading-tight">
+    <a href={href} class="theme-row__link no-underline">
+      <span class="theme-row__label">{category.label}</span>
+    </a>
   </h3>
-  <p class="text-sm leading-relaxed text-[var(--muted)]">{category.description}</p>
-  <p
-    class="mt-auto flex items-center justify-between gap-3 pt-2 text-xs tracking-widest text-[var(--muted)] uppercase"
-  >
-    <span>{count} {count === 1 ? 'essay' : 'essays'}</span>
-    <span
-      aria-hidden="true"
-      class="transition-transform group-hover:translate-x-1 motion-reduce:translate-x-0 motion-reduce:transition-none"
-      >&rarr;</span
-    >
-  </p>
-</a>
+  <p class="col-start-2 text-[var(--ink-soft)] sm:col-start-auto">{category.description}</p>
+  <p class="meta col-start-2 sm:col-start-auto">{countLabel}</p>
+</div>
+
+<style>
+  /* Stretch the heading link over the whole row so the row stays one click target. */
+  .theme-row__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .theme-row__label {
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 0.05em;
+    text-underline-offset: 0.15em;
+    transition: text-decoration-color 180ms ease;
+  }
+
+  .theme-row:hover .theme-row__label,
+  .theme-row:focus-within .theme-row__label {
+    text-decoration-color: currentColor;
+  }
+</style>
