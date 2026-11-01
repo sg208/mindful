@@ -1,81 +1,67 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PageHeader from '~/components/PageHeader.astro';
+import { siteConfig } from '~/config/site';
 ---
 
 <BaseLayout
   title="Terms of use"
-  description="Rules and expectations for using Mindful: reading, intellectual property, limitations, and links to our disclaimer and privacy pages."
+  description="The terms for reading Mindful: a free demo and portfolio project, offered as is, with no warranty and no professional advice."
 >
   <article class="mx-auto max-w-[52rem]">
     <PageHeader title="Using Mindful on fair terms." crumbs={[{ label: 'Terms' }]} />
 
     <div class="prose">
       <p>
-        By reading or sharing links to Mindful, you agree to these terms. If something here does not
-        work for you, please stop using the site.
+        By reading Mindful you agree to these terms. If they do not work for you, please stop using
+        the site.
       </p>
 
       <h2>What Mindful is</h2>
       <p>
-        Mindful publishes short essays on everyday mental wellbeing. The site is informational
-        reading, not a service agreement for therapy, coaching, or crisis support. Our
-        <a href="/disclaimer">Disclaimer</a> says more about limits of the content; it is part of
-        how we expect the site to be used.
+        Mindful is a demo and portfolio project: a small, free website of short essays on everyday
+        mental wellbeing. It is reading material, not therapy, coaching or crisis support. Nothing
+        here replaces advice from a qualified professional. The <a href="/disclaimer">Disclaimer</a>
+        explains the limits of the content and where to find help in a crisis.
       </p>
 
-      <h2>Not professional care</h2>
+      <h2>As is, with no warranty</h2>
       <p>
-        Nothing on Mindful replaces advice from a qualified professional. If you rely on any essay
-        in place of care, you do so against our intent. Read the disclaimer for crisis guidance.
-      </p>
-
-      <h2>Intellectual property</h2>
-      <p>
-        Text, layout, branding, and original graphics on Mindful belong to us or our licensors
-        unless otherwise noted. You may read in a browser, bookmark, and link to pages in a normal,
-        non-misleading way. Please do not copy full essays for republication, scrape the site for
-        training or bulk reuse, or remove credits without permission. If you would like to reuse
-        material, reach out through channels we provide when we have them.
-      </p>
-
-      <h2>Third-party services</h2>
-      <p>
-        Delivery of the site (for example hosting, DNS, and placeholder images) involves third-party
-        providers. Their terms and privacy practices apply to what they do on their side. We
-        describe our angle on that in <a href="/privacy">Privacy</a>.
-      </p>
-
-      <h2>Acceptable use</h2>
-      <p>
-        Do not try to break, overload, or probe the site in ways that could harm other readers or
-        our infrastructure. Do not use Mindful to harass anyone or to automate abusive traffic.
-      </p>
-
-      <h2>Links out</h2>
-      <p>
-        Essays may link elsewhere. We do not control external sites and are not responsible for
-        their content, availability, or policies.
-      </p>
-
-      <h2>Changes and availability</h2>
-      <p>
-        We may edit essays, routes, or these terms from time to time. The site may occasionally be
-        unavailable for maintenance or reasons outside our control. We do not promise uninterrupted
-        access.
+        The essays and the site are provided as is. We make no promise that the content is complete,
+        accurate or up to date, or that the site will always be available or free of errors. We may
+        change or remove essays, pages and these terms at any time.
       </p>
 
       <h2>Limitation of liability</h2>
       <p>
-        To the fullest extent allowed by law, Mindful and its editors are not liable for indirect,
-        incidental, or consequential damages arising from your use of the site or reliance on any
-        essay. Our total liability for any claim related to the site should not exceed what you paid
-        to use Mindful &mdash; which is zero, because the reading is free.
+        To the fullest extent the law allows, Mindful and its editors are not liable for any loss or
+        damage arising from your use of the site or from relying on any essay.
       </p>
 
-      <h2>Privacy</h2>
+      <h2>Who owns what</h2>
       <p>
-        For how technical data may be processed when you visit, see <a href="/privacy">Privacy</a>.
+        The site&rsquo;s code is public on <a href={siteConfig.repoUrl}>GitHub</a> under the MIT
+        licence, so you can reuse it as long as you keep the copyright notice. The essays still
+        belong to the project owners. You are welcome to link to any page, but please ask before
+        copying an essay elsewhere.
+      </p>
+      <p>
+        Third-party material belongs to its owners. That includes the placeholder photos from
+        Picsum, the Fraunces and Newsreader typefaces, and any site an essay links to. We do not
+        control linked sites and are not responsible for them.
+      </p>
+
+      <h2>Fair use of the site</h2>
+      <p>
+        Do not try to break, overload or probe the site in ways that could harm other readers, and
+        do not use it to harass anyone.
+      </p>
+
+      <h2>Privacy and questions</h2>
+      <p>
+        What happens to technical data when you visit is described on the
+        <a href="/privacy">Privacy</a> page. For questions about these terms, open an issue on
+        <a href={siteConfig.issuesUrl}>the Mindful repository on GitHub</a>.
       </p>
     </div>
   </article>

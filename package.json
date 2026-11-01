@@ -1,6 +1,7 @@
 {
   "name": "mindful",
-  "version": "0.2.1",
+  "version": "0.3.0",
+  "license": "MIT",
   "description": "Mindful - a short-read mental health blog. Static-first, accessible, SEO-tuned.",
   "private": true,
   "type": "module",
@@ -11,10 +12,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "start": "node scripts/upload-to-cdn.mjs && serve -s dist -l ${PORT:-3000}",
     "seed": "node scripts/csv-to-content.mjs",
     "icons": "node scripts/generate-icons.mjs",
     "init:env": "node scripts/init-env.mjs",
+    "cdn:upload": "node scripts/upload-to-cdn.mjs",
     "check": "astro check && tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -35,7 +36,6 @@
     "@fontsource-variable/newsreader": "^5.2.10",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.4.4",
-    "serve": "^14.2.6",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3"
   },
@@ -53,7 +53,8 @@
     "prettier-plugin-tailwindcss": "^0.8.1",
     "sharp": "^0.35.5",
     "typescript-eslint": "^8.72.1",
-    "vitest": "^5.0.5"
+    "vitest": "^5.0.5",
+    "wrangler": "^4.156.0"
   },
   "packageManager": "pnpm@10.34.8+sha512.f627a8e971343afe49dfd0f63d028234201dfa831d5cb588733e1e5f8db26bf16989a32161ab5c1b4db3b1fdbc373160606b5b89e002df6dd19a85adf91fc5a8",
   "pnpm": {
@@ -62,7 +63,6 @@
       "sharp"
     ],
     "overrides": {
-      "compression": "^1.8.2",
       "esbuild": "^0.28.1",
       "minimatch@10": "^11.0.1"
     }
