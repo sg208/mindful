@@ -7,10 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-01
+
+### Added
+
+- **Crisis help on every page**: the header's "Need help now?" link ("Crisis help" on small screens), the footer and the article disclaimer all point to a new crisis section at `/disclaimer#in-crisis`, which links to findahelpline.com.
+
+### Changed
+
+- **Editorial redesign**: new stone-and-moss palette in light and dark mode, new type and spacing for articles, and reworked home, essay index, theme and info pages. The header nav is now All essays, Themes and About, and previous/next essay links are restyled.
+- **New icons**: the favicon and PWA app icons are redrawn in the new palette.
+- **Node 24 and pnpm**: the project now builds with pnpm (`pnpm-lock.yaml` replaces `package-lock.json`) on Node 24, including the `Dockerfile`.
+
+### Fixed
+
+- **Security updates**: Astro 7.4.4, `@astrojs/mdx` 8 and `sharp` 0.35.5 patch the audited advisories, including a critical AVIF remote code execution issue and several XSS issues.
+- **End-to-end tests under Astro 7**: `astro preview` now stays in the foreground so Playwright's web server no longer exits early.
+
+## [0.1.0] - 2026-05-20
+
 ### Added
 
 - Self-care post “Self-Compassion When You're Hard on Yourself” at `/posts/self-compassion-when-youre-hard-on-yourself`.
-- Cursor agent `susan-new-article` (`.cursor/agents/`) to audit existing posts, invoke the ask-susan skill, and draft unique Mindful articles with valid frontmatter.
 - Accessibility statement at `/accessibility`, privacy notice at `/privacy`, and terms of use at `/terms`, linked from the shared footer and menu nav.
 - Playwright route smoke coverage for the new pages alongside About and Disclaimer.
 
