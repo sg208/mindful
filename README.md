@@ -2,6 +2,8 @@
 
 Mindful is a small blog of short, gentle essays about everyday mental wellbeing: anxiety and stress, mindfulness, relationships, self-care, and rest. It is a static Astro site built to be accessible, quick to load, and easy to find in search. It also installs as a PWA and keeps working offline for pages you have already visited.
 
+Live at https://mindful.engg.app, served by a Cloudflare Worker (static assets) on the sg208 account. `wrangler.jsonc` holds the config. `pnpm deploy` sets `SITE_URL=https://mindful.engg.app`, builds, and runs `wrangler deploy`; it needs `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in the environment.
+
 > Mindful is **not** a substitute for professional mental-health care. If you are in crisis, please contact your local emergency services or a trusted helpline.
 
 ## Stack
@@ -22,7 +24,8 @@ flowchart LR
   helpers --> pages["src/pages/*.astro"]
   pages --> build["astro build"]
   build --> dist["dist/"]
-  dist --> serve["serve (Docker on Railway)"]
+  dist --> worker["Cloudflare Worker (wrangler deploy)"]
+  dist --> serve["serve (Docker, pnpm start)"]
   dist --> cdn["Bunny CDN upload at container start"]
 ```
 
@@ -62,7 +65,7 @@ Then open http://localhost:4321.
 | Name                       | Used by                     | Notes                                                                                           |
 | -------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------- |
 | `SITE_URL`                 | `astro build`               | Base for canonical links, Open Graph tags and the sitemap. A production build fails without it. |
-| `PORT`                     | `pnpm start`, Docker        | Port for the static server. Railway sets it.                                                    |
+| `PORT`                     | `pnpm start`, Docker        | Port for the static server. Railway sets it if you run the Docker image there.                  |
 | `CSV_PATH`                 | `pnpm seed`                 | Location of the Appwrite CSV if it isn't in `~/Downloads`.                                      |
 | `BUNNY_STORAGE_ACCESS_KEY` | `scripts/upload-to-cdn.mjs` | Storage zone password for uploads.                                                              |
 | `BUNNY_API_KEY`            | `scripts/upload-to-cdn.mjs` | Account key used to purge the pull zone.                                                        |
