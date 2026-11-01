@@ -18,6 +18,7 @@
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { join, relative, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { collectDirectories, encodePath } from './lib/cdn-paths.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = resolve(here, '..', 'dist');
@@ -29,13 +30,6 @@ const API_KEY = process.env.BUNNY_API_KEY;
 const ZONE_ID = process.env.BUNNY_ZONE_ID;
 
 // ─── helpers ────────────────────────────────────────────────────────────────
-
-/** Encode each path segment individually, preserving the slashes between them.
- *  Normalises backslashes to forward slashes first so the function is safe on
- *  any platform and regardless of how the caller constructed the path. */
-function encodePath(rawPath) {
-  return rawPath.replace(/\\/g, '/').split('/').map(encodeURIComponent).join('/');
-}
 
 /** Recursively collect every file path under a directory. */
 async function collectFiles(dir) {
@@ -177,14 +171,8 @@ async function main() {
   // before files can be PUT inside them. Collect unique parent paths,
   // sort so parents are created before children, then create each one.
   // Failures are logged as warnings only; uploads proceed regardless.
-  const dirs = new Set();
-  for (const file of files) {
-    const parts = relative(DIST_DIR, file).replace(/\\/g, '/').split('/');
-    for (let i = 1; i < parts.length; i++) {
-      dirs.add(parts.slice(0, i).join('/'));
-    }
-  }
-  for (const dir of [...dirs].sort()) {
+  const relativeFiles = files.map((file) => relative(DIST_DIR, file).replace(/\\/g, '/'));
+  for (const dir of collectDirectories(relativeFiles)) {
     await createDirectory(dir);
   }
 

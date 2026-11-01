@@ -30,6 +30,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY package.json ./
 COPY --from=build /app/dist ./dist
 COPY scripts/upload-to-cdn.mjs ./scripts/upload-to-cdn.mjs
+COPY scripts/lib/cdn-paths.mjs ./scripts/lib/cdn-paths.mjs
 # node:24-alpine ships a non-root `node` user (uid 1000). Drop root for runtime.
 USER node
 EXPOSE 3000
