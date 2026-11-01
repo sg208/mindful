@@ -21,7 +21,9 @@ export default defineConfig({
     { name: 'mobile', use: { ...devices['Pixel 5'] } },
   ],
   webServer: {
-    command: `pnpm run build && pnpm run preview --host 127.0.0.1 --port ${String(PORT)}`,
+    // `--ignore-lock` keeps `astro preview` in the foreground: Astro 7 otherwise
+    // auto-backgrounds it under coding agents and Playwright sees an early exit.
+    command: `pnpm run build && pnpm run preview --host 127.0.0.1 --port ${String(PORT)} --ignore-lock`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
