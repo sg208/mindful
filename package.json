@@ -11,10 +11,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "start": "node scripts/upload-to-cdn.mjs && serve -s dist -l ${PORT:-3000}",
     "seed": "node scripts/csv-to-content.mjs",
     "icons": "node scripts/generate-icons.mjs",
     "init:env": "node scripts/init-env.mjs",
+    "cdn:upload": "node scripts/upload-to-cdn.mjs",
     "check": "astro check && tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -35,7 +35,6 @@
     "@fontsource-variable/newsreader": "^5.2.10",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.4.4",
-    "serve": "^14.2.6",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3"
   },
@@ -62,7 +61,6 @@
       "sharp"
     ],
     "overrides": {
-      "compression": "^1.8.2",
       "esbuild": "^0.28.1",
       "minimatch@10": "^11.0.1"
     }
