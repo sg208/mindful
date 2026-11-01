@@ -1,8 +1,8 @@
 # Mindful
 
-Mindful is a small blog of short, gentle essays about everyday mental wellbeing: anxiety and stress, mindfulness, relationships, self-care, and rest. It is a static Astro site built to be accessible, quick to load, and easy to find in search. It also installs as a PWA and keeps working offline for pages you have already visited.
+Live at https://mindful.engg.app
 
-Live at https://mindful.engg.app, served by a Cloudflare Worker (static assets) on the sg208 account. `wrangler.jsonc` holds the config. `pnpm run deploy` sets `SITE_URL=https://mindful.engg.app`, builds, and runs `wrangler deploy`; it needs a global `wrangler` (v4) plus `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in the environment.
+Mindful is a small blog of short essays about everyday mental wellbeing: anxiety and stress, mindfulness, relationships, self-care and rest. It is a static Astro site served by a Cloudflare Worker. It installs as a PWA and keeps working offline for pages you have already visited.
 
 > Mindful is **not** a substitute for professional mental-health care. If you are in crisis, please contact your local emergency services or a trusted helpline.
 
@@ -24,27 +24,25 @@ flowchart LR
   helpers --> pages["src/pages/*.astro"]
   pages --> build["astro build"]
   build --> dist["dist/"]
-  dist --> worker["Cloudflare Worker (wrangler deploy)"]
-  dist --> serve["serve (Docker, pnpm start)"]
-  dist --> cdn["Bunny CDN upload at container start"]
+  dist --> worker["Cloudflare Worker (pnpm run deploy)"]
 ```
 
 Markdown files in `src/content/posts/` are the source of truth. The posts were first imported from an Appwrite CSV export with `pnpm seed`, but that was a one-time migration and running it again overwrites files.
 
 ## Where things live
 
-| Path                    | What it holds                                                                              |
-| ----------------------- | ------------------------------------------------------------------------------------------ |
-| `src/pages/`            | Routes: home, `posts/[slug]`, `categories/[slug]`, legal pages, `offline`, `404`           |
-| `src/layouts/`          | `BaseLayout` (head, SEO, skip link, SW registration) and `ArticleLayout`                   |
-| `src/components/`       | Header with a native `<dialog>` menu, footer, shared `NavLinks`, `Seo`, cards, disclaimer  |
-| `src/content/`          | Posts and category JSON                                                                    |
-| `src/content.config.ts` | Zod schemas and the list of valid category ids                                             |
-| `src/lib/`              | Post and category helpers, with their unit tests                                           |
-| `src/config/site.ts`    | Site name, tagline, theme colour, nav links                                                |
-| `public/`               | Manifest, service worker, `serve.json` security headers, icons                             |
-| `scripts/`              | Seed import, icon generation, `.env` setup, CDN upload; testable helpers in `scripts/lib/` |
-| `tests/unit/`, `e2e/`   | Vitest unit tests and Playwright specs                                                     |
+| Path                    | What it holds                                                                                                         |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `src/pages/`            | Routes: home, `posts/[slug]`, `categories/[slug]`, about, disclaimer, accessibility, privacy, terms, `offline`, `404` |
+| `src/layouts/`          | `BaseLayout` (head, SEO, skip link, SW registration) and `ArticleLayout`                                              |
+| `src/components/`       | Header with a native `<dialog>` menu, footer, shared `NavLinks`, `Seo`, cards, disclaimer                             |
+| `src/content/`          | Posts and category JSON                                                                                               |
+| `src/content.config.ts` | Zod schemas and the list of valid category ids                                                                        |
+| `src/lib/`              | Post and category helpers, with their unit tests                                                                      |
+| `src/config/site.ts`    | Site name, tagline, theme colour, nav links                                                                           |
+| `public/`               | Manifest, service worker, `_headers` security headers, icons                                                          |
+| `scripts/`              | Seed import, icon generation, `.env` setup, CDN upload; testable helpers in `scripts/lib/`                            |
+| `tests/unit/`, `e2e/`   | Vitest unit tests and Playwright specs                                                                                |
 
 ## Getting started
 
@@ -65,13 +63,14 @@ Then open http://localhost:4321.
 | Name                       | Used by                     | Notes                                                                                           |
 | -------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------- |
 | `SITE_URL`                 | `astro build`               | Base for canonical links, Open Graph tags and the sitemap. A production build fails without it. |
-| `PORT`                     | `pnpm start`, Docker        | Port for the static server. Railway sets it if you run the Docker image there.                  |
 | `CSV_PATH`                 | `pnpm seed`                 | Location of the Appwrite CSV if it isn't in `~/Downloads`.                                      |
+| `CLOUDFLARE_API_TOKEN`     | `pnpm run deploy`           | Token allowed to deploy Workers.                                                                |
+| `CLOUDFLARE_ACCOUNT_ID`    | `pnpm run deploy`           | Account that owns the Worker.                                                                   |
 | `BUNNY_STORAGE_ACCESS_KEY` | `scripts/upload-to-cdn.mjs` | Storage zone password for uploads.                                                              |
 | `BUNNY_API_KEY`            | `scripts/upload-to-cdn.mjs` | Account key used to purge the pull zone.                                                        |
 | `BUNNY_ZONE_ID`            | `scripts/upload-to-cdn.mjs` | Numeric pull-zone id.                                                                           |
 
-If any of the Bunny variables are missing, the upload step logs a warning and the server starts anyway.
+The Bunny variables are only for the optional `pnpm cdn:upload`. If any are missing it logs a warning and exits cleanly.
 
 ## Scripts
 
@@ -80,7 +79,8 @@ If any of the Bunny variables are missing, the upload step logs a warning and th
 | `pnpm dev`         | Astro dev server with hot reload on port 4321                      |
 | `pnpm build`       | Static build into `dist/` (needs `SITE_URL`)                       |
 | `pnpm preview`     | Serve the built site locally                                       |
-| `pnpm start`       | Upload `dist/` to the CDN, then serve it on `$PORT`                |
+| `pnpm run deploy`  | Builds with the production `SITE_URL` and runs `wrangler deploy`   |
+| `pnpm cdn:upload`  | Optional: uploads `dist/` to Bunny storage and purges the zone     |
 | `pnpm check`       | `astro check` followed by `tsc --noEmit`                           |
 | `pnpm lint`        | ESLint; `pnpm lint:fix` applies fixes                              |
 | `pnpm format`      | Prettier write; `pnpm format:check` only reports                   |
@@ -179,20 +179,17 @@ Every page has one `<h1>`, proper landmarks, a skip link, visible focus rings, a
 
 The manifest is `public/manifest.webmanifest`. The service worker only handles same-origin requests. It fetches HTML from the network first and falls back to `/offline`, serves static assets stale-while-revalidate, and only caches successful, non-redirected responses so an error page can't get stuck in the cache. It registers on HTTPS, `localhost` and `127.0.0.1`.
 
-`public/serve.json` sets HSTS, a Content Security Policy, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` and frame blocking. `serve` reads it automatically.
+`public/_headers` sets HSTS, a Content Security Policy, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` and frame blocking, and turns off caching for the service worker files. Cloudflare applies it when it serves the static assets; `astro preview` ignores it.
 
 ## Deploying
 
-Railway builds the repo `Dockerfile` (see `railway.json`). The image is multi-stage on `node:24-alpine`: it installs with `pnpm install --frozen-lockfile --ignore-scripts`, builds, and runs as the non-root `node` user. On start it uploads `dist/` to Bunny CDN and purges the cache, then hands over to the bundled `serve`. Set `SITE_URL` in the Railway variables; the Dockerfile declares it as a build `ARG` so Railway passes it to the build step.
-
-The same image runs anywhere:
+The site runs as a Cloudflare Worker with static assets, configured in `wrangler.jsonc` (custom domain `mindful.engg.app`). DNS for `engg.app` is on Cloudflare too.
 
 ```bash
-docker build --build-arg SITE_URL=https://example.com -t mindful .
-docker run --rm -p 3000:3000 mindful
+pnpm run deploy
 ```
 
-Because the output is a plain `dist/` folder, any static host works too. Set `SITE_URL`, run `pnpm build`, and publish `dist/`.
+That sets `SITE_URL=https://mindful.engg.app`, builds, and runs `wrangler deploy`. You need `wrangler` v4 installed globally and `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in your environment. Unknown paths get the built `404` page.
 
 ## Troubleshooting
 
@@ -200,7 +197,7 @@ Because the output is a plain `dist/` folder, any static host works too. Set `SI
 - **`pnpm seed` finds no CSV.** Set `CSV_PATH` to the export's location.
 - **Warnings that `z` is deprecated.** Import `z` from `astro/zod`, not from `astro:content`.
 - **The service worker doesn't register.** It needs HTTPS outside localhost; on plain HTTP registration is skipped on purpose.
-- **Images from a new host don't load.** Add the host to `image.remotePatterns` in `astro.config.mjs` and to `img-src` in `public/serve.json`.
+- **Images from a new host don't load.** Add the host to `image.remotePatterns` in `astro.config.mjs` and to `img-src` in `public/_headers`.
 - **Playwright can't find a browser.** Run `pnpm exec playwright install chromium`.
 - **E2E tests 404 or time out.** Something else is on port 4173. Stop stray `astro preview` processes (`pnpm exec astro preview stop`) and try again.
 
@@ -213,4 +210,4 @@ Because the output is a plain `dist/` folder, any static host works too. Set `SI
 
 ## Licence
 
-All rights reserved by the project owners. No public licence has been applied yet.
+The source is public at https://github.com/sg208/mindful, but no open-source licence has been applied yet, so all rights are reserved by the project owners. Report bugs and accessibility problems through GitHub issues.

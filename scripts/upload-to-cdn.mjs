@@ -3,16 +3,16 @@
  * upload-to-cdn.mjs
  *
  * Uploads all files from dist/ to Bunny CDN storage, then purges the pull-zone
- * cache. Runs as part of the startup command so output is visible in Railway
- * deploy logs.
+ * cache. Optional manual step (`pnpm cdn:upload` after `pnpm build`); the live
+ * site is served by the Cloudflare Worker in wrangler.jsonc, not by Bunny.
  *
  * Required environment variables:
  *   BUNNY_STORAGE_ACCESS_KEY  – Storage zone password (used for PUT requests)
  *   BUNNY_API_KEY             – Account API key (used for cache purge)
  *   BUNNY_ZONE_ID             – Pull-zone ID to purge
  *
- * The script exits 0 regardless of upload/purge failures so that the server
- * always starts even when CDN credentials are absent or the API is unreachable.
+ * The script exits 0 regardless of upload/purge failures, so missing CDN
+ * credentials or an unreachable API never fail a calling script.
  */
 
 import { readdir, readFile, stat } from 'node:fs/promises';

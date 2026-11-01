@@ -10,9 +10,8 @@ Astro 7 static (`output: 'static'`) + TypeScript strict + Tailwind v4 (via
 `@tailwindcss/vite`) + Content Collections (markdown + JSON). Zero framework
 runtime. **E2E:** `@playwright/test` hits `astro preview` at `http://127.0.0.1:4173`
 (never 4321 — avoids clashing with `astro dev`); `playwright.config.ts` sets
-`SITE_URL` for the webServer build when unset. Deployed on Railway via the
-repo `Dockerfile` (multi-stage, non-root `node` user, bundled `serve`). Ships
-to any static host.
+`SITE_URL` for the webServer build when unset. Live at https://mindful.engg.app, served by a Cloudflare Worker with
+static assets (`wrangler.jsonc`, deploy with `pnpm run deploy`).
 
 ## Where to find things
 
@@ -81,9 +80,9 @@ to any static host.
   SWR for assets; only caches `response.ok && type === 'basic' && !redirected`
   so error/opaque responses can't poison the cache. Registered inline from
   `BaseLayout.astro` (HTTPS or `localhost`/`127.0.0.1`).
-- `public/serve.json` — runtime security headers for `serve` (HSTS, CSP,
+- `public/_headers` — Cloudflare static-asset security headers (HSTS, CSP,
   `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, frame
-  lockdown); also forces no-cache on `sw.js`.
+  lockdown); also forces no-cache on `sw.js`. Not applied by `astro preview`.
 - Icons regenerated from `public/favicon.svg` via `pnpm run icons`
 
 **Scripts** (`scripts/`)
@@ -110,13 +109,15 @@ to any static host.
   Fails `astro build` when `SITE_URL` is missing (canonical/OG/sitemap).
 - `eslint.config.mjs` (flat config: astro + jsx-a11y + typescript-eslint + prettier)
 - `.prettierrc`, `tsconfig.json` (path alias `~/*` → `src/*`; includes `e2e/**/*.ts`)
-- `railway.json` (builder: `DOCKERFILE`, `dockerfilePath: Dockerfile`), multi-stage
-  `Dockerfile` (non-root `node`, `--ignore-scripts`, bundled `serve`), `.dockerignore`
+- `wrangler.jsonc` — Cloudflare Worker (static assets from `dist/`, custom
+  domain `mindful.engg.app`, 404 page for unknown paths)
 
 ## Commands
 
 - `dev` / `build` / `preview` — Astro dev, static build, preview built site
-- `start` — `serve -s dist -l $PORT` (Railway entrypoint)
+- `deploy` — build with `SITE_URL=https://mindful.engg.app` + `wrangler deploy`
+  (global wrangler v4, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`)
+- `cdn:upload` — optional: push `dist/` to Bunny storage + purge (not the live host)
 - `seed` — re-import posts + categories from CSV (rare, destructive)
 - `icons` — regenerate PWA icons from `favicon.svg`
 - `check` — `astro check && tsc --noEmit`

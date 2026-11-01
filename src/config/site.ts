@@ -9,6 +9,9 @@ export const siteConfig = {
   themeColorDark: '#121513',
   /** Where every "Need help now?" link points: the crisis section of the disclaimer. */
   supportHref: '/disclaimer#in-crisis',
+  /** Public source repository; linked from the footer and the legal pages. */
+  repoUrl: 'https://github.com/sg208/mindful',
+  issuesUrl: 'https://github.com/sg208/mindful/issues',
   headerNav: [
     { href: '/posts', label: 'All essays' },
     { href: '/#themes', label: 'Themes' },
