@@ -19,8 +19,9 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
 
     <div class="prose">
       <p>
-        Mindful is a small, read-only website of essays. We do <strong>not</strong> run Google Analytics,
-        advertising trackers, or similar analytics products. We are not in the business of profiling readers.
+        Mindful is a small, read-only website of essays. We do <strong>not</strong> run Google
+        Analytics, advertising trackers, or similar analytics products. We are not in the business
+        of profiling readers.
       </p>
 
       <h2>What you share by simply browsing</h2>
@@ -35,35 +36,35 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
       <p>We rely on a few services so the site loads quickly and stays online:</p>
       <ul>
         <li>
-          <strong>Cloudflare</strong> sits in front of our domain for DNS and network services (for example
-          routing, security, and performance). Cloudflare processes visitor traffic as part of that role.
-          Their own policies describe what they collect and why.
+          <strong>Cloudflare</strong> sits in front of our domain for DNS and network services (for
+          example routing, security, and performance). Cloudflare processes visitor traffic as part
+          of that role. Their own policies describe what they collect and why.
         </li>
         <li>
-          <strong>Railway</strong> hosts the built site. When you request a page or file, Railway (and
-          any caching or edge network they use to deliver static files) may process the same kind of technical
-          data as any host.
+          <strong>Railway</strong> hosts the built site. When you request a page or file, Railway
+          (and any caching or edge network they use to deliver static files) may process the same
+          kind of technical data as any host.
         </li>
         <li>
-          <strong>Placeholder images</strong> on some essays come from <strong>Picsum</strong> (and its
-          CDN). Your browser loads those images directly from their infrastructure, which means Picsum
-          or its providers may see technical data tied to that request, the same way any external image
-          host would.
+          <strong>Placeholder images</strong> on some essays come from <strong>Picsum</strong> (and
+          its CDN). Your browser loads those images directly from their infrastructure, which means
+          Picsum or its providers may see technical data tied to that request, the same way any
+          external image host would.
         </li>
       </ul>
 
       <h2>Fonts</h2>
       <p>
         We bundle our web fonts with the site (via Fontsource packages built into our CSS). We do
-        <strong>not</strong> load fonts from Google Fonts or another remote font service in the page head,
-        so visiting Mindful does not send a separate font request to Google for typography.
+        <strong>not</strong> load fonts from Google Fonts or another remote font service in the page
+        head, so visiting Mindful does not send a separate font request to Google for typography.
       </p>
 
       <h2>Offline support (service worker)</h2>
       <p>
-        Mindful registers a small <strong>service worker</strong> so pages and same-origin assets can
-        be cached on <em>your device</em> for speed and a simple offline fallback. That cache stays on
-        your device; it is not a copy we read on our servers.
+        Mindful registers a small <strong>service worker</strong> so pages and same-origin assets
+        can be cached on <em>your device</em> for speed and a simple offline fallback. That cache
+        stays on your device; it is not a copy we read on our servers.
       </p>
 
       <h2>Cookies and similar storage</h2>

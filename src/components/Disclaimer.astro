@@ -5,23 +5,21 @@ interface Props {
 const { variant = 'card' } = Astro.props;
 ---
 
-{
-  variant === 'card' ? (
-    <aside
-      class="mx-auto max-w-3xl rounded-[var(--radius-card)] border border-[var(--rule)] bg-[var(--surface)] p-6 shadow-[var(--shadow-soft)]"
-      aria-label="Important note"
-    >
-      <p class="text-xs tracking-widest text-[var(--muted)] uppercase">A gentle note</p>
-      <p class="mt-2 text-base leading-relaxed text-[var(--ink-soft)]">
-        Mindful shares short reflections, not medical advice. If you are struggling, please reach
-        out to a qualified professional or a local crisis line. You deserve care that&nbsp;meets you
-        where you are.
-      </p>
-    </aside>
-  ) : (
-    <p class="text-xs leading-relaxed text-[var(--muted)]">
-      These reflections are not a substitute for professional mental-health care. If you need
-      support, please reach out to a qualified clinician or local helpline.
+{variant === 'card' ? (
+  <aside
+    class="mx-auto max-w-3xl rounded-[var(--radius-card)] border border-[var(--rule)] bg-[var(--surface)] p-6 shadow-[var(--shadow-soft)]"
+    aria-label="Important note"
+  >
+    <p class="text-xs tracking-widest text-[var(--muted)] uppercase">A gentle note</p>
+    <p class="mt-2 text-base leading-relaxed text-[var(--ink-soft)]">
+      Mindful shares short reflections, not medical advice. If you are struggling, please reach out
+      to a qualified professional or a local crisis line. You deserve care that&nbsp;meets you where
+      you are.
     </p>
-  )
-}
+  </aside>
+) : (
+  <p class="text-xs leading-relaxed text-[var(--muted)]">
+    These reflections are not a substitute for professional mental-health care. If you need support,
+    please reach out to a qualified clinician or local helpline.
+  </p>
+)}

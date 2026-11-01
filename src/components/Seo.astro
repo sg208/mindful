@@ -66,8 +66,6 @@ function serializeJsonLd(block: Record<string, unknown>): string {
 <meta name="twitter:description" content={description} />
 {ogImage && <meta name="twitter:image" content={ogImage} />}
 
-{
-  jsonLdBlocks.map((block) => (
-    <script is:inline type="application/ld+json" set:html={serializeJsonLd(block)} />
-  ))
-}
+{jsonLdBlocks.map((block) => (
+  <script is:inline type="application/ld+json" set:html={serializeJsonLd(block)} />
+))}

@@ -29,7 +29,9 @@ const jsonLd = {
   <header class="mb-14 border-b border-[var(--rule)] pb-10">
     <nav aria-label="Breadcrumb" class="mb-6 text-xs tracking-widest text-[var(--muted)] uppercase">
       <ol class="flex flex-wrap gap-2">
-        <li><a href="/">Mindful</a></li>
+        <li>
+          <a href="/">Mindful</a>
+        </li>
         <li aria-hidden="true">&middot;</li>
         <li aria-current="page">{category.data.label}</li>
       </ol>
@@ -50,17 +52,15 @@ const jsonLd = {
     </p>
   </header>
 
-  {
-    posts.length === 0 ? (
-      <p class="text-[var(--muted)]">No essays in this theme yet. Check back soon.</p>
-    ) : (
-      <ul class="grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-        {posts.map((post) => (
-          <li>
-            <PostCard post={post} headingLevel={2} />
-          </li>
-        ))}
-      </ul>
-    )
-  }
+  {posts.length === 0 ? (
+    <p class="text-[var(--muted)]">No essays in this theme yet. Check back soon.</p>
+  ) : (
+    <ul class="grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+      {posts.map((post) => (
+        <li>
+          <PostCard post={post} headingLevel={2} />
+        </li>
+      ))}
+    </ul>
+  )}
 </BaseLayout>

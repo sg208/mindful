@@ -57,15 +57,15 @@ const jsonLd = {
         class="mb-6 text-xs tracking-widest text-[var(--muted)] uppercase"
       >
         <ol class="flex flex-wrap items-center justify-center gap-2">
-          <li><a href="/">Mindful</a></li>
+          <li>
+            <a href="/">Mindful</a>
+          </li>
           <li aria-hidden="true">&middot;</li>
-          {
-            category && (
-              <li>
-                <a href={`/categories/${category.data.id}`}>{category.data.label}</a>
-              </li>
-            )
-          }
+          {category && (
+            <li>
+              <a href={`/categories/${category.data.id}`}>{category.data.label}</a>
+            </li>
+          )}
         </ol>
       </nav>
       <h1
@@ -77,9 +77,7 @@ const jsonLd = {
       <p class="rise rise-1 mx-auto mt-6 max-w-2xl text-lg text-[var(--muted)]">
         {post.data.excerpt}
       </p>
-      <div
-        class="rise rise-2 mt-6 flex flex-wrap items-center justify-center gap-3 text-sm text-[var(--muted)]"
-      >
+      <div class="rise rise-2 mt-6 flex flex-wrap items-center justify-center gap-3 text-sm text-[var(--muted)]">
         {category && <CategoryChip category={category.data} />}
         <time datetime={publishedIso}>{formatDate(post.data.publishedAt)}</time>
         <span aria-hidden="true">&middot;</span>
@@ -87,22 +85,20 @@ const jsonLd = {
       </div>
     </header>
 
-    {
-      post.data.image && (
-        <figure class="rise rise-3 mx-auto w-full max-w-4xl">
-          <img
-            src={post.data.image}
-            alt={post.data.imageAlt ?? post.data.title}
-            width="1200"
-            height="600"
-            loading="eager"
-            fetchpriority="high"
-            decoding="async"
-            class="aspect-[2/1] w-full rounded-[var(--radius-card)] object-cover"
-          />
-        </figure>
-      )
-    }
+    {post.data.image && (
+      <figure class="rise rise-3 mx-auto w-full max-w-4xl">
+        <img
+          src={post.data.image}
+          alt={post.data.imageAlt ?? post.data.title}
+          width="1200"
+          height="600"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          class="aspect-[2/1] w-full rounded-[var(--radius-card)] object-cover"
+        />
+      </figure>
+    )}
 
     <div class="prose mx-auto">
       <slot />
@@ -110,44 +106,42 @@ const jsonLd = {
 
     <Disclaimer variant="card" />
 
-    {
-      (previous || next) && (
-        <nav
-          aria-label="More reading"
-          class="mx-auto grid w-full max-w-4xl gap-6 border-t border-[var(--rule)] pt-10 sm:grid-cols-2"
-        >
-          {previous ? (
-            <a
-              href={`/posts/${previous.id}`}
-              class="group block rounded-[var(--radius-card)] border border-[var(--rule)] bg-[var(--surface)] p-5 no-underline transition-colors hover:border-[var(--accent)]"
+    {(previous || next) && (
+      <nav
+        aria-label="More reading"
+        class="mx-auto grid w-full max-w-4xl gap-6 border-t border-[var(--rule)] pt-10 sm:grid-cols-2"
+      >
+        {previous ? (
+          <a
+            href={`/posts/${previous.id}`}
+            class="group block rounded-[var(--radius-card)] border border-[var(--rule)] bg-[var(--surface)] p-5 no-underline transition-colors hover:border-[var(--accent)]"
+          >
+            <p class="text-xs tracking-widest text-[var(--muted)] uppercase">Previous</p>
+            <p
+              class="mt-2 text-lg leading-snug"
+              style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 30;"
             >
-              <p class="text-xs tracking-widest text-[var(--muted)] uppercase">Previous</p>
-              <p
-                class="mt-2 text-lg leading-snug"
-                style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 30;"
-              >
-                {previous.data.title}
-              </p>
-            </a>
-          ) : (
-            <span />
-          )}
-          {next && (
-            <a
-              href={`/posts/${next.id}`}
-              class="group block rounded-[var(--radius-card)] border border-[var(--rule)] bg-[var(--surface)] p-5 text-right no-underline transition-colors hover:border-[var(--accent)]"
+              {previous.data.title}
+            </p>
+          </a>
+        ) : (
+          <span />
+        )}
+        {next && (
+          <a
+            href={`/posts/${next.id}`}
+            class="group block rounded-[var(--radius-card)] border border-[var(--rule)] bg-[var(--surface)] p-5 text-right no-underline transition-colors hover:border-[var(--accent)]"
+          >
+            <p class="text-xs tracking-widest text-[var(--muted)] uppercase">Next</p>
+            <p
+              class="mt-2 text-lg leading-snug"
+              style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 30;"
             >
-              <p class="text-xs tracking-widest text-[var(--muted)] uppercase">Next</p>
-              <p
-                class="mt-2 text-lg leading-snug"
-                style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 30;"
-              >
-                {next.data.title}
-              </p>
-            </a>
-          )}
-        </nav>
-      )
-    }
+              {next.data.title}
+            </p>
+          </a>
+        )}
+      </nav>
+    )}
   </article>
 </BaseLayout>

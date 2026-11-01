@@ -24,12 +24,7 @@ describe('parseCsv', () => {
 
 describe('toRecords', () => {
   it('maps rows to objects keyed by header and skips blank rows', () => {
-    const rows = [
-      ['slug', 'title'],
-      ['one', 'First'],
-      ['', ''],
-      ['two'],
-    ];
+    const rows = [['slug', 'title'], ['one', 'First'], ['', ''], ['two']];
     expect(toRecords(rows)).toEqual([
       { slug: 'one', title: 'First' },
       { slug: 'two', title: '' },
