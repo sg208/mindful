@@ -2,7 +2,7 @@
 
 Mindful is a small blog of short, gentle essays about everyday mental wellbeing: anxiety and stress, mindfulness, relationships, self-care, and rest. It is a static Astro site built to be accessible, quick to load, and easy to find in search. It also installs as a PWA and keeps working offline for pages you have already visited.
 
-Live at https://mindful.engg.app, served by a Cloudflare Worker (static assets) on the sg208 account. `wrangler.jsonc` holds the config. `pnpm deploy` sets `SITE_URL=https://mindful.engg.app`, builds, and runs `wrangler deploy`; it needs `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in the environment.
+Live at https://mindful.engg.app, served by a Cloudflare Worker (static assets) on the sg208 account. `wrangler.jsonc` holds the config. `pnpm run deploy` sets `SITE_URL=https://mindful.engg.app`, builds, and runs `wrangler deploy`; it needs `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in the environment.
 
 > Mindful is **not** a substitute for professional mental-health care. If you are in crisis, please contact your local emergency services or a trusted helpline.
 
