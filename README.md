@@ -210,4 +210,4 @@ That sets `SITE_URL=https://mindful.engg.app`, builds, and runs `wrangler deploy
 
 ## Licence
 
-The source is public at https://github.com/sg208/mindful, but no open-source licence has been applied yet, so all rights are reserved by the project owners. Report bugs and accessibility problems through GitHub issues.
+The code is MIT licensed (see `LICENSE`). The essays are not covered by that licence and remain the project owners' work. Report bugs and accessibility problems through GitHub issues.
