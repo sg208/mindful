@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-01
+
+### Changed
+
+- **Cloudflare Workers hosting**: the site is live at https://mindful.engg.app, served as static assets by a Cloudflare Worker configured in `wrangler.jsonc`. `pnpm run deploy` builds with `SITE_URL=https://mindful.engg.app` and runs `wrangler deploy`. It needs a global `wrangler` v4 plus `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in the environment.
+
 ## [0.2.0] - 2026-11-01
 
 ### Added

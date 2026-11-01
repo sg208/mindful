@@ -1,6 +1,6 @@
 {
   "name": "mindful",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Mindful - a short-read mental health blog. Static-first, accessible, SEO-tuned.",
   "private": true,
   "type": "module",
@@ -24,7 +24,8 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "deploy": "SITE_URL=https://mindful.engg.app pnpm build && wrangler deploy"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.12",
