@@ -22,6 +22,7 @@ const themeLinks = [
 
 const utilityLinks = [
   { href: '/', label: 'Home' },
+  { href: '/posts', label: 'All essays' },
   { href: '/about', label: 'About' },
   { href: '/disclaimer', label: 'Disclaimer' },
   { href: '/accessibility', label: 'Accessibility' },
@@ -29,11 +30,12 @@ const utilityLinks = [
   { href: '/terms', label: 'Terms' },
 ];
 
-const textSize = variant === 'menu' ? 'text-lg' : 'text-sm';
-const spacing = variant === 'menu' ? 'space-y-3' : 'space-y-2';
+const isMenu = variant === 'menu';
+const textSize = isMenu ? 'font-display text-3xl sm:text-4xl' : 'text-base';
+const spacing = isMenu ? 'space-y-3' : 'space-y-2';
 const themesId = `${variant}-themes-heading`;
 const utilityId = `${variant}-utility-heading`;
-const headingClass = 'text-xs font-normal tracking-widest text-[var(--muted)] uppercase';
+const headingClass = isMenu ? 'meta' : 'text-[0.9375rem] text-[var(--close-muted)]';
 ---
 
 <nav aria-labelledby={labelledby} aria-label={labelledby ? undefined : label}>
@@ -45,7 +47,11 @@ const headingClass = 'text-xs font-normal tracking-widest text-[var(--muted)] up
       <ul class:list={['mt-3', spacing, textSize]}>
         {themeLinks.map((link) => (
           <li>
-            <a href={link.href} aria-current={currentPath === link.href ? 'page' : undefined}>
+            <a
+              href={link.href}
+              class="link-quiet"
+              aria-current={currentPath === link.href ? 'page' : undefined}
+            >
               {link.label}
             </a>
           </li>
@@ -60,7 +66,11 @@ const headingClass = 'text-xs font-normal tracking-widest text-[var(--muted)] up
       <ul class:list={['mt-3', spacing, textSize]}>
         {utilityLinks.map((link) => (
           <li>
-            <a href={link.href} aria-current={currentPath === link.href ? 'page' : undefined}>
+            <a
+              href={link.href}
+              class="link-quiet"
+              aria-current={currentPath === link.href ? 'page' : undefined}
+            >
               {link.label}
             </a>
           </li>

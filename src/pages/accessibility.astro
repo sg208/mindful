@@ -1,21 +1,17 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHeader from '~/components/PageHeader.astro';
 ---
 
 <BaseLayout
   title="Accessibility"
   description="How we think about accessibility on Mindful, what we try to do today, and where we still have room to grow."
 >
-  <article class="mx-auto max-w-3xl">
-    <header class="mb-10">
-      <p class="text-xs tracking-[0.3em] text-[var(--muted)] uppercase">Accessibility</p>
-      <h1
-        class="mt-4 text-5xl leading-tight tracking-tight text-balance sm:text-6xl"
-        style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 96;"
-      >
-        A site more people can use, comfortably.
-      </h1>
-    </header>
+  <article class="mx-auto max-w-[52rem]">
+    <PageHeader
+      title="A site more people can use, comfortably."
+      crumbs={[{ label: 'Accessibility' }]}
+    />
 
     <div class="prose">
       <p>

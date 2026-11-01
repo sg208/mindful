@@ -1,0 +1,59 @@
+---
+import type { Post } from '~/lib/posts';
+
+interface Props {
+  previous?: Post;
+  next?: Post;
+}
+
+const { previous, next } = Astro.props;
+const links = [
+  { post: previous, label: 'Previous essay', isNext: false },
+  { post: next, label: 'Next essay', isNext: true },
+];
+const hasLinks = Boolean(previous ?? next);
+---
+
+{hasLinks && (
+  <nav aria-label="More reading" class="mx-auto mt-20 grid max-w-[52rem] gap-4 sm:grid-cols-2">
+    {links.map(({ post, label, isNext }) =>
+      post ? (
+        <a
+          href={`/posts/${post.id}`}
+          class:list={[
+            'article-nav group flex flex-col gap-2 bg-[var(--surface)] p-6 no-underline sm:p-8',
+            isNext && 'sm:col-start-2 sm:text-right',
+          ]}
+        >
+          <span class="meta">{label}</span>
+          <span class="article-nav__title font-display text-[1.5rem] leading-snug">
+            {post.data.title}
+          </span>
+        </a>
+      ) : null,
+    )}
+  </nav>
+)}
+
+<style>
+  .article-nav {
+    transition: background-color 180ms ease;
+  }
+
+  .article-nav:hover {
+    background: color-mix(in oklch, var(--surface) 85%, var(--ink));
+  }
+
+  .article-nav__title {
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 0.05em;
+    text-underline-offset: 0.18em;
+    transition: text-decoration-color 180ms ease;
+  }
+
+  .article-nav:hover .article-nav__title,
+  .article-nav:focus-visible .article-nav__title {
+    text-decoration-color: currentColor;
+  }
+</style>

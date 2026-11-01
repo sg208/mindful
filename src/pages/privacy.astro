@@ -1,21 +1,14 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHeader from '~/components/PageHeader.astro';
 ---
 
 <BaseLayout
   title="Privacy"
   description="How Mindful handles information when you visit the site: no analytics, third-party hosting and images, and plain-language detail."
 >
-  <article class="mx-auto max-w-3xl">
-    <header class="mb-10">
-      <p class="text-xs tracking-[0.3em] text-[var(--muted)] uppercase">Privacy</p>
-      <h1
-        class="mt-4 text-5xl leading-tight tracking-tight text-balance sm:text-6xl"
-        style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 96;"
-      >
-        How we treat your visit.
-      </h1>
-    </header>
+  <article class="mx-auto max-w-[52rem]">
+    <PageHeader title="How we treat your visit." crumbs={[{ label: 'Privacy' }]} />
 
     <div class="prose">
       <p>
