@@ -6,7 +6,7 @@ without requiring a wide search.
 
 ## Stack
 
-Astro 6 static (`output: 'static'`) + TypeScript strict + Tailwind v4 (via
+Astro 7 static (`output: 'static'`) + TypeScript strict + Tailwind v4 (via
 `@tailwindcss/vite`) + Content Collections (markdown + JSON). Zero framework
 runtime. **E2E:** `@playwright/test` hits `astro preview` at `http://127.0.0.1:4173`
 (never 4321 — avoids clashing with `astro dev`); `playwright.config.ts` sets
@@ -76,7 +76,7 @@ to any static host.
 - `public/serve.json` — runtime security headers for `serve` (HSTS, CSP,
   `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, frame
   lockdown); also forces no-cache on `sw.js`.
-- Icons regenerated from `public/favicon.svg` via `npm run icons`
+- Icons regenerated from `public/favicon.svg` via `pnpm run icons`
 
 **Scripts** (`scripts/`)
 
@@ -84,6 +84,7 @@ to any static host.
   markdown is now source of truth)
 - `generate-icons.mjs` — sharp-based favicon → PWA PNG icons
 - `init-env.mjs` — copy `.env.example` → `.env` if missing
+- `lib/` — pure helpers (CSV parser, frontmatter builder, CDN paths) unit-tested in `tests/unit/`
 
 **E2E** (`e2e/`, `playwright.config.ts`)
 
@@ -115,9 +116,10 @@ to any static host.
 - `format` / `format:check` — Prettier
 - `fix` — `lint:fix` then `format`
 - `init:env` — copy `.env.example` → `.env`
-- `test:e2e` — Playwright (starts preview on **4173**)
+- `test` / `test:watch` — Vitest unit tests (`src/**/*.test.ts`, `tests/unit/`)
+- `test:e2e` — Playwright (starts preview on **4173**, `--ignore-lock` keeps Astro 7 preview in foreground)
 - `test:e2e:ui` — Playwright UI mode
-- (first run) `npx playwright install chromium` — browser binaries
+- (first run) `pnpm exec playwright install chromium` — browser binaries
 
 ## Conventions
 
@@ -161,7 +163,7 @@ to any static host.
   measured reason; the default viewport prefetch is already on.
 - Don't introduce CSS-in-JS or a component library; Tailwind + `global.css`
   tokens are the system.
-- Don't rerun `npm run seed` to edit posts — it is a one-shot migration;
+- Don't rerun `pnpm run seed` to edit posts — it is a one-shot migration;
   markdown files are now the source of truth.
 - Don't edit the header without also checking `Footer.astro` (they share
   `NavLinks.astro`).

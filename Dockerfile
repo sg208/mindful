@@ -1,13 +1,16 @@
 # syntax=docker/dockerfile:1.7
 
-FROM node:22-alpine AS deps
+FROM node:24-alpine AS base
 WORKDIR /app
-COPY package.json package-lock.json ./
-# --ignore-scripts blocks transitive postinstall from running during image build.
-RUN npm ci --no-audit --no-fund --ignore-scripts
+# pnpm is pinned by package.json "packageManager"; corepack provisions it.
+RUN corepack enable
 
-FROM node:22-alpine AS build
-WORKDIR /app
+FROM base AS deps
+COPY package.json pnpm-lock.yaml ./
+# --ignore-scripts blocks transitive postinstall from running during image build.
+RUN pnpm install --frozen-lockfile --ignore-scripts
+
+FROM base AS build
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # Railway (and plain Docker) only forward service variables to the build step
@@ -16,18 +19,19 @@ COPY . .
 ARG SITE_URL
 ENV SITE_URL=${SITE_URL}
 ENV NODE_ENV=production
-RUN npm run build
+RUN pnpm run build
 
-FROM node:22-alpine AS runtime
+FROM node:24-alpine AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
 RUN apk add --no-cache curl
-# Reuse the version of `serve` pinned in package-lock.json (no global install).
+# Reuse the version of `serve` pinned in pnpm-lock.yaml (no global install).
 COPY --from=deps /app/node_modules ./node_modules
 COPY package.json ./
 COPY --from=build /app/dist ./dist
 COPY scripts/upload-to-cdn.mjs ./scripts/upload-to-cdn.mjs
-# node:22-alpine ships a non-root `node` user (uid 1000). Drop root for runtime.
+COPY scripts/lib/cdn-paths.mjs ./scripts/lib/cdn-paths.mjs
+# node:24-alpine ships a non-root `node` user (uid 1000). Drop root for runtime.
 USER node
 EXPOSE 3000
 ENV PORT=3000

@@ -23,38 +23,36 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 <article
   class:list={['group relative flex flex-col gap-4', variant === 'feature' ? 'sm:gap-6' : '']}
 >
-  {
-    post.data.image && (
-      <a
-        href={href}
-        class="block overflow-hidden rounded-[var(--radius-card)] no-underline outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-inset"
-      >
-        <img
-          src={post.data.image}
-          alt={imageAlt}
-          loading={variant === 'feature' ? 'eager' : 'lazy'}
-          fetchpriority={variant === 'feature' ? 'high' : undefined}
-          decoding="async"
-          width={variant === 'feature' ? 1200 : 800}
-          height={variant === 'feature' ? 600 : 400}
-          class="aspect-[16/9] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-        />
-      </a>
-    )
-  }
+  {post.data.image && (
+    <a
+      href={href}
+      class="block overflow-hidden rounded-[var(--radius-card)] no-underline outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-inset"
+    >
+      <img
+        src={post.data.image}
+        alt={imageAlt}
+        loading={variant === 'feature' ? 'eager' : 'lazy'}
+        fetchpriority={variant === 'feature' ? 'high' : undefined}
+        decoding="async"
+        width={variant === 'feature' ? 1200 : 800}
+        height={variant === 'feature' ? 600 : 400}
+        class="aspect-[16/9] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+      />
+    </a>
+  )}
 
   <div class="flex flex-wrap items-center gap-3 text-sm text-[var(--muted)]">
     {category && <CategoryChip category={category.data} />}
-    <time datetime={post.data.publishedAt.toISOString()}>
-      {formatDate(post.data.publishedAt)}
-    </time>
+    <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
   </div>
 
   <Heading
     class:list={[headingSize, 'leading-tight tracking-tight']}
     style="font-family: var(--font-display); font-weight: 500; font-variation-settings: 'opsz' 48, 'SOFT' 30;"
   >
-    <a href={href} class="no-underline hover:text-[var(--accent-ink)]">{post.data.title}</a>
+    <a href={href} class="no-underline hover:text-[var(--accent-ink)]">
+      {post.data.title}
+    </a>
   </Heading>
 
   <p class="max-w-prose text-[var(--muted)]">{post.data.excerpt}</p>

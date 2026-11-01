@@ -39,32 +39,32 @@ const headingClass = 'text-xs font-normal tracking-widest text-[var(--muted)] up
 <nav aria-labelledby={labelledby} aria-label={labelledby ? undefined : label}>
   <div class="grid gap-10 sm:grid-cols-2">
     <section aria-labelledby={themesId}>
-      <h2 id={themesId} class={headingClass}>{siteConfig.name} by theme</h2>
+      <h2 id={themesId} class={headingClass}>
+        {siteConfig.name} by theme
+      </h2>
       <ul class:list={['mt-3', spacing, textSize]}>
-        {
-          themeLinks.map((link) => (
-            <li>
-              <a href={link.href} aria-current={currentPath === link.href ? 'page' : undefined}>
-                {link.label}
-              </a>
-            </li>
-          ))
-        }
+        {themeLinks.map((link) => (
+          <li>
+            <a href={link.href} aria-current={currentPath === link.href ? 'page' : undefined}>
+              {link.label}
+            </a>
+          </li>
+        ))}
       </ul>
     </section>
 
     <section aria-labelledby={utilityId}>
-      <h2 id={utilityId} class={headingClass}>Good to know</h2>
+      <h2 id={utilityId} class={headingClass}>
+        Good to know
+      </h2>
       <ul class:list={['mt-3', spacing, textSize]}>
-        {
-          utilityLinks.map((link) => (
-            <li>
-              <a href={link.href} aria-current={currentPath === link.href ? 'page' : undefined}>
-                {link.label}
-              </a>
-            </li>
-          ))
-        }
+        {utilityLinks.map((link) => (
+          <li>
+            <a href={link.href} aria-current={currentPath === link.href ? 'page' : undefined}>
+              {link.label}
+            </a>
+          </li>
+        ))}
       </ul>
     </section>
   </div>

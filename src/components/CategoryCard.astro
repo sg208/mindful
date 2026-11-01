@@ -18,7 +18,10 @@ const accentInk = `color-mix(in oklch, ${category.accent} 40%, var(--ink))`;
   aria-label={label}
   class="group relative flex h-full flex-col gap-3 rounded-[var(--radius-card)] border border-[var(--rule)] p-6 no-underline transition-colors hover:border-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] focus-visible:outline-none"
 >
-  <span aria-hidden="true" class="h-1 w-10 rounded-full" style={`background: ${accentTint};`}
+  <span
+    aria-hidden="true"
+    class="h-1 w-10 rounded-full"
+    style={`background: ${accentTint};`}
   ></span>
   <h3
     class="text-2xl leading-tight tracking-tight"
@@ -27,14 +30,15 @@ const accentInk = `color-mix(in oklch, ${category.accent} 40%, var(--ink))`;
     {category.label}
   </h3>
   <p class="text-sm leading-relaxed text-[var(--muted)]">{category.description}</p>
-  <p
-    class="mt-auto flex items-center justify-between gap-3 pt-2 text-xs tracking-widest text-[var(--muted)] uppercase"
-  >
-    <span>{count} {count === 1 ? 'essay' : 'essays'}</span>
+  <p class="mt-auto flex items-center justify-between gap-3 pt-2 text-xs tracking-widest text-[var(--muted)] uppercase">
+    <span>
+      {count} {count === 1 ? 'essay' : 'essays'}
+    </span>
     <span
       aria-hidden="true"
       class="transition-transform group-hover:translate-x-1 motion-reduce:translate-x-0 motion-reduce:transition-none"
-      >&rarr;</span
     >
+      &rarr;
+    </span>
   </p>
 </a>

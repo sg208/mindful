@@ -1,8 +1,8 @@
 node_modules
 dist
 .astro
-.env
-.env.local
+.env*
+!.env.example
 .DS_Store
 *.log
 .vercel
@@ -13,3 +13,5 @@ dev-dist
 playwright-report
 test-results
 blob-report
+.next
+.nuxt

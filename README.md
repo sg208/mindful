@@ -1,206 +1,147 @@
 # Mindful
 
-Short, gentle reads for everyday mental wellbeing. A static-first Astro blog —
-accessible, SEO-tuned, mobile/PWA-ready — with a minimalist editorial feel.
+Mindful is a small blog of short, gentle essays about everyday mental wellbeing: anxiety and stress, mindfulness, relationships, self-care, and rest. It is a static Astro site built to be accessible, quick to load, and easy to find in search. It also installs as a PWA and keeps working offline for pages you have already visited.
 
-> Mindful is **not** a substitute for professional mental-health care. If you are
-> in crisis, please contact your local emergency services or a trusted helpline.
+> Mindful is **not** a substitute for professional mental-health care. If you are in crisis, please contact your local emergency services or a trusted helpline.
 
----
+## Stack
 
-## Stack at a glance
+The site runs on Astro 7 with `output: 'static'`, TypeScript in strict mode, and Content Collections validated by Zod. Styling is Tailwind CSS v4 through `@tailwindcss/vite`, with design tokens in `src/styles/global.css`. Posts are markdown (MDX works too), and `@astrojs/sitemap` writes the sitemap. Fraunces and Newsreader are self-hosted through Fontsource.
 
-- **Astro 6** (`output: 'static'`) with TypeScript strict mode and Content Collections
-- **Tailwind CSS v4** (via `@tailwindcss/vite`) with design tokens in `src/styles/global.css`
-- **MDX** and **Sitemap** integrations
-- **Hand-rolled PWA**: `public/manifest.webmanifest` + `public/sw.js` (no framework runtime)
-- Fonts: self-hosted **Fraunces** (display) + **Newsreader** (body) via Fontsource
-- Tooling: **ESLint 9 flat config** (Astro + jsx-a11y + typescript-eslint), **Prettier**
-  with astro + tailwind plugins
-- **E2E: Playwright** (`@playwright/test`) against `astro preview` on a dedicated port
-  (`4173`) so tests never fight `astro dev` on `4321`
-- Deploy: Railway via the repo `Dockerfile` (non-root, bundled `serve`,
-  security headers from `public/serve.json`); portable to any static host
+No framework runtime reaches the browser. The only JavaScript is Astro's prefetch helper, a small inline script for the menu dialog, and a hand-written service worker in `public/sw.js`.
 
-Zero framework runtime ships to the browser. First-paint JS is ~2.2 KB (Astro's
-prefetch helper) plus the service worker.
+Tooling is pnpm 10 on Node 24, ESLint 10 (flat config with the Astro, jsx-a11y and typescript-eslint presets), Prettier with the Astro and Tailwind plugins, Vitest for unit tests and Playwright for end-to-end tests.
 
-## Architecture
+## How content becomes a page
 
 ```mermaid
 flowchart LR
-  csv["Appwrite CSV (one-shot)"] -->|"npm run seed"| seed[scripts/csv-to-content.mjs]
-  seed --> posts["src/content/posts/*.md"]
-  seed --> cats["src/content/categories/*.json"]
-  posts --> schema[src/content.config.ts]
-  cats --> schema
+  posts["src/content/posts/*.md"] --> schema[src/content.config.ts]
+  cats["src/content/categories/*.json"] --> schema
   schema --> helpers["src/lib/posts.ts<br/>src/lib/categories.ts"]
   helpers --> pages["src/pages/*.astro"]
-  pages --> layouts["src/layouts/*.astro"]
-  layouts --> astroBuild["astro build"]
-  astroBuild --> dist["dist/ (static HTML + assets)"]
-  dist --> host[Railway / any static host]
-  dist --> e2e["Playwright E2E<br/>astro preview :4173"]
+  pages --> build["astro build"]
+  build --> dist["dist/"]
+  dist --> serve["serve (Docker on Railway)"]
+  dist --> cdn["Bunny CDN upload at container start"]
 ```
 
-The CSV is the original import only. After the first `npm run seed`, markdown in
-`src/content/posts/` is the source of truth. Rerunning the seed overwrites files.
+Markdown files in `src/content/posts/` are the source of truth. The posts were first imported from an Appwrite CSV export with `pnpm seed`, but that was a one-time migration and running it again overwrites files.
 
-## Repository layout
+## Where things live
 
-```text
-.
-├── playwright.config.ts       Playwright: webServer build+preview on 127.0.0.1:4173, chromium + mobile
-├── e2e/                       End-to-end specs (home, menu dialog, routes, footer nav)
-├── astro.config.mjs         Astro + integrations (mdx, sitemap), Tailwind + image allowlist
-├── eslint.config.mjs        Flat ESLint config (astro + jsx-a11y + ts + prettier)
-├── .prettierrc              Prettier + astro/tailwind plugin config
-├── tsconfig.json            Strict TS, path alias `~/*` -> src/*
-├── railway.json             Railway build + start commands
-├── Dockerfile               Multi-stage node:22-alpine build (optional)
-├── public/
-│   ├── favicon.svg          Source logo (rasterised into /public/icons by script)
-│   ├── icons/*.png          PWA icons (192/512/maskable-512)
-│   ├── manifest.webmanifest PWA manifest
-│   ├── robots.txt           Sitemap pointer
-│   └── sw.js                Service worker (network-first HTML, SWR assets)
-├── scripts/
-│   ├── csv-to-content.mjs   One-shot CSV -> markdown import
-│   ├── generate-icons.mjs   Rasterise favicon.svg into PWA icons (uses sharp)
-│   └── init-env.mjs         Copy .env.example -> .env if missing
-└── src/
-    ├── components/
-    │   ├── CategoryChip.astro   Pill using category accent token
-    │   ├── Disclaimer.astro     Reusable "not medical advice" note
-    │   ├── Footer.astro         Bottom nav via NavLinks
-    │   ├── Header.astro         Sticky header + native <dialog> menu
-    │   ├── NavLinks.astro       Shared nav (footer + menu stay in sync)
-    │   ├── PostCard.astro       Card used on home + category index; hero image links to the post
-    │   └── Seo.astro            <title>, OG, Twitter, JSON-LD
-    ├── config/
-    │   └── site.ts              Site-level constants (name, tagline, nav)
-    ├── content/
-    │   ├── categories/*.json    Category metadata
-    │   └── posts/*.md           Blog posts
-    ├── content.config.ts        Zod schemas + collection loaders
-    ├── layouts/
-    │   ├── BaseLayout.astro     <html>, head, SEO, SW registration
-    │   └── ArticleLayout.astro  Article chrome (header, prose, prev/next)
-    ├── lib/
-    │   ├── categories.ts        getCategories / getCategory
-    │   └── posts.ts             getPublishedPosts / getFeaturedPost / getAdjacentPosts / formatDate / readingMinutes
-    ├── pages/
-    │   ├── 404.astro            Not-found (noindex)
-    │   ├── about.astro
-    │   ├── categories/[slug].astro
-    │   ├── disclaimer.astro
-    │   ├── accessibility.astro
-    │   ├── privacy.astro
-    │   ├── terms.astro
-    │   ├── index.astro          Home (hero + featured + grid)
-    │   ├── offline.astro        SW fallback (noindex)
-    │   └── posts/[slug].astro   Article renderer
-    └── styles/
-        └── global.css           Tailwind import + @theme tokens + .prose + grain overlay
-```
+| Path                    | What it holds                                                                              |
+| ----------------------- | ------------------------------------------------------------------------------------------ |
+| `src/pages/`            | Routes: home, `posts/[slug]`, `categories/[slug]`, legal pages, `offline`, `404`           |
+| `src/layouts/`          | `BaseLayout` (head, SEO, skip link, SW registration) and `ArticleLayout`                   |
+| `src/components/`       | Header with a native `<dialog>` menu, footer, shared `NavLinks`, `Seo`, cards, disclaimer  |
+| `src/content/`          | Posts and category JSON                                                                    |
+| `src/content.config.ts` | Zod schemas and the list of valid category ids                                             |
+| `src/lib/`              | Post and category helpers, with their unit tests                                           |
+| `src/config/site.ts`    | Site name, tagline, theme colour, nav links                                                |
+| `public/`               | Manifest, service worker, `serve.json` security headers, icons                             |
+| `scripts/`              | Seed import, icon generation, `.env` setup, CDN upload; testable helpers in `scripts/lib/` |
+| `tests/unit/`, `e2e/`   | Vitest unit tests and Playwright specs                                                     |
+
+`CLAUDE.md` and `AGENTS.md` carry a more detailed map for anyone (or any agent) making changes.
 
 ## Getting started
 
+You need Node 24 (see `.nvmrc`) and pnpm 10. The exact pnpm version is pinned in `package.json`, so `corepack enable` will pick it up.
+
 ```bash
-nvm use                 # Node 22 (see .nvmrc)
-npm install
-npm run init:env        # copies .env.example -> .env if missing
-npm run dev
+nvm use
+corepack enable
+pnpm install
+pnpm init:env     # copies .env.example to .env if you don't have one
+pnpm dev
 ```
 
-Open [http://localhost:4321](http://localhost:4321).
+Then open http://localhost:4321.
 
-Environment variables:
+### Environment variables
 
-| Variable   | Default                       | Purpose                                         |
-| ---------- | ----------------------------- | ----------------------------------------------- |
-| `SITE_URL` | `https://mindful.example.com` | Canonical, OG, and sitemap base URL             |
-| `PORT`     | `3000`                        | `npm start` static server port (set by Railway) |
-| `CSV_PATH` | `~/Downloads/mindful-...csv`  | Override for `npm run seed`                     |
+| Name                       | Used by                     | Notes                                                                                           |
+| -------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------- |
+| `SITE_URL`                 | `astro build`               | Base for canonical links, Open Graph tags and the sitemap. A production build fails without it. |
+| `PORT`                     | `pnpm start`, Docker        | Port for the static server. Railway sets it.                                                    |
+| `CSV_PATH`                 | `pnpm seed`                 | Location of the Appwrite CSV if it isn't in `~/Downloads`.                                      |
+| `BUNNY_STORAGE_ACCESS_KEY` | `scripts/upload-to-cdn.mjs` | Storage zone password for uploads.                                                              |
+| `BUNNY_API_KEY`            | `scripts/upload-to-cdn.mjs` | Account key used to purge the pull zone.                                                        |
+| `BUNNY_ZONE_ID`            | `scripts/upload-to-cdn.mjs` | Numeric pull-zone id.                                                                           |
+
+If any of the Bunny variables are missing, the upload step logs a warning and the server starts anyway.
 
 ## Scripts
 
-| Script                | What it does                                                       |
-| --------------------- | ------------------------------------------------------------------ |
-| `npm run dev`         | Astro dev server with HMR                                          |
-| `npm run build`       | Build static site into `dist/`                                     |
-| `npm run preview`     | Preview the built site locally                                     |
-| `npm start`           | Serve `dist/` on `$PORT` (Railway-ready)                           |
-| `npm run seed`        | Re-import posts + categories from the Appwrite CSV                 |
-| `npm run icons`       | Rasterise `public/favicon.svg` into PWA icon PNGs                  |
-| `npm run check`       | `astro check` + `tsc --noEmit`                                     |
-| `npm run lint`        | ESLint over the repo                                               |
-| `npm run lint:fix`    | ESLint with `--fix`                                                |
-| `npm run format`      | Prettier write                                                     |
-| `npm run fix`         | `lint:fix` then `format`                                           |
-| `npm run init:env`    | Copy `.env.example` to `.env` if missing                           |
-| `npm run test:e2e`    | Playwright: build, serve preview on **4173**, run all E2E projects |
-| `npm run test:e2e:ui` | Playwright UI mode                                                 |
+| Command            | What it does                                                       |
+| ------------------ | ------------------------------------------------------------------ |
+| `pnpm dev`         | Astro dev server with hot reload on port 4321                      |
+| `pnpm build`       | Static build into `dist/` (needs `SITE_URL`)                       |
+| `pnpm preview`     | Serve the built site locally                                       |
+| `pnpm start`       | Upload `dist/` to the CDN, then serve it on `$PORT`                |
+| `pnpm check`       | `astro check` followed by `tsc --noEmit`                           |
+| `pnpm lint`        | ESLint; `pnpm lint:fix` applies fixes                              |
+| `pnpm format`      | Prettier write; `pnpm format:check` only reports                   |
+| `pnpm fix`         | `lint:fix` and then `format`                                       |
+| `pnpm test`        | Vitest unit tests, once                                            |
+| `pnpm test:watch`  | Vitest in watch mode                                               |
+| `pnpm test:e2e`    | Playwright: builds, starts a preview on port 4173, runs every spec |
+| `pnpm test:e2e:ui` | Playwright UI mode                                                 |
+| `pnpm icons`       | Regenerates the PWA icons from `public/favicon.svg` with sharp     |
+| `pnpm seed`        | Re-imports posts and categories from the Appwrite CSV (overwrites) |
+| `pnpm init:env`    | Copies `.env.example` to `.env` if it's missing                    |
 
-## End-to-end tests (Playwright)
+## Tests
 
-First-time setup installs browser binaries:
+Unit tests run on Vitest and need no browser:
 
 ```bash
-npx playwright install chromium
+pnpm test
 ```
 
-`playwright.config.ts` runs `npm run build && npm run preview -- --host 127.0.0.1 --port 4173`
-and points tests at `http://127.0.0.1:4173`. The web server sets `SITE_URL` to that
-same base URL when the variable is unset so `astro build` succeeds without a local
-`.env` (override via `.env` or the environment if you need a different canonical URL
-in generated metadata). Port **4173** is intentional so a local `astro dev` on
-**4321** does not steal the preview port (if preview falls back to another port,
-`baseURL` would no longer match and tests can 404).
+They cover the post helpers (draft filtering, date sorting, the featured-post fallback, previous/next links, reading time, date formatting), the category helpers, and the pure parts of the scripts: the CSV parser, the frontmatter builder that escapes untrusted CSV values, and the CDN path encoding. Astro's `astro:content` module only exists inside Astro's build, so `vitest.config.ts` points it at a stub in `tests/stubs/` and each test mocks `getCollection`.
 
-Coverage (see `e2e/*.spec.ts`):
+End-to-end tests use Playwright. Install the browser once, then run them:
 
-- Home: single `h1`, `#main` landmark, skip link → `#main`, header/footer
-- Hamburger `<dialog#site-menu>`: open/close `aria-expanded`, navigate to About,
-  Escape closes
-- Routes: sample post (`/posts/what-is-mindfulness`), a second post slug used for
-  SEO rewrites (`/posts/how-to-calm-anxiety`), category (H1 = category **label** in
-  `categories/[slug].astro`), About, Disclaimer, `/offline`,
-  `/sitemap-index.xml`, 404 page
-- Footer: category link, utility links (about, legal pages, etc.)
+```bash
+pnpm exec playwright install chromium
+pnpm test:e2e
+```
 
-Projects: **chromium** (desktop) and **mobile** (Pixel 5 Chromium profile).
+Playwright builds the site and starts `astro preview` on `127.0.0.1:4173`, so it never collides with a dev server on 4321. If `SITE_URL` is unset it uses that preview address. The command passes `--ignore-lock` because Astro 7 otherwise moves `astro preview` into the background when it detects a coding agent, and Playwright then thinks the server died. The specs check the home page landmarks and skip link, the menu dialog (open, close, Escape, navigation), post, category and info pages, `/offline`, the sitemap, the 404 page and the footer links, on both a desktop and a Pixel 5 profile.
 
-## Content authoring
+There is no CI workflow yet, so run `pnpm lint`, `pnpm check`, `pnpm test` and `pnpm test:e2e` before you merge.
 
-### Add a post
+## Writing content
 
-Create `src/content/posts/<slug>.md`. The filename is the URL slug.
+### Adding a post
+
+Create `src/content/posts/<slug>.md`. The filename becomes the URL.
 
 ```md
 ---
 title: A plain sentence that becomes the H1
 excerpt: One or two sentences for the card and meta description.
-category: mindfulness # must match a category id (see list below)
-publishedAt: 2026-04-18 # ISO date; Date object is parsed by Zod
+category: mindfulness # must match a category id
+publishedAt: 2026-04-18 # ISO date
 updatedAt: 2026-04-19 # optional
-image: https://picsum.photos/seed/your-seed/1200/600 # optional, URL only
-imageAlt: Describe the image for screen readers # optional
-featured: false # at most one post is shown as the hero
-reviewRequired: false # editorial flag (for your own tracking)
-draft: false # true = excluded from build lists and sitemap
+image: https://picsum.photos/seed/your-seed/1200/600 # optional, http(s) URL
+imageAlt: Describe the image for screen readers # optional, falls back to the title
+featured: false # the featured post becomes the home page hero
+reviewRequired: false # editorial flag
+draft: false # true hides the post from every list, the sitemap and the build
 ---
 
-The body is plain markdown. First paragraph gets a drop cap via `.prose` styles.
-Use `##` and `###` for section headings; H1 is reserved for the page title.
+The body is plain markdown. The first paragraph gets a drop cap.
+Use `##` and `###` for sections; the H1 is the title.
 ```
 
-Valid categories (see `src/content/categories/*.json`):
-`anxiety-stress`, `mindfulness`, `relationships`, `self-care`, `sleep-rest`.
+The valid categories are `anxiety-stress`, `mindfulness`, `relationships`, `self-care` and `sleep-rest`. Run `pnpm check` after editing; it reports any frontmatter that doesn't match the schema. If you rename the post `.mdx` you can import Astro components inside it.
 
-### Add a category
+### Adding a category
 
-Create `src/content/categories/<id>.json` with:
+Create `src/content/categories/<id>.json`:
 
 ```json
 {
@@ -211,24 +152,11 @@ Create `src/content/categories/<id>.json` with:
 }
 ```
 
-Then add `"new-category"` to the `CATEGORY_IDS` tuple in
-[src/content.config.ts](src/content.config.ts) so the enum accepts it.
+Then add the id to the `CATEGORY_IDS` tuple in `src/content.config.ts`.
 
-### Drafts
+## Design, accessibility and SEO
 
-`draft: true` excludes a post from the homepage list, category pages, and
-sitemap. It is also **not** rendered as an HTML page by the build.
-
-### Rich content (optional)
-
-`@astrojs/mdx` is installed. Rename to `.mdx` and import Astro components inside
-the article when you need charts, callouts, or embedded widgets.
-
-## Design contract
-
-Tokens live in [src/styles/global.css](src/styles/global.css) inside
-`@theme { ... }`. Use them as CSS variables (`var(--accent)`) so dark mode and
-future palette changes "just work":
+Colours and fonts are CSS variables declared in the `@theme` block of `src/styles/global.css`, with dark-mode values alongside. Use `var(--accent)` and friends instead of hard-coded colours. Article text is capped at 66 characters per line by the `.prose` class, and the `rise rise-1/2/3` classes give hero elements a short staggered fade.
 
 | Token       | Light     | Dark      | Used for                 |
 | ----------- | --------- | --------- | ------------------------ |
@@ -240,129 +168,46 @@ future palette changes "just work":
 | `--accent`  | `#6B8E7F` | `#9FC2B3` | Sage accent, focus ring  |
 | `--warm`    | `#C9875B` | `#E0A37B` | Terracotta hover accent  |
 
-Font stack:
+Every page has one `<h1>`, proper landmarks, a skip link, visible focus rings, alt text on meaningful images and `aria-current="page"` on the active nav link. Animations respect `prefers-reduced-motion`. ESLint runs the jsx-a11y rules over `.astro` files.
 
-- `--font-display`: **Fraunces Variable** (opsz + SOFT axes). Used for headings
-  and brand. Set `font-variation-settings` when you care about optical size.
-- `--font-serif`: **Newsreader Variable**. Default body and UI.
-- `--font-sans`: system fallback for small meta text if you ever need it.
+`src/components/Seo.astro` writes the title, description, canonical link, Open Graph and Twitter tags, plus JSON-LD: `WebSite` on the home page, `CollectionPage` on categories and `Article` on posts.
 
-Other conventions:
+## PWA and security headers
 
-- Measure `max-width: 66ch` on article bodies via the `.prose` class.
-- Staggered entrance: add `rise rise-1 / rise-2 / rise-3` classes to hero
-  elements for a 0–300 ms fade-rise.
-- A SVG grain overlay is attached via `body::before`; do not override it.
+The manifest is `public/manifest.webmanifest`. The service worker only handles same-origin requests. It fetches HTML from the network first and falls back to `/offline`, serves static assets stale-while-revalidate, and only caches successful, non-redirected responses so an error page can't get stuck in the cache. It registers on HTTPS, `localhost` and `127.0.0.1`.
 
-## Accessibility contract
-
-All pages must:
-
-- Have exactly **one** `<h1>` and logical heading order.
-- Use landmark regions (`<header>`, `<nav>`, `<main>`, `<footer>`, `<article>`).
-- Include a skip link (already in `BaseLayout.astro`).
-- Have visible `:focus-visible` rings (2 px accent, 2 px offset — global rule).
-- Respect `prefers-reduced-motion` (all animations gated by a media query in
-  `global.css`) and `prefers-color-scheme`.
-- Give every meaningful image an `alt`; decorative images use `alt=""`.
-- Mark active nav items with `aria-current="page"`.
-
-Linted via `eslint-plugin-astro` + the `jsx-a11y` preset it re-exports.
-
-## SEO contract
-
-[src/components/Seo.astro](src/components/Seo.astro) emits:
-
-- `<title>`, `<meta name="description">`, canonical link
-- Open Graph (title, description, type, url, site_name, locale, image, article:)
-- Twitter Card (summary / summary_large_image when an image is provided)
-- JSON-LD passed via the `jsonLd` prop (objects or arrays)
-
-Per-page JSON-LD already wired:
-
-- Home: `WebSite`
-- Category: `CollectionPage`
-- Post: `Article` (via `ArticleLayout.astro`)
-
-`robots.txt` allows all and points to `/sitemap-index.xml`. `@astrojs/sitemap`
-emits `/sitemap-index.xml` + `/sitemap-0.xml` automatically.
-
-## PWA
-
-- Manifest: [public/manifest.webmanifest](public/manifest.webmanifest)
-  (`name`, `theme_color: #6B8E7F`, `background_color: #F7F3EC`, icons).
-- Service worker: [public/sw.js](public/sw.js).
-  - HTML requests: **network-first**, fall back to `/offline` on failure.
-  - Static assets (CSS, JS, fonts, images): **stale-while-revalidate**.
-  - Same-origin only; only `ok`, `basic`, non-redirected responses enter the
-    cache so error/opaque responses can't poison it.
-  - Registered from `BaseLayout.astro` on HTTPS, `localhost`, or `127.0.0.1`.
-- Runtime security headers: [public/serve.json](public/serve.json) (HSTS, CSP,
-  `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, frame
-  lockdown) — read automatically by `serve`.
-- Icons are regenerated from `public/favicon.svg` with `npm run icons`.
+`public/serve.json` sets HSTS, a Content Security Policy, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` and frame blocking. `serve` reads it automatically.
 
 ## Deploying
 
-### Railway (default)
+Railway builds the repo `Dockerfile` (see `railway.json`). The image is multi-stage on `node:24-alpine`: it installs with `pnpm install --frozen-lockfile --ignore-scripts`, builds, and runs as the non-root `node` user. On start it uploads `dist/` to Bunny CDN and purges the cache, then hands over to the bundled `serve`. Set `SITE_URL` in the Railway variables; the Dockerfile declares it as a build `ARG` so Railway passes it to the build step.
 
-`railway.json` points Railway at the repo `Dockerfile`:
-
-```jsonc
-{
-  "build": { "builder": "DOCKERFILE", "dockerfilePath": "Dockerfile" },
-}
-```
-
-The multi-stage image uses `node:22-alpine`, installs deps with
-`--ignore-scripts`, drops to the non-root `node` user for runtime, and starts
-the bundled `serve` pointed at `dist/`. Security headers come from
-`public/serve.json`. **Set `SITE_URL`** in the Railway project variables — the
-build throws when it is missing. The Dockerfile declares `ARG SITE_URL` so
-Railway forwards the service variable to the build step (without the `ARG`,
-Docker service variables only reach the runtime container).
-
-### Docker (anywhere else)
-
-The same `Dockerfile` runs on any container host:
+The same image runs anywhere:
 
 ```bash
-docker build -t mindful .
-docker run --rm -p 3000:3000 -e SITE_URL=https://example.com mindful
+docker build --build-arg SITE_URL=https://example.com -t mindful .
+docker run --rm -p 3000:3000 mindful
 ```
 
-### Any other static host
-
-It's a plain `dist/` directory. Netlify, Cloudflare Pages, Vercel, GitHub Pages,
-S3+CloudFront, nginx, Caddy — all work with no code changes. Just set
-`SITE_URL` and point the host at `dist/`.
+Because the output is a plain `dist/` folder, any static host works too. Set `SITE_URL`, run `pnpm build`, and publish `dist/`.
 
 ## Troubleshooting
 
-- **Build fails on a post with "expected date, received string"**: the
-  `publishedAt` field is missing or malformed. Use ISO 8601.
-- `**npm run seed` writes nothing\*\*: set `CSV_PATH` if your CSV is not at
-  `~/Downloads/mindful-from-appwrite-april-2026.csv`.
-- `**z` is deprecated warnings\*\*: you're importing from `astro:content` or
-  `astro:schema`. Import from `astro/zod` instead.
-- **Service worker doesn't register**: SWs require HTTPS. On plain `http://`
-  (non-localhost), the registration is a guarded no-op by design.
-- `**picsum.photos` is slow or rate-limited\*\*: replace with optimised local
-  images; update the `remotePatterns` allowlist in `astro.config.mjs` if you
-  add a new remote host.
-- **Playwright: browser not installed**: run `npx playwright install chromium`
-  (or `npx playwright install` for all browsers).
-- **E2E 404 on sitemap**: another process may be bound to the E2E preview
-  port; stop stray `astro preview`/`dev` processes or ensure `4173` is free.
+- **"expected date, received string" during build.** A post's `publishedAt` is missing or not an ISO date.
+- **`pnpm seed` finds no CSV.** Set `CSV_PATH` to the export's location.
+- **Warnings that `z` is deprecated.** Import `z` from `astro/zod`, not from `astro:content`.
+- **The service worker doesn't register.** It needs HTTPS outside localhost; on plain HTTP registration is skipped on purpose.
+- **Images from a new host don't load.** Add the host to `image.remotePatterns` in `astro.config.mjs` and to `img-src` in `public/serve.json`.
+- **Playwright can't find a browser.** Run `pnpm exec playwright install chromium`.
+- **E2E tests 404 or time out.** Something else is on port 4173. Stop stray `astro preview` processes (`pnpm exec astro preview stop`) and try again.
 
-## Roadmap
+## Ideas for later
 
-- Postgres-backed content (swap the `glob` loader for a DB loader).
-- Local/optimised images (replace `picsum.photos` placeholders with
-  `astro:assets`).
-- Static search (MiniSearch indexed at build time).
-- Expand Playwright coverage (e.g. article prev/next, theme color meta) as needed.
+- Load content from Postgres instead of the `glob` loader.
+- Replace the `picsum.photos` placeholders with optimised local images through `astro:assets`.
+- Add static search, for example a MiniSearch index built at build time.
+- Grow the Playwright suite, for instance article previous/next links.
 
 ## Licence
 
-All rights reserved by the project owners (no public licence applied yet).
+All rights reserved by the project owners. No public licence has been applied yet.
