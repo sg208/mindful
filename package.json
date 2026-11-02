@@ -1,6 +1,6 @@
 {
   "name": "mindful",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "license": "MIT",
   "description": "Mindful - a short-read mental health blog. Static-first, accessible, SEO-tuned.",
   "private": true,
