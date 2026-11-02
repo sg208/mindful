@@ -7,7 +7,7 @@
 - `src/lib/posts.ts:18` — `getPublishedPosts` filters `draft` + sorts desc; every listing goes through it
 - `src/components/NavLinks.astro` — single nav source for header dialog + footer. WHY: keeps menus in sync
 - `src/components/NavLinks.astro:28-30` — footer-only links to `/accessibility` · `/privacy` · `/terms` (static `.astro` pages) <!-- enggflo -->
-- `src/config/site.ts:13` — `repoUrl` · `issuesUrl`; footer "Source code on GitHub" (`src/components/Footer.astro:34`) + legal-page contact. WHY: one source for repo links <!-- enggflo -->
+- `src/config/site.ts:13` — `repoUrl` · `issuesUrl`; footer GitHub icon link (`src/components/Footer.astro:34`) + legal-page contact. WHY: one source for repo links <!-- enggflo -->
 
 ## Data flow
 
