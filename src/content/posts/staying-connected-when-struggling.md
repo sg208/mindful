@@ -1,6 +1,6 @@
 ---
 title: "Staying Connected When You're Struggling"
-excerpt: Isolation can make mental health harder. Reaching out—even in small ways—can help.
+excerpt: Isolation can make mental health harder. Reaching out, even in small ways, can help.
 category: relationships
 publishedAt: '2025-03-25T12:00:00.000+00:00'
 updatedAt: '2026-03-11T16:09:20.546+00:00'

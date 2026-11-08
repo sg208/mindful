@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.3] - 2026-11-08
+
+### Fixed
+
+- **robots.txt**: the `Sitemap:` line is now an absolute URL built from `SITE_URL`.
+- **Sitemap**: the `/offline` fallback page (noindex) is no longer listed.
+- **Open Graph**: `og:locale` is `en_US` instead of `en`.
+- **Permissions-Policy**: removed the retired `interest-cohort` token that made browsers log a warning.
+- **Essay images**: the hero `<img>` declares the real 800x400 size.
+
 ## [0.3.2] - 2026-11-02
 
 ### Changed

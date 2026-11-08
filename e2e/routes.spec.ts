@@ -70,6 +70,23 @@ test.describe('Core routes', () => {
     expect(html).toMatch(/sitemap/i);
   });
 
+  test('robots.txt points crawlers at an absolute sitemap URL', async ({ request }) => {
+    const response = await request.get('/robots.txt');
+    expect(response.status()).toBe(200);
+    expect(await response.text()).toMatch(/^Sitemap: https?:\/\/\S+\/sitemap-index\.xml$/m);
+  });
+
+  test('sitemap leaves out the noindex offline page', async ({ request }) => {
+    const response = await request.get('/sitemap-0.xml');
+    expect(response.status()).toBe(200);
+    expect(await response.text()).not.toContain('/offline<');
+  });
+
+  test('Open Graph locale uses language_TERRITORY', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('meta[property="og:locale"]')).toHaveAttribute('content', 'en_US');
+  });
+
   test('unknown path returns 404 page', async ({ page }) => {
     const response = await page.goto('/this-page-does-not-exist-xyz');
     expect(response?.status()).toBe(404);

@@ -1,6 +1,6 @@
 ---
 title: Rest Is Productive
-excerpt: "Taking real breaks isn't lazy—it's what allows you to sustain effort and creativity over time."
+excerpt: "Taking real breaks isn't lazy. It's what lets you keep up effort and creativity over time."
 category: self-care
 publishedAt: '2025-03-19T12:00:00.000+00:00'
 updatedAt: '2026-03-11T16:09:14.452+00:00'

@@ -73,14 +73,20 @@ async function networkFirst(request) {
   }
 }
 
+async function fetchAndCache(request, cache) {
+  try {
+    const response = await fetch(request);
+    if (isCacheable(response)) cache.put(request, response.clone());
+    return response;
+  } catch {
+    return undefined;
+  }
+}
+
 async function staleWhileRevalidate(request) {
   const cache = await caches.open(ASSET_CACHE);
   const cached = await cache.match(request);
-  const network = fetch(request)
-    .then((response) => {
-      if (isCacheable(response)) cache.put(request, response.clone());
-      return response;
-    })
-    .catch(() => undefined);
+  // A cached hit is returned immediately while the network fetch refreshes the cache in the background.
+  const network = fetchAndCache(request, cache);
   return cached ?? (await network) ?? Response.error();
 }

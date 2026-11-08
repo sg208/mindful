@@ -1,6 +1,6 @@
 ---
 title: Noticing Without Judging
-excerpt: "Mindfulness isn't about feeling a certain way. It's about noticing what's there—thoughts, feelings, sensations—without fighting or clinging."
+excerpt: "Mindfulness isn't about feeling a certain way. It's about noticing your thoughts, feelings and sensations without fighting or clinging to them."
 category: mindfulness
 publishedAt: '2025-03-21T12:00:00.000+00:00'
 updatedAt: '2026-03-11T16:09:16.265+00:00'
