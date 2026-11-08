@@ -86,7 +86,7 @@ async function fetchAndCache(request, cache) {
 async function staleWhileRevalidate(request) {
   const cache = await caches.open(ASSET_CACHE);
   const cached = await cache.match(request);
-  // Started before the cache check returns so a cached hit still refreshes in the background.
+  // A cached hit is returned immediately while the network fetch refreshes the cache in the background.
   const network = fetchAndCache(request, cache);
   return cached ?? (await network) ?? Response.error();
 }
