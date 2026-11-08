@@ -4,6 +4,8 @@ export const siteConfig = {
   description:
     'Mindful shares brief, research-informed essays on anxiety, mindfulness, relationships, self-care, and rest. Not a substitute for professional care.',
   locale: 'en',
+  /** Open Graph wants language_TERRITORY, not a bare language tag. */
+  ogLocale: 'en_US',
   author: 'The Mindful Editors',
   themeColor: '#F3F2EE',
   themeColorDark: '#121513',

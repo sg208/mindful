@@ -10,7 +10,7 @@ Mindful is a small blog of short essays about everyday mental wellbeing: anxiety
 
 The site runs on Astro 7 with `output: 'static'`, TypeScript in strict mode, and Content Collections validated by Zod. Styling is Tailwind CSS v4 through `@tailwindcss/vite`, with design tokens in `src/styles/global.css`. Posts are markdown (MDX works too), and `@astrojs/sitemap` writes the sitemap. Fraunces and Newsreader are self-hosted through Fontsource.
 
-No framework runtime reaches the browser. The only JavaScript is Astro's prefetch helper, a small inline script for the menu dialog, and a hand-written service worker in `public/sw.js`.
+No framework runtime reaches the browser. The only JavaScript is a small inline script for the menu dialog and a hand-written service worker in `public/sw.js`.
 
 Tooling is pnpm 10 on Node 24, ESLint 10 (flat config with the Astro, jsx-a11y and typescript-eslint presets), Prettier with the Astro and Tailwind plugins, Vitest for unit tests and Playwright for end-to-end tests.
 

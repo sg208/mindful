@@ -28,6 +28,8 @@ export default defineConfig({
     sitemap({
       changefreq: 'weekly',
       priority: 0.7,
+      // noindex pages must not be advertised to crawlers.
+      filter: (page) => !page.endsWith('/offline'),
     }),
   ],
   vite: {

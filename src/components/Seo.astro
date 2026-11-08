@@ -31,19 +31,19 @@ const pageTitle = title
 const url = new URL(canonical ?? Astro.url.pathname, Astro.site ?? Astro.url);
 const ogImage = image ? new URL(image, Astro.site ?? Astro.url).toString() : undefined;
 
-const jsonLdBlocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const jsonLdList = jsonLd === undefined ? [] : [jsonLd];
+const jsonLdBlocks = jsonLdList.flat();
 
 /** Escape JSON for safe embedding inside an HTML <script> tag. `JSON.stringify`
  * does not escape `</script>`, `<!--`, U+2028, or U+2029 — all of which can
  * break out of a JSON-LD block if they ever appear in post metadata. */
-function serializeJsonLd(block: Record<string, unknown>): string {
-  return JSON.stringify(block)
+const serializeJsonLd = (block: Record<string, unknown>): string =>
+  JSON.stringify(block)
     .replace(/</g, '\\u003c')
     .replace(/>/g, '\\u003e')
     .replace(/&/g, '\\u0026')
     .replace(/\u2028/g, '\\u2028')
     .replace(/\u2029/g, '\\u2029');
-}
 ---
 
 <title>{pageTitle}</title>
@@ -56,7 +56,7 @@ function serializeJsonLd(block: Record<string, unknown>): string {
 <meta property="og:description" content={description} />
 <meta property="og:type" content={type} />
 <meta property="og:url" content={url.toString()} />
-<meta property="og:locale" content={siteConfig.locale} />
+<meta property="og:locale" content={siteConfig.ogLocale} />
 {ogImage && <meta property="og:image" content={ogImage} />}
 {publishedAt && <meta property="article:published_time" content={publishedAt.toISOString()} />}
 {updatedAt && <meta property="article:modified_time" content={updatedAt.toISOString()} />}

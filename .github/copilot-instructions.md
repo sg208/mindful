@@ -168,8 +168,8 @@ static assets (`wrangler.jsonc`, deploy with `pnpm run deploy`).
 - Don't bypass the Zod schema when adding fields; update schema and consumers
   together.
 - Don't import `z` from `astro:content`; use `astro/zod`.
-- Don't add `client:load` islands or `prefetch: true` on links without a
-  measured reason; the default viewport prefetch is already on.
+- Don't add `client:load` islands or turn on `prefetch` without a measured
+  reason; the site ships no prefetch today.
 - Don't introduce CSS-in-JS or a component library; Tailwind + `global.css`
   tokens are the system.
 - Don't rerun `pnpm run seed` to edit posts — it is a one-shot migration;

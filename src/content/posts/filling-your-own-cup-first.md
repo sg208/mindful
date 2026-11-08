@@ -1,6 +1,6 @@
 ---
 title: Filling Your Own Cup First
-excerpt: "You can't pour from an empty cup. Prioritizing your own wellbeing isn't selfish—it's what lets you show up for others."
+excerpt: "You can't pour from an empty cup. Looking after your own wellbeing isn't selfish. It's what lets you show up for others."
 category: self-care
 publishedAt: '2025-03-24T12:00:00.000+00:00'
 updatedAt: '2026-03-11T16:09:19.339+00:00'
