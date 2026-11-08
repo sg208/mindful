@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.3] - 2026-11-08
+
 ### Fixed
 
 - **robots.txt**: the `Sitemap:` line is now an absolute URL built from `SITE_URL`.
